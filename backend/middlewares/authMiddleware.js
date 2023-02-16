@@ -1,31 +1,23 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel.js');
-const asyncHandler = require('express-async-handler');
+const jwt = require('jsonwebtoken')
 
-const protect = asyncHandler(async (req, res, next) => {
-    let token;
+const protect = (req, res, next) => {
+	const authHeader = req.header('Authorization')
+	const token = authHeader && authHeader.split(' ')[1]
 
-    if(
-        req.headers.authorization &&
-            req.headers.authorization.startsWith('Bearer')
-    ){
-        try {
-            token = req.headers.authorization.split(" ")[1];
-            
-            //decode token id
-            const decode = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = await User.findById(decode.id).select("-password");
+	if (!token)
+		return res
+			.status(401)
+			.json({ success: false, message: 'Access token not found' })
 
-            next();
-        } catch (error) {
-            res.status(401);
-            throw new Error("Not authorized, token failed");
-        }
-    }
-    if (!token) {
-        res.status(401);
-        throw new Error("Not authoried, no token")
-    }
-});
+	try {
+		const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+		req.userId = decoded.id
+		next()
+	} catch (error) {
+		console.log(error)
+		return res.status(403).json({ success: false, message: 'Invalid token' })
+	}
+}
 
 module.exports = { protect };

@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import RootNavigator from './src/navigation/RootNavigator';
+import { AuthContextProvider } from './src/contexts/AuthContext';
+import AppNavigator from './src/navigation/AppNavigator';
 import StartScreen from './src/screens/StartScreen';
 
 export default function App() {
@@ -16,8 +17,8 @@ export default function App() {
     )
   }
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <AuthContextProvider>
+      <AppNavigator/>
+    </AuthContextProvider>
   );
 }
