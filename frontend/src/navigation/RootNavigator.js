@@ -1,22 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ChattingScreen from "../screens/ChattingScreen";
-import HomeNavigator from "./HomeNavigator";
-import SettingScreen from "../screens/SettingScreen.js";
-import { StyleSheet } from "react-native";
-import AddFriendScreen from "../screens/AddFriendScreen.js";
-import MoreInfo from "../screens/MoreInfo";
-import { io } from "socket.io-client";
-import axios from 'axios';
-import { Url, UrlSK } from "../contexts/constants";
-import { AuthContext } from "../contexts/AuthContext";
-import FriendRequest from "../screens/FriendRequest";
-import SendFR from "../screens/SendFR";
-import ManageMember from "../screens/ManageMember";
-import CreateGroup from "../screens/CreateGroup";
-import UserInfoScreen from "../screens/UserInfoScreen";
-import AddUserScreen from "../screens/AddUserScreen";
-import SearchScreen from "../screens/SearchScreen";
+import HomeNavigator from "./HomeNavigator"
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -28,8 +12,8 @@ const RootNavigator = () => {
         statusBarColor: "#056282",
       })}
     >
-      {/* <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
-      <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
+      <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+      {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
       <Stack.Screen
         name="SettingScreen"
         component={SettingScreen}

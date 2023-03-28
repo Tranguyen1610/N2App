@@ -2,6 +2,12 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthContext } from '../contexts/AuthContext';
+import Screen1 from '../screens/Screen1';
+import Screen2 from '../screens/Screen2';
+import Screen3 from '../screens/Screen3';
+import Screen4 from '../screens/Screen4';
+import Screen5 from '../screens/Screen5';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 export default function HomeScreen({ navigation }) {
@@ -11,137 +17,97 @@ export default function HomeScreen({ navigation }) {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, size, color }) => {
                     let iconName;
-                    if (route.name === "Messages") {
-                        iconName = focused ? require('../image/chat.png') : require('../image/chat_outline.png');
-                    } else if (route.name === "Contacts") {
-                        iconName = focused ? require('../image/contact.png') : require('../image/contact_outline.png');
+                    if (route.name === "Screen1") {
+                        iconName = focused ? require('../image/star.png') : require('../image/star_outline.png');
+                    } else if (route.name === "Screen2") {
+                        iconName = focused ? require('../image/search.png') : require('../image/search_outline.png');
                     } else
-                        if (route.name === "Me") {
+                        if (route.name === "Screen3") {
+                            iconName = focused ? require('../image/open-book.png') : require('../image/open-book_outline.png');
+                        } else
+                            if (route.name === "Screen4") {
+                                iconName = focused ? require('../image/heart.png') : require('../image/heart_outline.png');
+                            } else
+                                if (route.name === "Screen5") {
                             iconName = focused ? require('../image/user.png') : require('../image/user_outline.png');
                         }
                     size = focused ? size + 5 : size + 2;
-                    // return <MaterialCommunityIcons name={iconName} size={size} color={color}/>
-                    return <Image source={iconName} style={{ width: 30, height: 30 }} />
+                    return <Image source={iconName} style={{ width: 25, height: 25 }} />
                 },
-                tabBarStyle: { padding: 10, height: 60, },
-                tabBarLabelStyle: { fontSize: 15 },
-                tabBarActiveTintColor: '#056282',
+                tabBarStyle: { height: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1C1717' },
+                tabBarLabelStyle: { fontSize: 13, fontWeight: "700" },
                 headerShown: true,
                 headerTitle: () => {
-                    let iconHeader;
+                    // let iconHeader;
                     let navName;
-                    if (route.name === "Messages") {
-                        iconHeader = 'add';
-                        navName = 'add';
+                    if (route.name === "Screen1") {
+                        navName = '';
                     }
-                    else if (route.name === "Contacts") {
-                        iconHeader = 'person-add';
-                        navName = 'AddFriendScreen';
+                    else if (route.name === "Screen2") {
+                        navName = '';
                     } else
-                        if (route.name === "Me") {
-                            iconHeader = 'settings';
-                            navName = 'SettingScreen';
+                        if (route.name === "Screen3") {
+                            // iconHeader = 'settings';
+                            navName = 'Các khóa học của tôi';
+                        } else
+                            if (route.name === "Screen4") {
+                                // iconHeader = 'settings';
+                                navName = 'Wishlist';
                         }
-                    return <View style={styles.search_nav}>
-                        <TouchableOpacity
-                            onPress={()=>navigation.navigate('SearchScreen')}
-                            style={styles.search_con}>
-                            <Ionicons
-                                name='search-outline'
-                                size={25}
-                                color={'#fff'} />
-                            <Text style={styles.search_text}>Tìm kiếm</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navName != 'add' ?
-                                navigation.navigate(navName) :
-                                setModalVisible(true)
-                            }}>
-                            <MaterialIcons
-                                name={iconHeader}
-                                size={25}
-                                color={'#fff'} />
-                        </TouchableOpacity>
+                            else
+                                if (route.name === "Screen5") {
+                                    // iconHeader = 'settings';
+                                    navName = 'Tài khoản';
+                                }
+                    return <View className="flex-1 flex-row items-center ">
+                        <Text className="text-lg text-white font-bold">{navName}</Text>
+                        <View className="">
+                            <Ionicons name="cart-outline" size={30} color="#9D9D9D" />
+                        </View>
                         
                     </View>
                 },
                 headerStyle: {
-                    backgroundColor: '#056282',
+                    // backgroundColor: '#056282',
+                    backgroundColor: '#0A0909',
                 }
             })} >
             <Tab.Screen
-                name="Messages"
-                component={MessagesScreen}
+                name="Screen1"
+                component={Screen1}
                 options={{
-                    title:"Tin nhắn",
+                    title: "Nổi bật"
                 }}
             />
             <Tab.Screen
-                name="Contacts"
-                component={ContactsScreen}
+                name="Screen2"
+                component={Screen2}
                 options={{
-                    title:"Liên hệ"
+                    title: "Tìm kiếm"
                 }}
             />
             <Tab.Screen
-                name="Me"
-                component={MeScreen}
+                name="Screen3"
+                component={Screen3}
                 options={{
-                    title:"Cá nhân"
+                    title: "Học tập"
+                }}
+            />
+            <Tab.Screen
+                name="Screen4"
+                component={Screen4}
+                options={{
+                    title: "Wishlist"
+                }}
+            />
+            <Tab.Screen
+                name="Screen5"
+                component={Screen5}
+                options={{
+                    title: "Tài khoản"
                 }}
             />
         </Tab.Navigator>
     );
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    search_nav: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-    search_con: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    search_text: {
-        color: '#fff',
-        width: 300,
-        padding: 10,
-    },
-    centered_view: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-end',
-        margin: 10,
-        // backgroundColor: '#00000099',
-    },
-    modal_cont: {
-        width: 200,
-        backgroundColor: '#ffffff',
-        borderRadius: 5,
-    },
-    modal_body: {
-        padding: 10,
-    },
-    choose: {
-        height: 50,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
-    text_choose: {
-        marginLeft: 15,
-        fontSize: 16,
-    }
-});
+
