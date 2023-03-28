@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function Screen4() {
+export default function MyLearningScreen() {
   return (
     <View className="bg-[#0A0909] flex-1">
-      <Text>Screen4</Text>
+      <Text>Screen3</Text>
     </View>
   )
 }

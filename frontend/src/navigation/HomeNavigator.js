@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthContext } from '../contexts/AuthContext';
-import Screen1 from '../screens/Screen1';
-import Screen2 from '../screens/Screen2';
-import Screen3 from '../screens/Screen3';
-import Screen4 from '../screens/Screen4';
-import Screen5 from '../screens/Screen5';
+import FeaturedScreen from '../screens/FeaturedScreen';
+import SearchScreen from '../screens/SearchScreen';
+import MyLearningScreen from '../screens/MyLearningScreen';
+import WishlishScreen from '../screens/WishlishScreen';
+import AccountSceeen from '../screens/AccountSceeen';
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -17,18 +17,18 @@ export default function HomeScreen({ navigation }) {
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, size, color }) => {
                     let iconName;
-                    if (route.name === "Screen1") {
+                    if (route.name === "FeaturedScreen") {
                         iconName = focused ? require('../image/star.png') : require('../image/star_outline.png');
-                    } else if (route.name === "Screen2") {
+                    } else if (route.name === "SearchScreen") {
                         iconName = focused ? require('../image/search.png') : require('../image/search_outline.png');
                     } else
-                        if (route.name === "Screen3") {
+                        if (route.name === "MyLearningScreen") {
                             iconName = focused ? require('../image/open-book.png') : require('../image/open-book_outline.png');
                         } else
-                            if (route.name === "Screen4") {
+                            if (route.name === "WishlishScreen") {
                                 iconName = focused ? require('../image/heart.png') : require('../image/heart_outline.png');
                             } else
-                                if (route.name === "Screen5") {
+                                if (route.name === "AccountSceeen") {
                             iconName = focused ? require('../image/user.png') : require('../image/user_outline.png');
                         }
                     size = focused ? size + 5 : size + 2;
@@ -40,22 +40,22 @@ export default function HomeScreen({ navigation }) {
                 headerTitle: () => {
                     // let iconHeader;
                     let navName;
-                    if (route.name === "Screen1") {
+                    if (route.name === "FeaturedScreen") {
                         navName = '';
                     }
-                    else if (route.name === "Screen2") {
+                    else if (route.name === "SearchScreen") {
                         navName = '';
                     } else
-                        if (route.name === "Screen3") {
+                        if (route.name === "MyLearningScreen") {
                             // iconHeader = 'settings';
                             navName = 'Các khóa học của tôi';
                         } else
-                            if (route.name === "Screen4") {
+                            if (route.name === "WishlishScreen") {
                                 // iconHeader = 'settings';
                                 navName = 'Wishlist';
                         }
                             else
-                                if (route.name === "Screen5") {
+                                if (route.name === "AccountSceeen") {
                                     // iconHeader = 'settings';
                                     navName = 'Tài khoản';
                                 }
@@ -73,36 +73,36 @@ export default function HomeScreen({ navigation }) {
                 }
             })} >
             <Tab.Screen
-                name="Screen1"
-                component={Screen1}
+                name="FeaturedScreen"
+                component={FeaturedScreen}
                 options={{
                     title: "Nổi bật"
                 }}
             />
             <Tab.Screen
-                name="Screen2"
-                component={Screen2}
+                name="SearchScreen"
+                component={SearchScreen}
                 options={{
                     title: "Tìm kiếm"
                 }}
             />
             <Tab.Screen
-                name="Screen3"
-                component={Screen3}
+                name="MyLearningScreen"
+                component={MyLearningScreen}
                 options={{
                     title: "Học tập"
                 }}
             />
             <Tab.Screen
-                name="Screen4"
-                component={Screen4}
+                name="WishlishScreen"
+                component={WishlishScreen}
                 options={{
                     title: "Wishlist"
                 }}
             />
             <Tab.Screen
-                name="Screen5"
-                component={Screen5}
+                name="AccountSceeen"
+                component={AccountSceeen}
                 options={{
                     title: "Tài khoản"
                 }}
