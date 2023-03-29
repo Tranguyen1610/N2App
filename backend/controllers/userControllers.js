@@ -1,8 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
+
 const registerUser = asyncHandler(async function (req, res) {
-  const { Email, Password, UserName, Name, DateOfBirth } = req.body;
+  const { Email, Password, UserName, Name, DateOfBirth, pic } = req.body;
   if (!Name || !Email || !Password) {
     res.status(400);
     throw new Error("Please Enter all Feilds");
@@ -18,6 +19,7 @@ const registerUser = asyncHandler(async function (req, res) {
     Email,
     Password,
     DateOfBirth,
+    pic,
     // Cart,
     // WishList,
   });
@@ -29,6 +31,7 @@ const registerUser = asyncHandler(async function (req, res) {
       Email: user.Email,
       Password: user.Password,
       DateOfBirth: user.DateOfBirth,
+      pic: user.pic,
       // Cart: user.Cart,
       // WishList: user.WishList,
       token: generateToken(user._id),
@@ -49,6 +52,7 @@ const authUser = asyncHandler(async (req, res) => {
       Email: user.Email,
       UserName: user.UserName,
       DateOfBirth: user.DateOfBirth,
+      pic: user.pic,
       // Cart: user.Cart,
       // WishList: user.WishList,
       token: generateToken(user._id),
@@ -64,11 +68,56 @@ const allUsers = asyncHandler(async (req, res) => {
         $or: [
           { UserName: { $regex: req.query.search, $options: "i" } },
           { Email: { $regex: req.query.search, $options: "i" } },
+          { Name: { $regex: req.query.search, $options: "i" } },
         ],
       }
     : {};
-
+  console.log("123", req.user);
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
-module.exports = { registerUser, authUser, allUsers };
+const SearchUser = asyncHandler(async (req, res) => {
+  const { Name } = req.body;
+  const user = await User.find({ Name });
+  if (user) {
+    res.json(user);
+  } else {
+    res.json("Faild");
+  }
+});
+const updateProfile = asyncHandler(async (req, res) => {
+  const { _id, UserName, Name, pic } = req.body;
+
+  const updateInfo = await User.findByIdAndUpdate(
+    _id,
+    {
+      UserName,
+      Name,
+      pic,
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!updateInfo) {
+    res.status(400);
+    throw new Error("User not found");
+  } else {
+    res.json({
+      _id: updateInfo._id,
+      UserName: updateInfo.UserName,
+      Name: updateInfo.Name,
+      Email: updateInfo.Email,
+      pic: updateInfo.pic,
+      token: generateToken(updateInfo._id),
+    });
+  }
+});
+module.exports = {
+  registerUser,
+  authUser,
+  allUsers,
+  SearchUser,
+  updateProfile,
+};

@@ -7,6 +7,11 @@ const userSchema = mongoose.Schema(
     Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true },
     Name: { type: String, required: true },
+    pic: {
+      type: String,
+      default:
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+    },
     // Gender: { type: Boolean, required: true },
     DateOfBirth: { type: Date, required: true },
     Cart: [
@@ -19,16 +24,18 @@ const userSchema = mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
       },
     ],
-    // CoursePurchased: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //   },
-    // ],
-    // CoursePosted: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //   },
-    // ],
+    CoursePurchased: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Video",
+      },
+    ],
+    CoursePosted: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Video",
+      },
+    ],
   },
   {
     Timestamp: true,
