@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert, Modal, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthContext } from '../contexts/AuthContext';
 import FeaturedScreen from '../screens/FeaturedScreen';
@@ -29,16 +29,15 @@ export default function HomeScreen({ navigation }) {
                                 iconName = focused ? require('../image/heart.png') : require('../image/heart_outline.png');
                             } else
                                 if (route.name === "AccountSceeen") {
-                            iconName = focused ? require('../image/user.png') : require('../image/user_outline.png');
-                        }
+                                    iconName = focused ? require('../image/user.png') : require('../image/user_outline.png');
+                                }
                     size = focused ? size + 5 : size + 2;
                     return <Image source={iconName} style={{ width: 25, height: 25 }} />
                 },
                 tabBarStyle: { height: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1C1717' },
-                tabBarLabelStyle: { fontSize: 13, fontWeight: "700" },
+                tabBarLabelStyle: { fontSize: 14, fontWeight: "700" },
                 headerShown: true,
                 headerTitle: () => {
-                    // let iconHeader;
                     let navName;
                     if (route.name === "FeaturedScreen") {
                         navName = '';
@@ -47,28 +46,36 @@ export default function HomeScreen({ navigation }) {
                         navName = '';
                     } else
                         if (route.name === "MyLearningScreen") {
-                            // iconHeader = 'settings';
                             navName = 'Các khóa học của tôi';
                         } else
                             if (route.name === "WishlishScreen") {
-                                // iconHeader = 'settings';
                                 navName = 'Wishlist';
-                        }
+                            }
                             else
                                 if (route.name === "AccountSceeen") {
-                                    // iconHeader = 'settings';
                                     navName = 'Tài khoản';
                                 }
-                    return <View className="flex-1 flex-row items-center ">
-                        <Text className="text-lg text-white font-bold">{navName}</Text>
-                        <View className="">
-                            <Ionicons name="cart-outline" size={30} color="#9D9D9D" />
+                    return <View className="flex-1 flex-row items-center">
+                        <View className="w-10/12">
+
+                            {route.name == "SearchScreen" ?
+                                <View>
+                                    <View className="flex-row p-2 bg-gray-500 rounded-md">
+                                        <View className="w-1/12">
+                                            <Ionicons name="search" size={24} color="white"  />
+                                        </View>
+                                        <TextInput className=" w-11/12 text-base px-2" placeholder='Tìm kiếm'>
+                                        </TextInput>
+                                    </View>
+                                </View> :
+                                <Text className="text-lg text-white font-bold">{navName}</Text>}
                         </View>
-                        
+                        <View className="w-2/12 items-end">
+                            <Ionicons name="cart-outline" size={30} color="white" />
+                        </View>
                     </View>
                 },
                 headerStyle: {
-                    // backgroundColor: '#056282',
                     backgroundColor: '#0A0909',
                 }
             })} >

@@ -9,7 +9,7 @@ const RootNavigator = () => {
       initialRouteName="HomeNavigator"
       screenOptions={() => ({
         headerShown: false,
-        statusBarColor: "#056282",
+        statusBarColor: "#0A0909",
       })}
     >
       <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
