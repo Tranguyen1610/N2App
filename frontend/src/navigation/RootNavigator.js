@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeNavigator from "./HomeNavigator"
+import CoursesDetail from "../screens/CoursesDetail";
+import VideoPreviewScreen from "../screens/VideoPreviewScreen";
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -14,6 +16,18 @@ const RootNavigator = () => {
       })}
     >
       <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+      <Stack.Screen 
+        name="CoursesDetail" 
+        component={CoursesDetail} 
+        options={{
+          animation:'none'
+        }} />
+      <Stack.Screen 
+        name="VideoPreviewScreen" 
+        component={VideoPreviewScreen} 
+        options={{
+          animation:'none'
+        }} />
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
       <Stack.Screen
         name="SettingScreen"

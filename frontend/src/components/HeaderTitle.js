@@ -1,10 +1,12 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native';
 
-export default function HeaderTitle({ name, title, isBack,nav}) {
+export default function HeaderTitle({ name, title, isBack}) {
+    const nav = useNavigation();
     return (
-        <View className="flex-row items-center justify-center border-b border-gray-500 w-screen h-14 px-5">
+        <View className="flex-row items-center justify-center border-b border-gray-900 w-screen h-14 px-5">
             <View className="w-10/12 flex-row">
                 {name == "SearchScreen" ?
                     <View className="flex-row p-2 bg-gray-500 rounded-md">
