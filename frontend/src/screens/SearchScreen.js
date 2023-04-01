@@ -8,7 +8,7 @@ export default function SearchScreen({navigation}) {
   const data = ["sql", "html", "javascript", "c#", "react native"]
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
-      <HeaderTitle name={'SearchScreen'} title="" isBack={false} nav={navigation}/>
+      <HeaderTitle name={'SearchScreen'} title="" isBack={false} />
       <View className="mx-5">
         <Text className="text-white text-2xl font-bold mt-5 mb-2">Top 5 tìm kiếm</Text>
         <FlatList
