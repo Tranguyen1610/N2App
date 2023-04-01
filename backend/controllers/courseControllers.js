@@ -83,10 +83,48 @@ const deleteCourse = asyncHandler(async (req, res) => {
     else res.send("error delete");
   });
 });
+const updateCoures = asyncHandler(async (req, res) => {
+  const { Name, Description, Type, Price, _id } = req.body;
+  const course = await Course.findByIdAndUpdate(
+    _id,
+    {
+      Name,
+      Description,
+      Type,
+      Price,
+    },
+    { new: true }
+  );
+  if (!course) {
+    res.status(400);
+    throw new Error("Course not found");
+  } else {
+    res.json({
+      _id: course._id,
+      Name: course.Name,
+      Description: course.Description,
+      Type: course.Type,
+      Price: course.Price,
+    });
+  }
+});
+const deleteVideoOfCourse = asyncHandler(async (req, res) => {
+  await Course.findById({
+    VideoId: [req.params.videoId],
+  })
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+});
 module.exports = {
   createCourse,
   addVideotoCourse,
   searchCourse,
   allCourses,
   deleteCourse,
+  deleteVideoOfCourse,
+  updateCoures,
 };

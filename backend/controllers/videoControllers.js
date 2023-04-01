@@ -49,4 +49,13 @@ const searchVideoById = asyncHandler(async (req, res) => {
     res.json("No search video");
   }
 });
-module.exports = { addVideo, allVideos, searchVideoById };
+const deleteVideo = asyncHandler(async (req, res) => {
+  Video.deleteOne({ id: req.params.videoId })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+module.exports = { addVideo, allVideos, searchVideoById, deleteVideo };

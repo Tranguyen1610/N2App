@@ -6,6 +6,8 @@ const {
   searchCourse,
   allCourses,
   deleteCourse,
+  updateCoures,
+  deleteVideoOfCourse,
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
@@ -14,5 +16,7 @@ router.route("/createCourse").post(protect, createCourse);
 router.route("/addVideotoCourse").put(protect, addVideotoCourse);
 router.route("/searchCourse").get(protect, searchCourse);
 router.route("/:id/delete").post(protect, deleteCourse);
+router.route("/update").put(protect, updateCoures);
+router.route("/deleteVideo/:videoId").post(protect, deleteVideoOfCourse);
 
 module.exports = router;
