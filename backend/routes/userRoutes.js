@@ -3,6 +3,8 @@ const {
   registerUser,
   allUsers,
   authUser,
+  SearchUser,
+  updateProfile,
 } = require("../controllers/userControllers");
 const User = require('../models/userModel.js');
 const router = express.Router();
@@ -22,7 +24,10 @@ router.get('/', protect, async (req, res) => {
 	}
 });
 
+router.route("/").get(protect, allUsers);
 router.post("/login", authUser);
+router.route("/update").put(protect, updateProfile);
+router.get("/searchuser", SearchUser);
 
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
+
 const registerUser = asyncHandler(async function (req, res) {
   const { Email, Password, Name, DateOfBirth } = req.body;
   if (!Name || !Email || !Password) {
@@ -15,6 +16,7 @@ const registerUser = asyncHandler(async function (req, res) {
     Email,
     Password,
     DateOfBirth,
+    pic,
     // Cart,
     // WishList,
   });
@@ -45,14 +47,59 @@ const authUser = asyncHandler(async (req, res) => {
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
-      $or: [
-        { UserName: { $regex: req.query.search, $options: "i" } },
-        { Email: { $regex: req.query.search, $options: "i" } },
-      ],
-    }
+        $or: [
+          { UserName: { $regex: req.query.search, $options: "i" } },
+          { Email: { $regex: req.query.search, $options: "i" } },
+          { Name: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
     : {};
-
+  console.log("123", req.user);
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   res.send(users);
 });
-module.exports = { registerUser, authUser, allUsers };
+const SearchUser = asyncHandler(async (req, res) => {
+  const { Name } = req.body;
+  const user = await User.find({ Name });
+  if (user) {
+    res.json(user);
+  } else {
+    res.json("Faild");
+  }
+});
+const updateProfile = asyncHandler(async (req, res) => {
+  const { _id, UserName, Name, pic } = req.body;
+
+  const updateInfo = await User.findByIdAndUpdate(
+    _id,
+    {
+      UserName,
+      Name,
+      pic,
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!updateInfo) {
+    res.status(400);
+    throw new Error("User not found");
+  } else {
+    res.json({
+      _id: updateInfo._id,
+      UserName: updateInfo.UserName,
+      Name: updateInfo.Name,
+      Email: updateInfo.Email,
+      pic: updateInfo.pic,
+      token: generateToken(updateInfo._id),
+    });
+  }
+});
+module.exports = {
+  registerUser,
+  authUser,
+  allUsers,
+  SearchUser,
+  updateProfile,
+};
