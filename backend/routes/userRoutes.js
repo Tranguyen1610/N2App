@@ -5,6 +5,8 @@ const {
   authUser,
   SearchUser,
   updateProfile,
+  addWishList,
+  getWishList,
 } = require("../controllers/userControllers");
 const router = express.Router();
 const { protect } = require("../middlewares/authMiddleware");
@@ -14,5 +16,6 @@ router.route("/").post(registerUser);
 router.post("/login", authUser);
 router.route("/update").put(protect, updateProfile);
 router.get("/searchuser", SearchUser);
-
+router.route("/getWishList").get(protect,getWishList);
+router.route("/addWishList/:videoId").put(protect,addWishList);
 module.exports = router;

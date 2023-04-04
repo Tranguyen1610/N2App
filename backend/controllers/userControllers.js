@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
 
 const registerUser = asyncHandler(async function (req, res) {
-  const { Email, Password, UserName, Name, DateOfBirth, pic } = req.body;
+  const { Email, Password, UserName, Name, DateOfBirth } = req.body;
   if (!Name || !Email || !Password) {
     res.status(400);
     throw new Error("Please Enter all Feilds");
@@ -19,7 +19,6 @@ const registerUser = asyncHandler(async function (req, res) {
     Email,
     Password,
     DateOfBirth,
-    pic,
     // Cart,
     // WishList,
   });
@@ -31,7 +30,7 @@ const registerUser = asyncHandler(async function (req, res) {
       Email: user.Email,
       Password: user.Password,
       DateOfBirth: user.DateOfBirth,
-      pic: user.pic,
+      // pic: user.pic,
       // Cart: user.Cart,
       // WishList: user.WishList,
       token: generateToken(user._id),
@@ -114,10 +113,42 @@ const updateProfile = asyncHandler(async (req, res) => {
     });
   }
 });
+const addWishList = asyncHandler(async(req,res)=>{
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { $addToSet: { WishList:req.params.videoId } },
+    { new: true }
+  );
+  console.log(user);
+  // res.json(course);
+  // console.log(course);
+  // course.ListVideo.push({ ...videoId });
+  // console.log("Course:", course.);
+  if (user) {
+    res.json({
+      _id: user._id,
+      Name: user.Name,
+      Email:user.Email,
+      WishList: user.WishList,
+    });
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
+})
+const getWishList = asyncHandler(async(req,res)=>{
+  const course =await User.findById(req.user._id).then((data)=>{res.json(data.WishList)})
+  // res.json(course.WishList)
+})
+// const addCart =asyncHandler(asyncHandler(req,res)=>{
+  
+// })
 module.exports = {
   registerUser,
   authUser,
   allUsers,
   SearchUser,
   updateProfile,
+  addWishList,
+  getWishList,
 };
