@@ -21,7 +21,7 @@ const registerUser = asyncHandler(async function (req, res) {
     // WishList,
   });
   if (user) {
-    res.status(201).json({ success: true, message: 'Tạo tài khoản thành công', token: generateToken(user._id) })
+    res.status(201).json({ success: true, message: 'Tạo tài khoản thành công', _id: user._id ,token: generateToken(user._id) })
   } else {
     throw new Error("Failed to create the user ");
   }
@@ -34,6 +34,7 @@ const authUser = asyncHandler(async (req, res) => {
       res.json({
         success: true,
         message: 'Đăng nhập thành công',
+        Id: user._id,
         token: generateToken(user._id),
       });
     } else {
@@ -48,7 +49,6 @@ const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
         $or: [
-          { UserName: { $regex: req.query.search, $options: "i" } },
           { Email: { $regex: req.query.search, $options: "i" } },
           { Name: { $regex: req.query.search, $options: "i" } },
         ],
@@ -68,14 +68,12 @@ const SearchUser = asyncHandler(async (req, res) => {
   }
 });
 const updateProfile = asyncHandler(async (req, res) => {
-  const { _id, UserName, Name, pic } = req.body;
+  const { _id, Name } = req.body;
 
   const updateInfo = await User.findByIdAndUpdate(
     _id,
     {
-      UserName,
       Name,
-      pic,
     },
     {
       new: true,
@@ -88,10 +86,8 @@ const updateProfile = asyncHandler(async (req, res) => {
   } else {
     res.json({
       _id: updateInfo._id,
-      UserName: updateInfo.UserName,
       Name: updateInfo.Name,
       Email: updateInfo.Email,
-      pic: updateInfo.pic,
       token: generateToken(updateInfo._id),
     });
   }
