@@ -5,6 +5,8 @@ const {
   authUser,
   SearchUser,
   updateProfile,
+  addWishList,
+  getWishList,
 } = require("../controllers/userControllers");
 const User = require('../models/userModel.js');
 const router = express.Router();
@@ -28,6 +30,6 @@ router.route("/").get(protect, allUsers);
 router.post("/login", authUser);
 router.route("/update").put(protect, updateProfile);
 router.get("/searchuser", SearchUser);
-
-
+router.route("/getWishList").get(protect,getWishList);
+router.route("/addWishList/:videoId").put(protect,addWishList);
 module.exports = router;
