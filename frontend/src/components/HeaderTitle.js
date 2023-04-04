@@ -39,7 +39,7 @@ export default function HeaderTitle({ name, title, isBack }) {
                 {title.length != 0 ?
                     <Text className="text-lg text-white font-bold ">{title}</Text> : <></>}
             </View>
-            {mode === "Student" ?
+            {mode !== "Teacher" ?
                 <TouchableOpacity className="w-2/12 items-center flex-row"
                     onPress={() =>
                         nav.navigate("CardScreen")
