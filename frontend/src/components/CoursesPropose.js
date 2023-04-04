@@ -12,7 +12,7 @@ export default function CoursesPropose({ item}) {
         return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +" đ"
     }
     return (
-        <TouchableOpacity className="bg-[#1B3856] mr-5 w-56"
+        <TouchableOpacity className="bg-[#1B212D] mr-5 w-56"
         onPress={()=>nav.navigate("CoursesDetail",{course:item})}>
             <Image
                 source={{ uri: item.image }}
@@ -25,7 +25,7 @@ export default function CoursesPropose({ item}) {
                 <Rating
                     ratingCount={5}
                     imageSize={20}
-                    tintColor='#1B3856'
+                    tintColor='#1B212D'
                     readonly
                     startingValue={item.numStar}
                 />

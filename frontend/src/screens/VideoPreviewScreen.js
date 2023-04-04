@@ -8,7 +8,10 @@ export default function VideoPreviewScreen({ route }) {
     const link = route.params.link;
     const video = useRef(null);
     useEffect(() => {
-        video.current.playAsync();
+        
+        setTimeout(() => {
+            video.current.playAsync();
+          }, 500)
     }, []);
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1 ">

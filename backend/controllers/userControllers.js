@@ -16,7 +16,7 @@ const registerUser = asyncHandler(async function (req, res) {
     Email,
     Password,
     DateOfBirth,
-    pic,
+    //pic,
     // Cart,
     // WishList,
   });

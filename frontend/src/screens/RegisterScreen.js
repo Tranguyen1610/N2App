@@ -83,7 +83,7 @@ export default function RegisterScreen({ navigation }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView className="bg-[#0A0909] flex-1 px-4">
-                <StatusBar style='light' />
+                {/* <StatusBar backgroundColor='#0A0909' /> */}
                 <Text className="text-white text-3xl font-medium mt-16">Đăng ký</Text>
                 <View className="flex-row">
                     <Text className="text-[#7F889A] text-sm mr-2">Bạn đã có tài khoản?</Text>

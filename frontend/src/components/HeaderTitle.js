@@ -1,12 +1,24 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
+import CardScreen from '../screens/CardScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function HeaderTitle({ name, title, isBack}) {
+export default function HeaderTitle({ name, title, isBack }) {
     const nav = useNavigation();
+    const [numCart, setnumCart] = useState(3);
+    const [mode, setMode] = useState();
+
+    const getMode = async () => {
+        const mode = await AsyncStorage.getItem('mode');
+        setMode(mode)
+    }
+    useEffect(()=>{
+        getMode()
+    },[])
     return (
-        <View className="flex-row items-center justify-center border-b border-gray-900 w-screen h-14 px-5">
+        <View className="flex-row items-center justify-center w-screen h-14 px-5">
             <View className="w-10/12 flex-row">
                 {name == "SearchScreen" ?
                     <View className="flex-row p-2 bg-gray-500 rounded-md">
@@ -27,9 +39,17 @@ export default function HeaderTitle({ name, title, isBack}) {
                 {title.length != 0 ?
                     <Text className="text-lg text-white font-bold ">{title}</Text> : <></>}
             </View>
-            <View className="w-2/12 items-end">
-                <Ionicons name="cart-outline" size={30} color="white" />
-            </View>
+            {mode === "Student" ?
+                <TouchableOpacity className="w-2/12 items-center flex-row"
+                    onPress={() =>
+                        nav.navigate("CardScreen")
+                    }>
+                    <Ionicons name="cart-outline" size={30} color="white" />
+                    {numCart != 0 ?
+                        <View className="justify-center items-center rounded-full w-5 h-5 bg-[#1273FE] absolute bottom-4 right-5 ">
+                            <Text className="text-white font-bold text-xs ">{numCart < 10 ? numCart : "9+"}</Text>
+                        </View> : <></>}
+                </TouchableOpacity> : <View className="w-2/12"></View>}
         </View>
     )
 }
