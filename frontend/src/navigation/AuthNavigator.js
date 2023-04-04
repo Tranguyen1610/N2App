@@ -9,7 +9,10 @@ const Stack = createNativeStackNavigator();
 
 export default function AuthNavigator() {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            screenOptions={{
+                statusBarColor:'#0A0909'
+            }}>
             
             <Stack.Screen 
                 name="LoginScreen" 

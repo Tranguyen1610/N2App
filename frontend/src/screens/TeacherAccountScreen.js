@@ -7,7 +7,7 @@ import HeaderTitle from '../components/HeaderTitle'
 import StartScreen from './StartScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function AccountSceeen({ navigation }) {
+export default function TeacherAccountScreen({ navigation }) {
   const { userInfo, logout } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLogoutVisible, setModalLogoutVisible] = useState(false);
@@ -19,13 +19,14 @@ export default function AccountSceeen({ navigation }) {
   const [newPassword, setNewPassword] = useState('');
   const [cfNewPassword, setCfNewPassword] = useState('');
   const [alertt, setAlertt] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
 
   const switchType = async () => {
-    await AsyncStorage.setItem('mode', "Teacher")
-    navigation.navigate("SwitchTeacher")
+    await AsyncStorage.setItem('mode', "Student")
+    navigation.navigate("SwitchStudent")
   }
-  const clicklogout=()=>{
+  const clicklogout = () => {
     setIsLogout(true)
     setTimeout(() => {
       setIsLogout(false)
@@ -34,7 +35,7 @@ export default function AccountSceeen({ navigation }) {
   }
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
-      <HeaderTitle name={AccountSceeen} title={'Tài khoản'} isBack={false} />
+      <HeaderTitle name={TeacherAccountScreen} title={'Tài khoản'} isBack={false} />
       <View className="px-5">
         <View className="items-center">
           <Image source={require('../image/user_logo.png')} className="w-24 h-24 mt-5" />
@@ -48,7 +49,7 @@ export default function AccountSceeen({ navigation }) {
           onPress={() => {
             switchType()
           }}>
-          <Text className="text-[#1273FE] text-center font-bold text-base mt-5">Chuyển sang chế độ giảng viên</Text>
+          <Text className="text-[#1273FE] text-center font-bold text-base mt-5">Chuyển sang chế độ học viên</Text>
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600 mt-5">
           <MaterialIcons
@@ -80,7 +81,7 @@ export default function AccountSceeen({ navigation }) {
             size={25}
             color="white" />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
+        {/* <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
           onPress={() => {
             setModalVisible(true)
             setPassword("")
@@ -93,12 +94,12 @@ export default function AccountSceeen({ navigation }) {
             name='apps-outline'
             size={25}
             color='#FCC61F' />
-          <Text className="ml-2.5 mr-auto text-base text-white">Thể loại yêu thích</Text>
+          <Text className="ml-2.5 mr-auto text-base text-white"></Text>
           <Ionicons
             name='chevron-forward'
             size={25}
             color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600">
           <Ionicons
             name='language'
@@ -258,7 +259,7 @@ export default function AccountSceeen({ navigation }) {
                 </View> :
                 <View className="flex-row justify-center mb-10">
                   <Text className=" p-3 text-xl font-bold text-[#1273FE]">Đang đăng xuất</Text>
-                  <ActivityIndicator size={'large'}  className=""/>
+                  <ActivityIndicator size={'large'} className="" />
                 </View>}
             </View>
           </View>

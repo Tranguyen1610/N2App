@@ -1,32 +1,56 @@
-import React, { useContext, useEffect } from "react";
+import React from 'react'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeNavigator from "./HomeNavigator"
 import CoursesDetail from "../screens/CoursesDetail";
 import VideoPreviewScreen from "../screens/VideoPreviewScreen";
+import CardScreen from "../screens/CardScreen";
+import SwitchNavigator from "./SwitchNavigator"
+import SwitchStudent from './SwitchStudent';
+import SwitchTeacher from './SwitchTeacher';
+import TeacherAccountScreen from '../screens/TeacherAccountScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="HomeNavigator"
+      initialRouteName={ SwitchNavigator }
       screenOptions={() => ({
         headerShown: false,
         statusBarColor: "#0A0909",
         // navigationBarColor: "#1C1717",
       })}
     >
+      <Stack.Screen name="SwitchNavigator" component={SwitchNavigator} />
       <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
-      <Stack.Screen 
-        name="CoursesDetail" 
-        component={CoursesDetail} 
+      <Stack.Screen name="SwitchStudent" component={SwitchStudent} />
+      <Stack.Screen name="SwitchTeacher" component={SwitchTeacher} />
+      <Stack.Screen
+        name="CoursesDetail"
+        component={CoursesDetail}
         options={{
-          animation:'none'
+          animation: 'none'
         }} />
-      <Stack.Screen 
-        name="VideoPreviewScreen" 
-        component={VideoPreviewScreen} 
+      <Stack.Screen
+        name="VideoPreviewScreen"
+        component={VideoPreviewScreen}
         options={{
-          animation:'none'
+          animation: 'none'
+        }} />
+      <Stack.Screen
+        name="CardScreen"
+        component={CardScreen}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: ''
+        }} />
+      <Stack.Screen
+        name="TeacherAccountScreen"
+        component={TeacherAccountScreen}
+        options={{
+          animation: 'none'
         }} />
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
       <Stack.Screen

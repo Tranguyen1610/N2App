@@ -13,7 +13,6 @@ const Tab = createBottomTabNavigator();
 export default function HomeScreen() {
     return (
         <Tab.Navigator
-            initialRouteName={"Messages"}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, size, color }) => {
                     let iconName;

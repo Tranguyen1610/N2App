@@ -15,7 +15,6 @@ export const AuthContextProvider = ({ children }) => {
 	useEffect(() => {
 		loadUser();
 	  }, []); 
-	  
 	//Login
 	const login = async userForm =>{
 		try{
@@ -23,6 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 			if (response.data.success){
 				setUserToken(response.data.accessToken);
 				AsyncStorage.setItem('userToken',response.data.token);
+				AsyncStorage.setItem('mode','Student')
 				await loadUser()
 			}
 			return response.data
@@ -41,6 +41,7 @@ export const AuthContextProvider = ({ children }) => {
 			setUserInfo({});
 			setUserToken(null);
 			AsyncStorage.removeItem('userToken')
+			AsyncStorage.removeItem('mode')
 			setIsLoading(false)},1000);
 	}
 	//LoadUser
@@ -99,6 +100,7 @@ export const AuthContextProvider = ({ children }) => {
 		} catch (error) {
 			if (error.response.data) {
 				console.log(error.response.data);
+				AsyncStorage.setItem('mode','Student')
 				return error.response.data
 			}
 			else{
@@ -132,7 +134,7 @@ export const AuthContextProvider = ({ children }) => {
 	return (
 		<AuthContext.Provider value={{
 			login,logout,userToken,userInfo,setUserToken,loadUser_Register,register,
-			isLoading,userInfo
+			isLoading,userInfo,
 		}}>
 			{children}
 		</AuthContext.Provider>
