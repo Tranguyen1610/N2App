@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
 
 const registerUser = asyncHandler(async function (req, res) {
-  const { Email, Password, UserName, Name, DateOfBirth } = req.body;
+  const { Email, Password, Name, DateOfBirth } = req.body;
   if (!Name || !Email || !Password) {
     res.status(400);
     throw new Error("Please Enter all Feilds");
@@ -15,7 +15,6 @@ const registerUser = asyncHandler(async function (req, res) {
   }
   const user = await User.create({
     Name,
-    UserName,
     Email,
     Password,
     DateOfBirth,
@@ -26,7 +25,6 @@ const registerUser = asyncHandler(async function (req, res) {
     res.status(201).json({
       _id: user._id,
       Name: user.Name,
-      UserName: user.UserName,
       Email: user.Email,
       Password: user.Password,
       DateOfBirth: user.DateOfBirth,
@@ -49,9 +47,8 @@ const authUser = asyncHandler(async (req, res) => {
       Id: user._id,
       Name: user.Name,
       Email: user.Email,
-      UserName: user.UserName,
       DateOfBirth: user.DateOfBirth,
-      pic: user.pic,
+      // pic: user.pic,
       // Cart: user.Cart,
       // WishList: user.WishList,
       token: generateToken(user._id),
@@ -65,7 +62,6 @@ const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
         $or: [
-          { UserName: { $regex: req.query.search, $options: "i" } },
           { Email: { $regex: req.query.search, $options: "i" } },
           { Name: { $regex: req.query.search, $options: "i" } },
         ],
@@ -85,14 +81,12 @@ const SearchUser = asyncHandler(async (req, res) => {
   }
 });
 const updateProfile = asyncHandler(async (req, res) => {
-  const { _id, UserName, Name, pic } = req.body;
+  const { _id, Name } = req.body;
 
   const updateInfo = await User.findByIdAndUpdate(
     _id,
     {
-      UserName,
       Name,
-      pic,
     },
     {
       new: true,
@@ -105,10 +99,8 @@ const updateProfile = asyncHandler(async (req, res) => {
   } else {
     res.json({
       _id: updateInfo._id,
-      UserName: updateInfo.UserName,
       Name: updateInfo.Name,
       Email: updateInfo.Email,
-      pic: updateInfo.pic,
       token: generateToken(updateInfo._id),
     });
   }
