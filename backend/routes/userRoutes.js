@@ -7,6 +7,7 @@ const {
   updateProfile,
   addWishList,
   getWishList,
+  addCart,
 } = require("../controllers/userControllers");
 const router = express.Router();
 const { protect } = require("../middlewares/authMiddleware");
@@ -18,4 +19,6 @@ router.route("/update").put(protect, updateProfile);
 router.get("/searchuser", SearchUser);
 router.route("/getWishList").get(protect,getWishList);
 router.route("/addWishList/:videoId").put(protect,addWishList);
+router.route("/addCart/:courseId").put(protect,addCart);
+
 module.exports = router;

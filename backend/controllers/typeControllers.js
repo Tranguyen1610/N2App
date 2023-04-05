@@ -25,4 +25,17 @@ const addType = asyncHandler(async (req, res) => {
     }
   });
 
-  module.exports={addType}
+  const allTypes = asyncHandler(async (req, res) => {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { Name: { $regex: req.query.search, $options: "i" } },
+            // { Email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+    console.log("abc");
+    const types = await Type.find(keyword);
+    res.send(types);
+  });
+  module.exports={addType,allTypes}
