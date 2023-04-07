@@ -132,6 +132,11 @@ const getWishList = asyncHandler(async(req,res)=>{
   const course =await User.findById(req.user._id).then((data)=>{res.json(data.WishList)})
   // res.json(course.WishList)
 })
+
+const getAllCart = asyncHandler(async(req,res)=>{
+  const cart =await User.findById(req.user._id).then((data)=>{res.json(data.Cart)})
+  // res.json(course.WishList)
+})
 const addCart =asyncHandler(async(req,res)=>{
   const { courseId } = req.params.courseId;
 
@@ -159,6 +164,11 @@ const addCart =asyncHandler(async(req,res)=>{
     throw new Error("User not found");
   }
 })
+const deleteProductFromCart = asyncHandler(async(req,res)=>{
+  const cart = User.findById(req.user._id);
+  console.log(cart);
+})
+
 module.exports = {
   registerUser,
   authUser,
@@ -168,4 +178,6 @@ module.exports = {
   addWishList,
   getWishList,
   addCart,
+  getAllCart,
+  deleteProductFromCart,
 };

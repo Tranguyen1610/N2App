@@ -17,23 +17,25 @@ const userSchema = mongoose.Schema(
     Cart: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        ref:"Course"
       },
     ],
     WishList: [
       {
         type: mongoose.Schema.Types.ObjectId,
+        ref:"Course"
       },
     ],
     CoursePurchased: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Video",
+        ref: "Course",
       },
     ],
     CoursePosted: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Video",
+        ref: "Course",
       },
     ],
   },
