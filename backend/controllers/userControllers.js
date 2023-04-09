@@ -21,11 +21,12 @@ const registerUser = asyncHandler(async function (req, res) {
     // WishList,
   });
   if (user) {
-    res.status(201).json({ success: true, message: 'Tạo tài khoản thành công', _id: user._id ,token: generateToken(user._id) })
+    res.status(201).json({ success: true, message: 'Tạo tài khoản thành công' ,token: generateToken(user._id) })
   } else {
     throw new Error("Failed to create the user ");
   }
 });
+
 const authUser = asyncHandler(async (req, res) => {
   const { Email, Password } = req.body;
   try {
@@ -45,6 +46,19 @@ const authUser = asyncHandler(async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error' })
   }
 });
+
+const getinfo = asyncHandler(async (req, res) => {
+	try {
+		const user = await User.findById(req.userId).select('-Password')
+		if (!user)
+			return res.status(400).json({ success: false, message: 'User not found' })
+		res.json({ success: true, user })
+	} catch (error) {
+		console.log(error)
+		res.status(500).json({ success: false, message: 'Internal server error' })
+	}
+})
+
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
@@ -55,12 +69,12 @@ const allUsers = asyncHandler(async (req, res) => {
       }
     : {};
   console.log("123", req.user);
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  const users = await User.find(keyword).find({ _id: { $ne: req.userId } });
   res.send(users);
 });
 const SearchUser = asyncHandler(async (req, res) => {
   const { Name } = req.body;
-  const user = await User.find({ Name });
+  const user = await User.find({ Name }).select('-Password');
   if (user) {
     res.json(user);
   } else {
@@ -116,7 +130,7 @@ const addWishList = asyncHandler(async(req,res)=>{
   }
 })
 const getWishList = asyncHandler(async(req,res)=>{
-  const course =await User.findById(req.user._id).then((data)=>{res.json(data.WishList)})
+  const course =await User.findById(req.userId).then((data)=>{res.json(data.WishList)})
   // res.json(course.WishList)
 })
 // const addCart =asyncHandler(asyncHandler(req,res)=>{
@@ -130,4 +144,5 @@ module.exports = {
   updateProfile,
   addWishList,
   getWishList,
+  getinfo,
 };

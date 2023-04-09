@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
 
 const createCourse = asyncHandler(async (req, res) => {
-  const { Name, Description, Type, Price } = req.body;
+  const { Name, Description, Type, Price, Image } = req.body;
 
   if (!Name || !Description || !Type || !Price) {
     res.status(400);
