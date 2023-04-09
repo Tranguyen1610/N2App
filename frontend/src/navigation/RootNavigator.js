@@ -8,6 +8,8 @@ import SwitchNavigator from "./SwitchNavigator"
 import SwitchStudent from './SwitchStudent';
 import SwitchTeacher from './SwitchTeacher';
 import TeacherAccountScreen from '../screens/TeacherAccountScreen';
+import AddCourseScreen from '../screens/AddCourseScreen';
+import AddVideoScreen from '../screens/AddVideoScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -49,6 +51,22 @@ const RootNavigator = () => {
       <Stack.Screen
         name="TeacherAccountScreen"
         component={TeacherAccountScreen}
+        options={{
+          animation: 'none'
+        }} />
+      <Stack.Screen
+        name="AddCourseScreen"
+        component={AddCourseScreen}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Tạo khóa học mới'
+        }} />
+      <Stack.Screen
+        name="AddVideoScreen"
+        component={AddVideoScreen}
         options={{
           animation: 'none'
         }} />
