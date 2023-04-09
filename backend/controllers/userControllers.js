@@ -133,9 +133,43 @@ const getWishList = asyncHandler(async(req,res)=>{
   const course =await User.findById(req.userId).then((data)=>{res.json(data.WishList)})
   // res.json(course.WishList)
 })
-// const addCart =asyncHandler(asyncHandler(req,res)=>{
-  
-// })
+
+const getAllCart = asyncHandler(async(req,res)=>{
+  const cart =await User.findById(req.user._id).then((data)=>{res.json(data.Cart)})
+  // res.json(course.WishList)
+})
+const addCart =asyncHandler(async(req,res)=>{
+  const { courseId } = req.params.courseId;
+
+  const cart = await User.findByIdAndUpdate(
+    req.user._id,
+    { $addToSet: {Cart :req.params.courseId } },
+    { new: true }
+  );
+   console.log(courseId);
+  // res.json(course);
+  // console.log(course);
+  // course.ListVideo.push({ ...videoId });
+  // console.log("Course:", course.);
+  if (cart) {
+    res.json({
+      _id: cart._id,
+      Name: cart.Name,
+      Email:cart.Email,
+      DateOfBirth:cart.DateOfBirth,
+      Cart:cart.Cart,
+
+    });
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
+})
+const deleteProductFromCart = asyncHandler(async(req,res)=>{
+  const cart = User.findById(req.user._id);
+  console.log(cart);
+})
+
 module.exports = {
   registerUser,
   authUser,
@@ -145,4 +179,7 @@ module.exports = {
   addWishList,
   getWishList,
   getinfo,
+  addCart,
+  getAllCart,
+  deleteProductFromCart,
 };
