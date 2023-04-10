@@ -5,7 +5,7 @@ const userRouters = require("./routes/userRoutes");
 const videoRouters = require("./routes/videoRoutes");
 const courseRouters = require("./routes/courseRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
-
+const orderRouters = require("./routes/orderRoutes");
 const typeRouters = require("./routes/typeRoutes");
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/middleware");
@@ -19,6 +19,7 @@ app.use("/api/video", videoRouters);
 app.use("/api/course", courseRouters);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/type",typeRouters);
+app.use("/api/order",orderRouters);
 
 
 app.use(notFound);

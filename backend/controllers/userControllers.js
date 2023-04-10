@@ -135,14 +135,14 @@ const getWishList = asyncHandler(async(req,res)=>{
 })
 
 const getAllCart = asyncHandler(async(req,res)=>{
-  const cart =await User.findById(req.user._id).then((data)=>{res.json(data.Cart)})
+  const cart =await User.findById(req.userId).then((data)=>{res.json(data.Cart)})
   // res.json(course.WishList)
 })
 const addCart =asyncHandler(async(req,res)=>{
   const { courseId } = req.params.courseId;
 
   const cart = await User.findByIdAndUpdate(
-    req.user._id,
+    req.userId,
     { $addToSet: {Cart :req.params.courseId } },
     { new: true }
   );
@@ -166,10 +166,32 @@ const addCart =asyncHandler(async(req,res)=>{
   }
 })
 const deleteProductFromCart = asyncHandler(async(req,res)=>{
-  const cart = User.findById(req.user._id);
+  const cart = User.findById(req.userId);
   console.log(cart);
 })
+const onTeacher = asyncHandler(async(req,res)=>{
+  const user =await User.findByIdAndUpdate(req.userId,
+    {
+     $set:{IsTeacher:"TEACHER"},
+    },{
+      new:true,
+    }
+    );
+    // res.send(user);
+    if (!user) {
+      res.status(400);
+      throw new Error("User not found");
+    } else {
+      res.json({
+        _id: user._id,
+        Name: user.Name,
+        Email: user.Email,
+        IsTeacher:user.IsTeacher,
+        token: generateToken(user._id),
+      });
+    }
 
+})
 module.exports = {
   registerUser,
   authUser,
@@ -182,4 +204,5 @@ module.exports = {
   addCart,
   getAllCart,
   deleteProductFromCart,
+  onTeacher,
 };
