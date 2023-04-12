@@ -74,11 +74,11 @@ const allCourses = asyncHandler(async (req, res) => {
     ? {
         $or: [
           { Name: { $regex: req.query.search, $options: "i" } },
-          // { Email: { $regex: req.query.search, $options: "i" } },
+          { Type: { $regex: req.query.search, $options: "i" } },
         ],
       }
     : {};
-  console.log("abc");
+  // console.log("abc");
   const courses = await Course.find(keyword);
   res.send(courses);
 });
@@ -125,6 +125,10 @@ const deleteVideoOfCourse = asyncHandler(async (req, res) => {
       res.send(err);
     });
 });
+const sortCourse = asyncHandler(async(req,res)=>{
+  const course = await Course.find({}).sort({FinalPrice:-1})
+  res.send(course);
+})
 module.exports = {
   createCourse,
   addVideotoCourse,
@@ -133,4 +137,5 @@ module.exports = {
   deleteCourse,
   deleteVideoOfCourse,
   updateCoures,
+  sortCourse,
 };
