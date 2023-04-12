@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("/", uploader.single("file"), async (req, res) => {
 	try {
 		const upload = await cloudinary.uploader.upload(req.file.path,{
-			upload_preset:'N2App'
+			upload_preset:'N2App',
+			resource_type:'auto'
 		});
 		return res.json({
 			success: true,

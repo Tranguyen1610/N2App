@@ -1,131 +1,141 @@
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking } from 'react-native'
-import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import * as ImagePicker from 'expo-image-picker';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput } from 'react-native'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Url } from '../contexts/constants';
 import axios from 'axios';
+import DropDownPicker from 'react-native-dropdown-picker'
+import { AuthContext } from '../contexts/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { Keyboard } from 'react-native';
+
 
 export default function AddCourseScreen() {
-  const [image, setImage] = useState(' ');
-  const [isLoading, setIsLoading] = useState(false);
-  const showImagePicker = async () => {
-    // Ask the user for the permission to access the media library 
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const { types, setTypes } = useContext(AuthContext);
+  const nav = useNavigation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [alertValue, setAlertValue] = useState("");
+  const [type, setType] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [des, setDes] = useState("");
 
-    if (permissionResult.granted === false) {
-      Alert.alert(
-        "Cấp quyền truy cập",
-        "Bạn cần cấp quyền cho phép ứng dụng này truy cập vào ảnh của bạn \n\nBấm mở cài đặt, chọn Quyền và bật ON các quyền tương thích",
-        [
-          {
-            text: 'Hủy',
-          },
-          {
-            text: 'Mở cài đặt',
-            onPress: () => handleOpenSettings(),
-          },
-        ], {
-        cancelable: true,
-      });
-      return;
+  const getType = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/type`);
+      // console.log(res.data);
+      const listtype = res.data;
+      for (let index = 0; index < listtype.length; index++) {
+        list.push({ label: listtype[index].Name, value: listtype[index]._id })
+      }
+    } catch (err) {
+      console.log(err);
     }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.5,
+    setTypes(list)
+  }
+
+  const check = () => {
+    const regexPrice = /^[1-9][0-9]*$/;
+    if (name !== "" && type !== "" && price !== "" && des !== "") {
+      if (regexPrice.test(price)) {
+        setAlertValue("")
+        const datas ={
+          Name:name,
+          Type:type,
+          Price:price,
+          Description:des
+        }
+        nav.navigate('AddCourseStep2Screen',{data:datas})
+      }
+      else {
+        setAlertValue("Giá phải là số lớn hơn 0")
+        setTimeout(() => setAlertValue(''), 3000)
+      }
     }
+    else {
+      setAlertValue("Phải điền đầy đủ thông tin")
+      setTimeout(() => setAlertValue(''), 3000)
+    }
+  }
+
+  useEffect(() => {
+    getType()
+  }, [])
+
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardOpen(true);
+      }
     );
 
-    // Explore the result 
-    if (!result.cancelled) {
-      setImage(result.uri);
-      handleUpload()
-    }
-  }
-  //send image
-  // const handleImageChange = async (image) => {
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardOpen(false);
+      }
+    );
 
-  //   const blob = await new Promise((resolve, reject) => {
-  //     const xhr = new XMLHttpRequest();
-  //     xhr.onload = function () {
-  //       resolve(xhr.response);
-  //     };
-  //     xhr.onerror = function (e) {
-  //       console.log(e);
-  //       reject(new TypeError("Network request failed"));
-  //     };
-  //     xhr.responseType = "blob";
-  //     xhr.open("GET", image.uri, true);
-  //     xhr.send(null);
-  //   });
-  //   setIsLoading(true);
-  //   const fileName = image.uri.slice(image.uri.lastIndexOf('/') + 1, image.uri.lastIndexOf('.')) + "-" + Date.now();
-  //   const imageRef = ref(storage, `/image/${fileName}`);
-  //   uploadBytes(imageRef, blob)
-  //     .then(() => {
-  //       getDownloadURL(imageRef)
-  //         .then(async (url) => {
-  //           setImage(url)
-  //           setIsLoading(false);
-  //         })
-  //         .catch((error) => {
-  //           console.log(error.message, "error getting the image url");
-  //         });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.message);
-  //     });
-
-  // };
-  const handleUpload = async()=>{
-    const formData = new FormData()
-    formData.append('file',{
-      name:'image.jpeg',
-      uri: image,
-      type: 'image/jpg'
-    })
-    setIsLoading(true);
-    try {
-      const response = await axios.post(`${Url}/upload`, formData,{
-        headers:{
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        }
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-      setImage(' ');
-    }
-    setIsLoading(false);
-  }
-
-  const handleOpenSettings = () => {
-    if (Platform.OS === 'ios') {
-        Linking.openURL('app-settings:');
-    } else {
-        Linking.openSettings();
-    }
-};
+    // cleanup function to remove listeners when unmounting
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   return (
-    <SafeAreaView className="flex-1 bg-[#0A0909] p-5">
-      <ScrollView>
-      <View
-            className="w-max h-48 border border-gray-900 justify-center rounded-sm">
-        {isLoading ?
-            <ActivityIndicator size={'large'}  />:
-          <Image
-            className="w-max h-48 rounded-sm border-gray-900"
-            source={{ uri: image }}
-          />}
-      </View>
-        <TouchableOpacity
-          className="justify-center items-center mt-5"
-          onPress={() => showImagePicker()}>
-          <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Chọn ảnh bìa</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+    <View className="flex-1 bg-[#0A0909] p-5">
+      <TextInput
+        placeholder='Tên khóa học'
+        placeholderTextColor={'#7F889A'}
+        className="text-white text-base  px-2 border border-gray-900 w-full h-12 my-5 rounded-sm "
+        value={name}
+        onChangeText={(e) => setName(e)} />
+      <DropDownPicker
+        items={types}
+        open={isOpen}
+        setOpen={() => setIsOpen(!isOpen)}
+        value={type}
+        setValue={(val) => setType(val)}
+        maxHeight={200}
+        scrollViewProps
+        autoScroll
+        placeholder='Chọn thể loại'
+        dropDownDirection='BOTTOM'
+        theme='DARK'
+        textStyle={{
+          color: "#fff"
+        }}
+      />
+      <TextInput
+        placeholder='Giá'
+        placeholderTextColor={'#7F889A'}
+        className="text-white text-base  px-2 border border-gray-900 w-full h-12 my-5 rounded-sm "
+        value={price}
+        onChangeText={(e) => setPrice(e)} />
+      <TextInput
+        multiline={true}
+        numberOfLines={4}
+        placeholder='Mô tả'
+        placeholderTextColor={'#7F889A'}
+        className="text-white text-base p-2 border border-gray-900 w-full mt-5 rounded-sm "
+        style={{
+          textAlignVertical: 'top',
+          minHeight: 150
+        }}
+        value={des}
+        onChangeText={(e) => setDes(e)} />
+      <Text className="text-red-600 text-base italic text-center mt-10" >{alertValue}</Text>
+      {!isKeyboardOpen ?
+        <View className="absolute bottom-10 right-5 items-end">
+          <Text className="text-[#7F889A] italic">Nhấn "Bước tiếp" để thêm ảnh bìa, video giới thiệu</Text>
+          <TouchableOpacity
+            className="justify-center items-center mt-2"
+            onPress={() => check()}>
+            <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Bước tiếp</Text>
+          </TouchableOpacity>
+        </View> : <></>}
+    </View>
   )
 }

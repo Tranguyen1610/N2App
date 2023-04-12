@@ -25,7 +25,8 @@ export default function CoursesTeacherScreen() {
               nav.navigate('AddCourseScreen')}>
             <Text className="text-white p-2 text-base font-semibold">Thêm khóa học</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="mr-3 mb-3 rounded-xl border border-white bg-[#1B212D]">
+          <TouchableOpacity className="mr-3 mb-3 rounded-xl border border-white bg-[#1B212D]"
+            onPress={()=>nav.navigate('AddVideoScreen',{idCourse:"6435a8bb0e91caa468999a8c"})}>
             <Text className="text-white p-2 text-base font-semibold">Tìm kiếm</Text>
           </TouchableOpacity>
           <TouchableOpacity className="mr-3 mb-3 rounded-xl border border-white bg-[#1B212D]">

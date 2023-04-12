@@ -11,6 +11,7 @@ export const AuthContextProvider = ({ children }) => {
 	const [userToken,setUserToken] = useState(null);
 	const [userInfo, setUserInfo] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
+	const [types,setTypes] = useState([]);
 
 	useEffect(() => {
 		loadUser();
@@ -134,7 +135,7 @@ export const AuthContextProvider = ({ children }) => {
 	return (
 		<AuthContext.Provider value={{
 			login,logout,userToken,userInfo,setUserToken,loadUser_Register,register,
-			isLoading,userInfo,
+			isLoading,userInfo,types,setTypes
 		}}>
 			{children}
 		</AuthContext.Provider>
