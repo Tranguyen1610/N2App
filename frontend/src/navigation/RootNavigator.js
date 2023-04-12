@@ -10,6 +10,7 @@ import SwitchTeacher from './SwitchTeacher';
 import TeacherAccountScreen from '../screens/TeacherAccountScreen';
 import AddCourseScreen from '../screens/AddCourseScreen';
 import AddVideoScreen from '../screens/AddVideoScreen';
+import AddCourseStep2Screen from '../screens/AddCourseStep2Screen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -64,11 +65,25 @@ const RootNavigator = () => {
           headerTintColor: '#ffffff',
           title: 'Tạo khóa học mới'
         }} />
+        <Stack.Screen
+        name="AddCourseStep2Screen"
+        component={AddCourseStep2Screen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Tạo khóa học mới'
+        }} />
       <Stack.Screen
         name="AddVideoScreen"
         component={AddVideoScreen}
         options={{
-          animation: 'none'
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Thêm video'
         }} />
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
       <Stack.Screen

@@ -2,16 +2,17 @@ const asyncHandler = require("express-async-handler");
 const Video = require("../models/videoModel");
 
 const addVideo = asyncHandler(async (req, res) => {
-  const { Name, LinkVideo, Description } = req.body;
+  const { Name, LinkVideo, Description, CourseId } = req.body;
 
-  if (!Name || !LinkVideo || !Description) {
+  if (!Name || !LinkVideo || !Description || !CourseId) {
     res.status(400);
     throw new Error("Please Enter all the Feilds");
   }
-  const video = Video.create({
+  const video = await Video.create({
     Name,
     LinkVideo,
     Description,
+    CourseId,
   });
   if (video) {
     res.status(200).json({
@@ -19,6 +20,7 @@ const addVideo = asyncHandler(async (req, res) => {
       Name: video.Name,
       LinkVideo: video.LinkVideo,
       Description: video.Description,
+      CourseId: video.CourseId,
     });
   } else {
     res.status(400);

@@ -71,7 +71,7 @@ export default function VerificationScreen({ route }) {
                         if (e.replace(/[^0-9]/g, '') != "") Keyboard.dismiss();
                     }} />
             </View>
-            <TouchableOpacity className="bg-[#1273FE] h-12 rounded-md mt-5 items-center justify-center w-4/5 mt-10">
+            <TouchableOpacity className="bg-[#1273FE] h-12 rounded-md items-center justify-center w-4/5 mt-10">
                 <Text className="text-base text-white font-medium">
                     Xác thực
                 </Text>

@@ -2,9 +2,9 @@ const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
 
 const createCourse = asyncHandler(async (req, res) => {
-  const { Name, Description, Type, Price, Image } = req.body;
+  const { Name, Description, Type, Price, Image,Video } = req.body;
 
-  if (!Name || !Description || !Type || !Price) {
+  if (!Name || !Description || !Type || !Price || !Image || !Video) {
     res.status(400);
     throw new Error("Please Enter all the Feilds");
   }
@@ -13,6 +13,9 @@ const createCourse = asyncHandler(async (req, res) => {
     Description,
     Type,
     Price,
+    Image,
+    Video,
+    Teacher:req.userId,
   });
   if (course) {
     res.status(201).json({
@@ -21,6 +24,9 @@ const createCourse = asyncHandler(async (req, res) => {
       Description: course.Description,
       Type: course.Type,
       Price: course.Price,
+      Image: course.Image,
+      Video: course.Video,
+      Teacher:req.userId,
     });
   } else {
     res.status(400);
@@ -28,11 +34,11 @@ const createCourse = asyncHandler(async (req, res) => {
   }
 });
 const addVideotoCourse = asyncHandler(async (req, res) => {
-  const { videoId } = req.body;
+  const { VideoId,CourseId } = req.body;
 
   const course = await Course.findByIdAndUpdate(
-    req.body.courseId,
-    { $addToSet: { ListVideo: videoId } },
+    CourseId,
+    { $addToSet: { ListVideo: VideoId } },
     { new: true }
   );
   console.log(course);
@@ -51,7 +57,7 @@ const addVideotoCourse = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("User not found");
+    throw new Error("Course not found");
   }
 });
 const searchCourse = asyncHandler(async (req, res) => {

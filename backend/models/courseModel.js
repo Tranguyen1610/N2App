@@ -13,6 +13,8 @@ const courseSchema = mongoose.Schema(
     Type: { type: mongoose.Schema.Types.ObjectId, trim: true, ref:"Type" },
     Price: { type: Number, trim: true },
     LastUpdate: { type: Date, trim: true },
+    Image: {type: String, trim: true },
+    Video: {type: String, trim: true },
   },
   {
     Timestamp: true,
