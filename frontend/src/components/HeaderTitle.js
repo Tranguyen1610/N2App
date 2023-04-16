@@ -1,14 +1,16 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 import CardScreen from '../screens/CardScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function HeaderTitle({ name, title, isBack }) {
     const nav = useNavigation();
     const [numCart, setnumCart] = useState(3);
     const [mode, setMode] = useState();
+    const { textSearch, setTextSearch } = useContext(AuthContext);
 
     const getMode = async () => {
         const mode = await AsyncStorage.getItem('mode');
@@ -25,7 +27,11 @@ export default function HeaderTitle({ name, title, isBack }) {
                         <View className="w-1/12">
                             <Ionicons name="search" size={24} color="white" />
                         </View>
-                        <TextInput className=" w-11/12 text-base px-2 text-white" placeholder='Tìm kiếm'>
+                        <TextInput 
+                            className=" w-11/12 text-base px-2 text-white" 
+                            placeholder='Tìm kiếm'
+                            value={textSearch}
+                            onChangeText={(e)=>setTextSearch(e)}>
                         </TextInput>
                     </View> : <></>}
                 {isBack ?

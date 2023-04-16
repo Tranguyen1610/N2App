@@ -10,7 +10,9 @@ export default function CoursesCart({ item }) {
     const [isChecked, setChecked] = useState(false);
 
     const formatNumStart = (num) => {
-        return num.toFixed(1);
+        if(num!="")
+            return num.toFixed(1);
+        return "";
     }
     const formatPrice = (num) => {
         return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"

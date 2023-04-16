@@ -35,6 +35,7 @@ export default function HomeScreen() {
                 },
                 tabBarStyle: {height:60,justifyContent: 'center', alignItems: 'center', backgroundColor: '#1C1717'},
                 tabBarLabelStyle: { fontSize: 14, fontWeight: "700",},
+                tabBarHideOnKeyboard:true,
                 headerShown: false,
             })} >
             <Tab.Screen

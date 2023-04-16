@@ -4,9 +4,12 @@ import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { Url } from '../contexts/constants';
+import Toast from 'react-native-root-toast';
+import { useNavigation } from '@react-navigation/native';
 
 export default function AddVideoScreen({ route }) {
   const data = route.params.idCourse;
+  const nav = useNavigation()
   const [video, setVideo] = useState(null);
   const [linkVideo, setLinkVideo] = useState("");
   const [name, setName] = useState("");
@@ -14,7 +17,8 @@ export default function AddVideoScreen({ route }) {
   const [isLoadingVideo, setIsLoadingVideo] = useState(false);
   const videoRef = useRef();
   const [alertValue, setAlertValue] = useState("");
-
+  const [key, setKey] = useState(Date.now());
+  const [numVideo,setNumVideo]= useState(0);
   const showVideoPicker = async () => {
     // Ask the user for the permission to access the media library 
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -76,10 +80,6 @@ export default function AddVideoScreen({ route }) {
 
   }
 
-  useEffect(() => {
-    console.log(data);
-  }, [])
-
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   useEffect(() => {
@@ -104,7 +104,11 @@ export default function AddVideoScreen({ route }) {
     };
   }, []);
 
-  const check = async() => {
+  useEffect(()=>{
+    getNumVideoOfCourse()
+  },[])
+
+  const check = async () => {
     if (name !== "" && des !== "" && linkVideo !== "") {
       const dataVideo = {
         Name: name,
@@ -116,13 +120,22 @@ export default function AddVideoScreen({ route }) {
       try {
         const res = await axios.post(`${Url}/video/addVideo`, dataVideo);
         console.log(res.data);
-        const dataAdd={
-          VideoId:res.data._id,
-          CourseId:data
+        const dataAdd = {
+          VideoId: res.data._id,
+          CourseId: data
         }
         try {
           const response = await axios.put(`${Url}/course/addVideotoCourse`, dataAdd);
           console.log(response.data);
+          Toast.show('Thành công',
+            {
+              backgroundColor: '#3B404F',
+              textColor: '#ffffff',
+              opacity: 1,
+              duration: Toast.durations.SHORT,
+              position: Toast.positions.BOTTOM,
+              animation: true,
+            })
         } catch (error) {
           console.log(error);
         }
@@ -136,6 +149,26 @@ export default function AddVideoScreen({ route }) {
     }
 
   }
+
+  const reset = () => {
+    setNumVideo(numVideo+1)
+    setName(`Bài học ${numVideo+2}`)
+    setDes("")
+    setLinkVideo("")
+    setVideo(null)
+    setKey(Date.now());
+  }
+  
+  const getNumVideoOfCourse=async()=>{
+    try {
+      const response = await axios.get(`${Url}/course/getVideoOfCourse/${data}`);
+      setNumVideo(response.data.ListVideo.length);
+      setName(`Bài học ${response.data.ListVideo.length+1}`)
+    }
+    catch (err){
+      console.log(err);
+    }
+  }
   return (
     <View className="flex-1 bg-[#0A0909] p-5">
       <TextInput
@@ -144,6 +177,7 @@ export default function AddVideoScreen({ route }) {
         className="text-white text-base  px-2 border border-gray-900 w-full h-12 mt-5 rounded-sm "
         value={name}
         onChangeText={(e) => setName(e)}
+        editable={false}
       />
       <TextInput
         placeholder='Nội dung'
@@ -157,6 +191,7 @@ export default function AddVideoScreen({ route }) {
         {isLoadingVideo ?
           <ActivityIndicator size={'large'} /> :
           <Video
+            key={key}
             ref={videoRef}
             source={{ uri: video }}
             className="w-max h-48"
@@ -178,13 +213,18 @@ export default function AddVideoScreen({ route }) {
           <View className="flex-row">
             <TouchableOpacity
               className="justify-center items-center mt-2"
-              onPress={() => check()}>
+              onPress={() => {
+                check()
+                nav.popToTop()
+                }}>
               <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Hoàn thành</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="justify-center items-center mt-2"
-            // onPress={() => check()}
-            >
+              onPress={() => {
+                check()
+                reset()
+              }}>
               <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl ml-5">Tiếp tục thêm mới</Text>
             </TouchableOpacity>
           </View>
