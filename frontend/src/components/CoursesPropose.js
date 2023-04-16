@@ -1,27 +1,42 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Rating } from 'react-native-ratings';
 import { useNavigation } from '@react-navigation/native';
 
-export default function CoursesPropose({ item}) {
+export default function CoursesPropose({ item }) {
     const nav = useNavigation();
-    const formatNumStart = (num)=>{
-        return num.toFixed(1);
+    const formatNumStart = (num) => {
+        if (num)
+            return num.toFixed(1);
+        return ""
     }
-    const formatPrice = (num)=>{
-        return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') +" đ"
+
+    const names = (m) => {
+        if (m != null) {
+            if (m.length <= 40)
+                return m
+            else
+                return m.slice(0, 36) + '...'
+        }
+        return ""
+    }
+
+    const formatPrice = (num) => {
+        if (num)
+            return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
+        return ""
     }
     return (
-        <TouchableOpacity className="bg-[#1B212D] mr-5 w-56"
-        onPress={()=>nav.navigate("CoursesDetail",{course:item})}>
+        <TouchableOpacity className="bg-[#1B212D] mr-5 w-56 p-3"
+            onPress={() => nav.navigate("CoursesDetail", { course: item })}>
             <Image
-                source={{ uri: item.image }}
+                source={{ uri: item.Image }}
                 className="w-max h-28" />
-            <Text className="text-white text-lg font-semibold">{item.name}</Text>
-            <Text className="text-gray-400 text-base">{item.lecturers}</Text>
+            <Text className="text-white text-lg font-semibold h-14">{names(item.Name)}</Text>
+            <Text className="text-gray-400 text-base">{item.Teacher.Name}</Text>
             <View
                 className="flex-row">
-                <Text className="text-[#f1c40f] mr-2 font-medium"> {formatNumStart(item.numStar)}</Text>
+                <Text className="text-[#f1c40f] mr-2 font-medium"> {formatNumStart(4.1)}</Text>
                 <Rating
                     ratingCount={5}
                     imageSize={20}
@@ -29,9 +44,9 @@ export default function CoursesPropose({ item}) {
                     readonly
                     startingValue={item.numStar}
                 />
-                <Text className="text-gray-500 ml-4">({item.numRating})</Text>
+                <Text className="text-gray-500 ml-4">(230)</Text>
             </View>
-            <Text className='text-white font-semibold text-base'>{formatPrice(item.price)}</Text>
+            <Text className='text-white font-semibold text-base'>{formatPrice(item.Price)}</Text>
         </TouchableOpacity>
     )
 }

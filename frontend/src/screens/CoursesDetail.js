@@ -8,23 +8,28 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function CoursesDetail({ route }) {
     const course = route.params.course;
+    console.log(course);
     const nav = useNavigation();
     const formatNumStart = (num) => {
-        return num.toFixed(1);
+        if (num)
+            return num.toFixed(1);
+        return ""
     }
     const formatPrice = (num) => {
+        if(num)
         return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
+        return ""
     }
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1">
             <HeaderTitle name='CoursesDetail' title='' isBack={true} />
             <ScrollView className="mx-5">
                 <TouchableOpacity
-                    onPress={()=>
-                        nav.navigate("VideoPreviewScreen",{link:course.videoInfo})
+                    onPress={() =>
+                        nav.navigate("VideoPreviewScreen", { link: course.Video })
                     }>
                     <Image
-                        source={{ uri: course.image }}
+                        source={{ uri: course.Image }}
                         className="w-fit h-56 mt-5 rounded-md" />
                     <View className="absolute top-24 w-screen items-center">
                         <Ionicons
@@ -37,7 +42,7 @@ export default function CoursesDetail({ route }) {
                 </TouchableOpacity>
                 <Text className="text-white font-semibold text-2xl">{course.name}</Text>
                 <View className="flex-row items-center">
-                    <Text className="text-white font-semibold mr-2 text-base"> {formatNumStart(course.numStar)}</Text>
+                    <Text className="text-white font-semibold mr-2 text-base"> {formatNumStart(4.1)}</Text>
                     <Rating
                         ratingCount={5}
                         imageSize={20}
@@ -49,7 +54,7 @@ export default function CoursesDetail({ route }) {
                 <Text className="text-gray-400 text-sm">({course.numRating} xếp hạng) {course.numRating} học viên </Text>
                 <View className="flex-row mt-2">
                     <Text className="text-gray-400 text-base"> Tác giả</Text>
-                    <Text className="text-[#1273FE] text-base ml-3">{course.lecturers}</Text>
+                    <Text className="text-[#1273FE] text-base ml-3">{course.Teacher.Name}</Text>
                 </View>
                 <Text className="text-white font-bold text-2xl mt-5 mb-3">Những gì bạn sẽ học</Text>
                 <View>

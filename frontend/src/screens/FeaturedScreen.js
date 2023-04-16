@@ -1,17 +1,57 @@
 import { View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../contexts/AuthContext'
 import CoursesPropose from '../components/CoursesPropose'
 import Type from '../components/Type'
 import HeaderTitle from '../components/HeaderTitle'
 import { Courses, dataType } from '../contexts/Data'
+import axios from 'axios';
+import { StatusBar } from 'expo-status-bar'
+import { Url } from '../contexts/constants'
 
-export default function FeaturedScreen({navigation}) {
-  const { userInfo} = useContext(AuthContext)
+export default function FeaturedScreen({ navigation }) {
+  const { userInfo, listType, setListType, courses, setCourses } = useContext(AuthContext);
+  const [topFiveCourse,setTopFiveCourse] = useState([]);
 
+  const getType = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/type`);
+      // console.log(res.data);
+      const listtype = res.data;
+      for (let index = 0; index < listtype.length; index++) {
+        list.push(listtype[index].Name)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setListType(list)
+  }
+  const getCourse = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/course`);
+      // console.log(res.data);
+      const listcourse = res.data;
+      for (let index = 0; index < listcourse.length; index++) {
+        list.push(listcourse[index])
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setCourses(list)
+    setTopFiveCourse(list.slice(0,5))
+  }
+
+
+  useEffect(() => {
+    getType();
+    getCourse();
+  }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
+      <StatusBar style='light' />
       <HeaderTitle name='FeaturedScreen' title='' isBack={false} />
       <ScrollView className="px-5 pt-5"
         showsVerticalScrollIndicator={false}>
@@ -22,10 +62,10 @@ export default function FeaturedScreen({navigation}) {
         </View>
         <View className="flex-row mt-7 items-center justify-between">
           <Text className="text-white text-2xl font-bold">Đề xuất cho bạn</Text>
-          <TouchableOpacity 
-          onPress={() => {
-            navigation.navigate("ProposalScreen")
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ProposalScreen")
+            }}>
             <Text className="text-[#1273FE]">Xem tất cả</Text>
           </TouchableOpacity>
         </View>
@@ -34,7 +74,7 @@ export default function FeaturedScreen({navigation}) {
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={Courses}
+            data={topFiveCourse}
             renderItem={({ item }) =>
               <CoursesPropose
                 item={item} />
@@ -52,7 +92,7 @@ export default function FeaturedScreen({navigation}) {
         </View>
         <ScrollView horizontal={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} className="mt-3" >
           <FlatList
-            data={dataType}
+            data={listType}
             numColumns={Math.ceil(dataType.length / 2)}
             scrollEnabled={false}
             renderItem={({ item }) =>
@@ -63,10 +103,10 @@ export default function FeaturedScreen({navigation}) {
         </ScrollView>
         <View className="flex-row mt-7 items-center justify-between">
           <Text className="text-white text-2xl font-bold">CNTT & Phần mềm</Text>
-          <TouchableOpacity 
-          onPress={() => {
-            navigation.navigate("ProposalScreen")
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ProposalScreen")
+            }}>
             <Text className="text-[#1273FE]">Xem tất cả</Text>
           </TouchableOpacity>
         </View>
@@ -75,7 +115,7 @@ export default function FeaturedScreen({navigation}) {
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={Courses}
+            data={topFiveCourse}
             renderItem={({ item }) =>
               <CoursesPropose
                 item={item} />

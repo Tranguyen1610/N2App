@@ -13,7 +13,7 @@ const {
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
-router.route("/").get(protect, allCourses);
+router.route("/").get(allCourses);
 router.route("/getVideoOfCourse/:CourseId").get(protect,getVideoOfCourse);
 // router.route("/getCourseUnFinished").get(protect, getCourseUnFinished);
 router.route("/createCourse").post(protect, createCourse);
