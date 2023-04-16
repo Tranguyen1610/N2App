@@ -44,7 +44,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-[#0A0909] px-4">
-        {/* <StatusBar backgroundColor='#0A0909' /> */}
+        <StatusBar style='light' />
         <Text className="text-white text-3xl font-medium mt-16">Đăng nhập</Text>
         <View className="flex-row">
           <Text className="text-[#7F889A] text-sm mr-2">Bạn chưa có tài khoản?</Text>

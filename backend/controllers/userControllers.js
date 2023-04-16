@@ -49,7 +49,10 @@ const authUser = asyncHandler(async (req, res) => {
 
 const getinfo = asyncHandler(async (req, res) => {
 	try {
-		const user = await User.findById(req.userId).select('-Password')
+		const user = await User.findById(req.userId)
+      .select('-Password')
+      .populate('WishList')
+      .populate('Cart')
 		if (!user)
 			return res.status(400).json({ success: false, message: 'User not found' })
 		res.json({ success: true, user })

@@ -12,6 +12,7 @@ export const AuthContextProvider = ({ children }) => {
 	const [userInfo, setUserInfo] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [types,setTypes] = useState([]);
+	const [listType,setListType] = useState([]);
 	const [courses,setCourses] = useState([]);
 	const [textSearch, setTextSearch] = useState("");
 
@@ -137,7 +138,8 @@ export const AuthContextProvider = ({ children }) => {
 	return (
 		<AuthContext.Provider value={{
 			login,logout,userToken,userInfo,setUserToken,loadUser_Register,register,
-			isLoading,userInfo,types,setTypes,courses,setCourses,textSearch, setTextSearch
+			isLoading,userInfo,types,setTypes,courses,setCourses,textSearch, setTextSearch,
+			listType,setListType
 		}}>
 			{children}
 		</AuthContext.Provider>

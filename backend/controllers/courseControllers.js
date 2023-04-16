@@ -79,7 +79,8 @@ const allCourses = asyncHandler(async (req, res) => {
       }
     : {};
   // console.log("abc");
-  const courses = await Course.find(keyword);
+  const courses = await Course.find(keyword)
+  .populate("Teacher", "-Password");
   res.send(courses);
 });
 const deleteCourse = asyncHandler(async (req, res) => {

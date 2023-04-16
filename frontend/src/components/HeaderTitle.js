@@ -8,9 +8,9 @@ import { AuthContext } from '../contexts/AuthContext';
 
 export default function HeaderTitle({ name, title, isBack }) {
     const nav = useNavigation();
-    const [numCart, setnumCart] = useState(3);
+    const [numCart, setnumCart] = useState(0);
     const [mode, setMode] = useState();
-    const { textSearch, setTextSearch } = useContext(AuthContext);
+    const { textSearch, setTextSearch,userInfo } = useContext(AuthContext);
 
     const getMode = async () => {
         const mode = await AsyncStorage.getItem('mode');
@@ -18,6 +18,7 @@ export default function HeaderTitle({ name, title, isBack }) {
     }
     useEffect(()=>{
         getMode()
+        setnumCart(userInfo.Cart.length);
     },[])
     return (
         <View className="flex-row items-center justify-center w-screen h-14 px-5">

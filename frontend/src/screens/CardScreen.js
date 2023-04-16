@@ -1,21 +1,28 @@
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Checkbox from 'expo-checkbox';
 import { CoursesWL } from '../contexts/Data'
 import CoursesCart from '../components/CoursesCart'
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function CardScreen() {
+    const { userInfo } = useContext(AuthContext);
+    const [carts, setCarts] = useState([])
     const [isChecked, setChecked] = useState(false);
     const [total, setTotal] = useState("0 đ");
+
+    useEffect(() => {
+        setCarts(userInfo.Cart)
+    }, [])
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1">
             <FlatList
                 className=" px-2"
                 showsHorizontalScrollIndicator={false}
-                data={CoursesWL}
+                data={carts}
                 renderItem={({ item }) =>
                     <CoursesCart
                         item={item} />
