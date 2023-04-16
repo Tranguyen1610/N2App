@@ -26,7 +26,7 @@ const createCourse = asyncHandler(async (req, res) => {
       Price: course.Price,
       Image: course.Image,
       Video: course.Video,
-      Teacher:req.userId,
+      Teacher:course.Teacher,
     });
   } else {
     res.status(400);
@@ -129,6 +129,18 @@ const sortCourse = asyncHandler(async(req,res)=>{
   const course = await Course.find({}).sort({FinalPrice:-1})
   res.send(course);
 })
+const getVideoOfCourse = asyncHandler(async(req,res)=>{
+  const course = await Course.findById(req.params.CourseId);
+  if(course){
+    res.json({
+      ListVideo:course.ListVideo
+    })
+  }
+  else{
+    res.status(400);
+    throw new Error("Course not found");
+  }
+})
 module.exports = {
   createCourse,
   addVideotoCourse,
@@ -138,4 +150,5 @@ module.exports = {
   deleteVideoOfCourse,
   updateCoures,
   sortCourse,
+  getVideoOfCourse
 };

@@ -9,11 +9,13 @@ const {
   updateCoures,
   deleteVideoOfCourse,
   sortCourse,
+  getVideoOfCourse,
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
 router.route("/").get(protect, allCourses);
-router.route("/getCourseUnFinished").get(protect, getCourseUnFinished);
+router.route("/getVideoOfCourse/:CourseId").get(protect,getVideoOfCourse);
+// router.route("/getCourseUnFinished").get(protect, getCourseUnFinished);
 router.route("/createCourse").post(protect, createCourse);
 router.route("/addVideotoCourse").put(protect, addVideotoCourse);
 router.route("/searchCourse").get(protect, searchCourse);
