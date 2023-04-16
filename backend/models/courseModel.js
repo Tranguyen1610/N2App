@@ -16,10 +16,17 @@ const courseSchema = mongoose.Schema(
     LastUpdate: { type: Date, trim: true },
     Image: {type: String, trim: true },
     Video: {type: String, trim: true },
+    Comment:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+         ref: "Comment",
+      }
+    ]
   },
   {
     Timestamp: true,
   }
+  
 );
 const Course = mongoose.model("Course", courseSchema);
 module.exports = Course;

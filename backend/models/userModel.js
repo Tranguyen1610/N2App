@@ -38,6 +38,12 @@ const userSchema = mongoose.Schema(
         ref: "Course",
       },
     ],
+    Comment:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      }
+    ]
   },
   {
     Timestamp: true,

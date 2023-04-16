@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.route("/").get(protect,getAllOrder);
 router.route("/createOrder").post(protect,createOrder);
-router.route("/:id/deleteOrder").put(protect,deleteOrder);
+router.route("/:id/deleteOrder").delete(protect,deleteOrder);
 
 module.exports = router;
