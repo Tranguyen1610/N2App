@@ -14,10 +14,17 @@ const courseSchema = mongoose.Schema(
     OriginPrice: { type: Number, trim: true },
     FinalPrice: { type: Number, trim: true },
     LastUpdate: { type: Date, trim: true },
+    Comment:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+         ref: "Comment",
+      }
+    ]
   },
   {
     Timestamp: true,
   }
+  
 );
 const Course = mongoose.model("Course", courseSchema);
 module.exports = Course;
