@@ -32,25 +32,36 @@ const createComment = asyncHandler(async (req, res) => {
 }catch(error){
   res.status(400).send(error.message || error);
 }
-   
-    // .then((data) => {
-    //   var result = data;
-    //   //  res.json(result);
-    // }).then((data)=>{
-    //   console.log("data",data._id);
-    //   const course = Course.findByIdAndUpdate(
-    //     req.body.courseId,
-    //     { $addToSet: { Comment: data._id } },
-    //     { new: true }
-    //   );
-    //   res.json(course);
-    // })
-    // .catch((error) => {
-    //  
-    // }); 
-    //  console.log("commentIDD",);
-   
 });
+const replyComment = asyncHandler(async(req,res)=>{
+  try{
+    const comment =await Comment.create({
+      Sender: req.userId,
+      Content: req.body.content,
+      Course: req.body.courseId,
+      ReplyId:req.body.commentId,
+    });
+    console.log("Comment",comment);
+    res.json(comment);
+    if(req.body.courseId){
+      const course = Course.findById(req.body.courseId);
+      await course.updateOne({$push:{Comment:comment._id}})
+    }
+  }catch(error){
+    res.status(400).send(error.message || error);
+  }
+})
+const getReplyofComment = asyncHandler(async(req,res)=>{
+  await Comment.find({ ReplyId: req.params.replyId }).populate("ReplyId")
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+
+})
 const getStartOfCourse=asyncHandler(async(req,res)=>{
   try{
     const startOfCourse = Course.findById(req.params.id)
@@ -84,4 +95,6 @@ module.exports = {
   createComment,
   deleteComment,
   getStartOfCourse,
+  replyComment,
+  getReplyofComment
 };

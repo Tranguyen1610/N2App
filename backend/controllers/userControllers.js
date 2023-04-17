@@ -47,12 +47,11 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-const getinfo = asyncHandler(async (req, res) => {
+const getInfo = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(req.userId)
       .select('-Password')
-      .populate('WishList')
-      .populate('Cart')
+      .populate("Cart").populate("WishList")
 		if (!user)
 			return res.status(400).json({ success: false, message: 'User not found' })
 		res.json({ success: true, user })
@@ -111,7 +110,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 });
 const addWishList = asyncHandler(async(req,res)=>{
   const user = await User.findByIdAndUpdate(
-    req.user._id,
+    req.userId,
     { $addToSet: { WishList:req.params.videoId } },
     { new: true }
   );
@@ -203,7 +202,7 @@ module.exports = {
   updateProfile,
   addWishList,
   getWishList,
-  getinfo,
+  getInfo,
   addCart,
   getAllCart,
   deleteProductFromCart,
