@@ -18,7 +18,10 @@ export default function HeaderTitle({ name, title, isBack }) {
     }
     useEffect(()=>{
         getMode()
-        setnumCart(userInfo.Cart.length);
+        const setnumCartt=async()=>{
+            await setnumCart(userInfo.Cart.length);
+        }
+        setnumCartt();
     },[])
     return (
         <View className="flex-row items-center justify-center w-screen h-14 px-5">

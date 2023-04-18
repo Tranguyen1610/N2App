@@ -45,11 +45,11 @@ export default function SearchScreen({ navigation }) {
       setListSearchCourse(list)
     }
     else setListSearchCourse([])
-    console.log(list);
+    // console.log(list);
   }, [textSearch])
 
   return (
-    <View className="bg-[#0A0909] flex-1">
+    <SafeAreaView className="bg-[#0A0909] flex-1">
       <HeaderTitle name={'SearchScreen'} title="" isBack={false} />
       {listSearchCourse.length > 0 ?
         <View className="mx-5 mt-5">
@@ -68,6 +68,6 @@ export default function SearchScreen({ navigation }) {
           <Text className="text-gray-400 text-center text-xl mt-10" >
             Không tìm thấy kết quả</Text>
         </View>}
-    </View>
+    </SafeAreaView>
   )
 }
