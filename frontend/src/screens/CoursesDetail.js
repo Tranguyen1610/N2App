@@ -16,8 +16,8 @@ export default function CoursesDetail({ route }) {
         return ""
     }
     const formatPrice = (num) => {
-        if(num)
-        return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
+        if (num)
+            return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return ""
     }
     return (
@@ -40,7 +40,7 @@ export default function CoursesDetail({ route }) {
                     </View>
                     <Text className="text-white absolute top-40 p-5 w-screen text-center font-bold text-xl">Xem trước khóa học</Text>
                 </TouchableOpacity>
-                <Text className="text-white font-semibold text-2xl">{course.name}</Text>
+                <Text className="text-white font-semibold text-2xl">{course.Name}</Text>
                 <View className="flex-row items-center">
                     <Text className="text-white font-semibold mr-2 text-base"> {formatNumStart(4.1)}</Text>
                     <Rating
@@ -57,15 +57,7 @@ export default function CoursesDetail({ route }) {
                     <Text className="text-[#1273FE] text-base ml-3">{course.Teacher.Name}</Text>
                 </View>
                 <Text className="text-white font-bold text-2xl mt-5 mb-3">Những gì bạn sẽ học</Text>
-                <View>
-                    <Text className="text-base text-gray-400">~ Kiến thức nền tảng của ReactJS</Text>
-                    <Text className="text-base text-gray-400">~ Làm giao diện nhanh và đơn giản với Material UI</Text>
-                    <Text className="text-base text-gray-400">~ Thiết kế và triển khai API cho một dự án thực tế</Text>
-                    <Text className="text-base text-gray-400">~ Xây dựng hoàn chỉnh một dự án thực tế</Text>
-                </View>
-                <TouchableOpacity>
-                    <Text className="text-[#1273FE] text-base ml-3"> Xem thêm</Text>
-                </TouchableOpacity>
+                <Text className="text-base text-gray-400">{course.Description}</Text>
             </ScrollView>
             <View className="absolute bottom-0 flex-row w-screen h-14 ">
                 <TouchableOpacity className="bg-[#242F41] items-center justify-center w-3/12 flex-row border-r-2 border-gray-800">
