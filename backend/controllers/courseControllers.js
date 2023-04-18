@@ -143,6 +143,17 @@ const getVideoOfCourse = asyncHandler(async(req,res)=>{
     throw new Error("Course not found");
   }
 })
+const getCourseofType =asyncHandler(async(req,res)=>{
+  await Course.find({ Type: req.params.typeId }).populate("Type")
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+
+})
 module.exports = {
   createCourse,
   addVideotoCourse,
@@ -152,5 +163,6 @@ module.exports = {
   deleteVideoOfCourse,
   updateCoures,
   sortCourse,
-  getVideoOfCourse
+  getVideoOfCourse,
+  getCourseofType
 };

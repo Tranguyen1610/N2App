@@ -7,7 +7,7 @@ const {
   updateProfile,
   addWishList,
   getWishList,
-  getinfo,
+  getInfo,
   addCart,
   onTeacher,
 } = require("../controllers/userControllers");
@@ -18,7 +18,7 @@ const { protect } = require("../middlewares/authMiddleware");
 
 router.post("/login", authUser);
 router.route("/").post(registerUser);
-router.route("/").get(protect,getinfo)
+router.route("/").get(protect,getInfo);
 router.route("/getAll").get(protect, allUsers);
 router.route("/update").put(protect, updateProfile);
 router.get("/searchuser", SearchUser);

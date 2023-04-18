@@ -10,6 +10,7 @@ const {
   deleteVideoOfCourse,
   sortCourse,
   getVideoOfCourse,
+  getCourseofType,
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
@@ -23,4 +24,5 @@ router.route("/:id/delete").post(protect, deleteCourse);
 router.route("/update").put(protect, updateCoures);
 router.route("/deleteVideo/:videoId").post(protect, deleteVideoOfCourse);
 router.route("/sort").get(protect,sortCourse);
+router.route("/:typeId/getcourseoftype").get(protect,getCourseofType);
 module.exports = router;

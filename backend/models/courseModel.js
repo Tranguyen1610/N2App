@@ -10,7 +10,7 @@ const courseSchema = mongoose.Schema(
       },
     ],
     Description: { type: String, trim: true },
-    Type: { type:String, trim: true, ref:"Type" },
+    Type: { type:mongoose.Schema.Types.ObjectId, ref:"Type" },
     OriginPrice: { type: Number, trim: true },
     FinalPrice: { type: Number, trim: true },
     LastUpdate: { type: Date, trim: true },
