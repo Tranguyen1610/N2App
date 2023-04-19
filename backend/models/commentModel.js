@@ -9,9 +9,7 @@ const commentSchema = mongoose.Schema(
     ReplyId: { type: mongoose.Types.ObjectId, ref: "Comment" },
     LastUpdate: { type: Date, trim: true },
   },
-  {
-    Timestamp: true,
-  }
+  { timestamps: true }
 );
 const Comment = mongoose.model("Comment", commentSchema);
 module.exports = Comment;

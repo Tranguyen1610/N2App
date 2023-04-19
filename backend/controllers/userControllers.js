@@ -51,7 +51,7 @@ const getInfo = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(req.userId)
       .select('-Password')
-      .populate("Cart").populate("WishList")
+      .populate("Cart").populate("WishList").populate("CoursePurchased")
 		if (!user)
 			return res.status(400).json({ success: false, message: 'User not found' })
 		res.json({ success: true, user })
@@ -132,7 +132,8 @@ const addWishList = asyncHandler(async(req,res)=>{
   }
 })
 const getWishList = asyncHandler(async(req,res)=>{
-  const course =await User.findById(req.userId).then((data)=>{res.json(data.WishList)})
+  const course =await User.findById(req.userId).populate('WishList')
+  .then((data)=>{res.json(data.WishList)})
   // res.json(course.WishList)
 })
 

@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../contexts/AuthContext'
@@ -7,7 +7,6 @@ import Type from '../components/Type'
 import HeaderTitle from '../components/HeaderTitle'
 import { Courses, dataType } from '../contexts/Data'
 import axios from 'axios';
-import { StatusBar } from 'expo-status-bar'
 import { Url } from '../contexts/constants'
 
 export default function FeaturedScreen({ navigation }) {
@@ -19,14 +18,10 @@ export default function FeaturedScreen({ navigation }) {
     try {
       const res = await axios.get(`${Url}/type`);
       // console.log(res.data);
-      const listtype = res.data;
-      for (let index = 0; index < listtype.length; index++) {
-        list.push(listtype[index].Name)
-      }
+      setListType(res.data)
     } catch (err) {
       console.log(err);
     }
-    setListType(list)
   }
   const getCourse = async () => {
     let list = [];
@@ -51,7 +46,7 @@ export default function FeaturedScreen({ navigation }) {
   }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
-      <StatusBar style='light' />
+      <StatusBar/>
       <HeaderTitle name='FeaturedScreen' title='' isBack={false} />
       <ScrollView className="px-5 pt-5"
         showsVerticalScrollIndicator={false}>
@@ -112,7 +107,7 @@ export default function FeaturedScreen({ navigation }) {
         </View>
         <View>
           <FlatList
-            className="mt-5"
+            className="mt-5 mb-20"
             showsHorizontalScrollIndicator={false}
             horizontal
             data={topFiveCourse}

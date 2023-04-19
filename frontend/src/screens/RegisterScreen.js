@@ -1,8 +1,7 @@
-import { View, Text, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator, StatusBar } from 'react-native'
 import DateTimePickerModal from "react-native-modal-datetime-picker"
 import React, { useContext, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StatusBar } from 'expo-status-bar'
 import { Ionicons } from '@expo/vector-icons'
 import { AuthContext } from '../contexts/AuthContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -83,7 +82,7 @@ export default function RegisterScreen({ navigation }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView className="bg-[#0A0909] flex-1 px-4">
-                <StatusBar style='light' />
+                <StatusBar />
                 <Text className="text-white text-3xl font-medium mt-16">Đăng ký</Text>
                 <View className="flex-row">
                     <Text className="text-[#7F889A] text-sm mr-2">Bạn đã có tài khoản?</Text>

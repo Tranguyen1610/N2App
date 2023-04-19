@@ -1,3 +1,4 @@
+const { json } = require("express");
 const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
 
@@ -132,7 +133,7 @@ const sortCourse = asyncHandler(async(req,res)=>{
   res.send(course);
 })
 const getVideoOfCourse = asyncHandler(async(req,res)=>{
-  const course = await Course.findById(req.params.CourseId);
+  const course = await Course.findById(req.params.CourseId).populate('ListVideo');
   if(course){
     res.json({
       ListVideo:course.ListVideo
@@ -152,7 +153,6 @@ const getCourseofType =asyncHandler(async(req,res)=>{
   .catch((error) => {
     res.status(400).send(error.message || error);
   });
-
 })
 module.exports = {
   createCourse,
