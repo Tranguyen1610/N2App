@@ -1,6 +1,5 @@
-import { Image, Keyboard, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Keyboard, KeyboardAvoidingView, StatusBar, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useContext, useRef, useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { AuthContext } from '../contexts/AuthContext'
@@ -44,7 +43,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-[#0A0909] px-4">
-        <StatusBar style='light' />
+        <StatusBar/>
         <Text className="text-white text-3xl font-medium mt-16">Đăng nhập</Text>
         <View className="flex-row">
           <Text className="text-[#7F889A] text-sm mr-2">Bạn chưa có tài khoản?</Text>

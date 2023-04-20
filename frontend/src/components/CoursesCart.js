@@ -13,7 +13,7 @@ export default function CoursesCart({ item, carts, setCarts, setTotal, setIsAllC
         return "";
     }
     const formatPrice = (num) => {
-        if (num)
+        if (num!="")
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return ""
     }

@@ -7,12 +7,12 @@ export default function CourseSearch({ item }) {
     const nav = useNavigation();
 
     const formatNumStart = (num) => {
-        if (num != null)
+        if (num != 0)
             return num.toFixed(1);
-        return "";
+        else return "0";
     }
     const formatPrice = (num) => {
-        if (num != null)
+        if (num!="")
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return "";
     }
@@ -28,7 +28,7 @@ export default function CourseSearch({ item }) {
                 <TouchableOpacity>
                     <Text className="text-white text-lg font-semibold">{item.Name}</Text>
                 </TouchableOpacity>
-                <Text className="text-gray-400 text-base">{item.Teacher.Name}</Text>
+                <Text className="text-gray-400 text-base">{item.Teacher?item.Teacher.Name:""}</Text>
                 <Text className='text-white font-semibold text-base'>{formatPrice(item.Price)}</Text>
             </View>
         </TouchableOpacity>

@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { Url } from '../contexts/constants'
 
-export default function CoursesList({ item }) {
+export default function CourseLearning({ item }) {
     const nav = useNavigation();
     const [numStarAVG, setNumStarAVG] = useState(0);
     const [numCmt, setNumCmt] = useState(0);
@@ -64,7 +64,7 @@ export default function CoursesList({ item }) {
             </View>
             <View className="w-3/4 ml-2">
                 <Text className="text-white text-lg font-semibold">{names(item.Name)}</Text>
-                <Text className="text-gray-400 text-base"></Text>
+                <Text className="text-gray-400 text-base">{item.Teacher.Name}</Text>
                 <View
                     className="flex-row">
                     <Text className="text-[#f1c40f] mr-2 font-medium"> {formatNumStart(numStarAVG)}</Text>

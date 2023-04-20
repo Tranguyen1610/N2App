@@ -12,11 +12,14 @@ export default function CardScreen() {
     const { userInfo } = useContext(AuthContext);
     const [carts, setCarts] = useState([]);
     const [total, setTotal] = useState(0);
-    const [isAllChecked, setIsAllChecked] = useState(false);
+    const [isAllChecked, setIsAllChecked] = useState(true);
     const flatListRef = useRef();
 
+    const [isloading, setIsLoading] = useState(false);
+
+
     const formatPrice = (num) => {
-        if (num)
+        if (num!="")
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return ""
     }
@@ -30,7 +33,7 @@ export default function CardScreen() {
                 Image:cart.Image,
                 Teacher:cart.Teacher,
                 Price: cart.Price,
-                isChecked:false 
+                isChecked:true 
             })
         })
         setCarts(list);
@@ -44,7 +47,7 @@ export default function CardScreen() {
     const checkAll=()=>{
         setIsAllChecked(!isAllChecked);
         carts.forEach((cart)=>cart.isChecked=!isAllChecked);
-        setCarts(carts)        
+        // setCarts(newCarts);   
     }
 
     return (

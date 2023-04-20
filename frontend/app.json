@@ -3,7 +3,6 @@
     "name": "N2App",
     "slug": "N2App",
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./src/image/icon.png",
     "userInterfaceStyle": "light",
     "splash": {

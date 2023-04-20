@@ -7,6 +7,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
 import HeaderTitle from '../components/HeaderTitle'
 import ProposalScreen from '../screens/ProposalScreen';
+import CourseOfTypeScreen from '../screens/CourseOfTypeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,14 @@ export default function CustomFeatureNavigator() {
             <Stack.Screen
                 name="ProposalScreen"
                 component={ProposalScreen}
+                options={{
+                    animation: "none",
+
+                }}
+            />
+            <Stack.Screen
+                name="CourseOfTypeScreen"
+                component={CourseOfTypeScreen}
                 options={{
                     animation: "none",
 

@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
 
 const getAllComments = asyncHandler(async (req, res) => {
-  await Comment.find({ Course: req.params.courseId })
+  await Comment.find({ Course: req.params.courseId, NumberOfStarts: { $ne: null } })
     .populate("Sender", "-Password")
     .populate("Course")
     .then((data) => {
@@ -52,7 +52,7 @@ const replyComment = asyncHandler(async(req,res)=>{
   }
 })
 const getReplyofComment = asyncHandler(async(req,res)=>{
-  await Comment.find({ ReplyId: req.params.replyId }).populate("ReplyId")
+  await Comment.find({ ReplyId: req.params.replyId }).populate("ReplyId").populate("Sender")
   .then((data) => {
     var result = data;
     res.json(result);
