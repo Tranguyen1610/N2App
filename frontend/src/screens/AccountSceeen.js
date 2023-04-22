@@ -229,7 +229,7 @@ export default function AccountSceeen({ navigation }) {
         <Modal
           visible={modalLogoutVisible}
           transparent={true}
-          onRequestClose={() => setModalVisible(false)}
+          onRequestClose={() => setModalLogoutVisible(false)}
           animationType='fade'
           hardwareAccelerated>
           <View className="flex-1 justify-center items-center bg-[#00000099]" >
@@ -258,7 +258,7 @@ export default function AccountSceeen({ navigation }) {
                 </View> :
                 <View className="flex-row justify-center mb-10">
                   <Text className=" p-3 text-xl font-bold text-[#1273FE]">Đang đăng xuất</Text>
-                  <ActivityIndicator size={'large'}  className=""/>
+                  <ActivityIndicator size={'large'} color={'#1273FE'} className=""/>
                 </View>}
             </View>
           </View>

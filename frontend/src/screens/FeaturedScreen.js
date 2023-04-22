@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, StatusBar } from 'react-native'
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../contexts/AuthContext'
@@ -12,6 +12,7 @@ import { Url } from '../contexts/constants'
 export default function FeaturedScreen({ navigation }) {
   const { userInfo, listType, setListType, courses, setCourses } = useContext(AuthContext);
   const [topFiveCourse,setTopFiveCourse] = useState([]);
+  const [isLoading,setIsLoading]= useState(true);
 
   const getType = async () => {
     let list = [];
@@ -41,9 +42,16 @@ export default function FeaturedScreen({ navigation }) {
 
 
   useEffect(() => {
+    setTimeout(() => setIsLoading(false), 900)
     getType();
     getCourse();
   }, [])
+  if (isLoading) 
+    return(
+      <SafeAreaView  className="bg-[#0A0909] flex-1 justify-center items-center">
+         <ActivityIndicator size={'large'} color={'#1273FE'}/>
+      </SafeAreaView>
+    )
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
       <StatusBar/>
