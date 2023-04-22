@@ -7,14 +7,14 @@ const orderSchema = mongoose.Schema(
         MoneyTotal:{type:Number,default:0,require:true},
         MoneyFinal:{type:Number,default:0,require:true},
         CodeDiscount:{ type: String,default:"",trim:true },
-        CreatedAt:{type:Number,default:0,require:true},
-        User:{type: mongoose.Schema.Types.ObjectId,ref:"User"},
-        Detail:[
-            {type: mongoose.Schema.Types.ObjectId,ref:"OrderDetail"}
-        ]
-        
-
-    }
+        BuyerId:{type: mongoose.Schema.Types.ObjectId,ref:"User"},
+        // Detail:[
+        //     {type: mongoose.Schema.Types.ObjectId,ref:"OrderDetail"}
+        // ]
+        Detail:{type:Array,require:true},
+        IsPayment:{type:Boolean,default:false},
+    },
+    { timestamps: true }
 )
 const Order = mongoose.model("Order",orderSchema);
 module.exports = Order;

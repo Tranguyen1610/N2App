@@ -154,6 +154,13 @@ const getWishList = asyncHandler(async (req, res) => {
   // res.json(course.WishList)
 })
 
+const getCoursePurchased = asyncHandler(async (req, res) => {
+  const course = await User.findById(req.userId).populate('CoursePurchased')
+    .then((data) => { res.json(data.CoursePurchased) })
+  // res.json(course.WishList)
+})
+
+
 const getAllCart = asyncHandler(async (req, res) => {
   const cart = await User.findById(req.userId).populate('Cart')
   .then((data) => { res.json(data.Cart) })
@@ -248,4 +255,5 @@ module.exports = {
   onTeacher,
   deleteWishList,
   deleteCourseOfCard,
+  getCoursePurchased,
 };

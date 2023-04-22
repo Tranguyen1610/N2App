@@ -13,6 +13,7 @@ const {
   deleteWishList,
   deleteCourseOfCard,
   getAllCart,
+  getCoursePurchased,
 } = require("../controllers/userControllers");
 const User = require('../models/userModel.js');
 const router = express.Router();
@@ -26,6 +27,7 @@ router.route("/getAll").get(protect, allUsers);
 router.route("/update").put(protect, updateProfile);
 router.get("/searchuser", SearchUser);
 router.route("/getWishList").get(protect,getWishList);
+router.route("/getCoursePurchased").get(protect,getCoursePurchased);
 router.route("/addWishList/:videoId").put(protect,addWishList);
 router.route("/deleteWishList/:videoId").put(protect,deleteWishList);
 router.route("/addCart/:courseId").put(protect,addCart);
