@@ -1,30 +1,54 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle'
 import { CoursesWL } from '../contexts/Data'
 import CoursesList from '../components/CoursesList'
 import { AuthContext } from '../contexts/AuthContext'
+import axios from 'axios';
+import { Url } from '../contexts/constants'
 
 export default function WishlistScreen() {
-  const { userInfo } = useContext(AuthContext);
-  const [wishlists,setWishLists]= useState([])
+  const { userInfo, wishlists, setWishLists } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const getWishList = async () => {
+    try {
+      const result = await axios.get(`${Url}/user/getWishList`);
+      if (result.data) {
+        setWishLists(result.data)
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
 
-  useEffect(()=>{
-    setWishLists(userInfo.WishList)
-  },[])
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 500);
+    getWishList();
+  }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
       <HeaderTitle name={WishlistScreen} title='Wishlist' isBack={false} />
-      <FlatList
-        className="mt-5"
-        showsHorizontalScrollIndicator={false}
-        data={wishlists}
-        renderItem={({ item }) =>
-          <CoursesList
-            item={item} />
-        }
-      />
+      {isLoading ?
+        <View className="bg-[#0A0909] flex-1 justify-center items-center">
+          <ActivityIndicator size={'large'} color={'#1273FE'} />
+        </View> :
+        <View>
+          {wishlists.length == 0 ?
+            <Text className="text-gray-300 text-xl text-center mt-20">
+              Chưa có khóa học</Text> : <></>}
+          <FlatList
+            className="mt-5"
+            showsHorizontalScrollIndicator={false}
+            data={wishlists}
+            renderItem={({ item }) =>
+              <CoursesList
+                item={item} />
+            }
+          />
+        </View>
+      }
     </SafeAreaView>
   )
 }
