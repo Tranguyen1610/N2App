@@ -2,10 +2,11 @@ import { View, Text, TouchableOpacity, Image, Alert, StyleSheet, Modal, TextInpu
 import React, { useContext, useRef, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import HeaderTitle from '../components/HeaderTitle'
 import StartScreen from './StartScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
 
 export default function AccountSceeen({ navigation }) {
   const { userInfo, logout } = useContext(AuthContext)
@@ -25,7 +26,7 @@ export default function AccountSceeen({ navigation }) {
     await AsyncStorage.setItem('mode', "Teacher")
     navigation.navigate("SwitchTeacher")
   }
-  const clicklogout=()=>{
+  const clicklogout = () => {
     setIsLogout(true)
     setTimeout(() => {
       setIsLogout(false)
@@ -94,6 +95,18 @@ export default function AccountSceeen({ navigation }) {
             size={25}
             color='#FCC61F' />
           <Text className="ml-2.5 mr-auto text-base text-white">Thể loại yêu thích</Text>
+          <Ionicons
+            name='chevron-forward'
+            size={25}
+            color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
+        onPress={()=>navigation.navigate('OrderScreen')}>
+          <Ionicons
+            name="clipboard-outline"
+            size={25}
+            color="#0F9ACE" />
+          <Text className="ml-2.5 mr-auto text-base text-white">Đơn hàng</Text>
           <Ionicons
             name='chevron-forward'
             size={25}
@@ -258,7 +271,7 @@ export default function AccountSceeen({ navigation }) {
                 </View> :
                 <View className="flex-row justify-center mb-10">
                   <Text className=" p-3 text-xl font-bold text-[#1273FE]">Đang đăng xuất</Text>
-                  <ActivityIndicator size={'large'} color={'#1273FE'} className=""/>
+                  <ActivityIndicator size={'large'} color={'#1273FE'} className="" />
                 </View>}
             </View>
           </View>
