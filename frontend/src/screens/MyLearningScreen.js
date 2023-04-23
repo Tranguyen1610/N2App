@@ -1,29 +1,54 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import HeaderTitle from '../components/HeaderTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CourseLearning from '../components/CourseLearning'
 import { AuthContext } from '../contexts/AuthContext'
+import axios from 'axios';
+import { Url } from '../contexts/constants'
 
-export default function MyLearningScreen({navigation}) {
-  const { userInfo } = useContext(AuthContext);
-  const [listCoursePurchased,setListCoursePurchased] = useState([])
+export default function MyLearningScreen({ navigation }) {
+  const { userInfo,coursePurchaseds, setCoursePurchaseds } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(()=>{
-    setListCoursePurchased(userInfo.CoursePurchased);
-  },[])
+  const getCoursePurchased = async () => {
+    try {
+      const result = await axios.get(`${Url}/user/getCoursePurchased`);
+      if (result.data) {
+        setCoursePurchaseds(result.data)
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 500);
+    getCoursePurchased();
+  }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
       <HeaderTitle name={MyLearningScreen} title={'Học tập'} isBack={false} />
-      <FlatList
-        className="mt-5"
-        showsHorizontalScrollIndicator={false}
-        data={listCoursePurchased}
-        renderItem={({ item }) =>
-          <CourseLearning
-            item={item} />
-        }
-      />
+      {isLoading ?
+        <View className="bg-[#0A0909] flex-1 justify-center items-center">
+          <ActivityIndicator size={'large'} color={'#1273FE'} />
+        </View> :
+        <View>
+          {coursePurchaseds.length == 0 ?
+            <Text className="text-gray-300 text-xl text-center mt-20">
+              Chưa có khóa học</Text> : <></>}
+          <FlatList
+            className="mt-5"
+            showsHorizontalScrollIndicator={false}
+            data={coursePurchaseds}
+            renderItem={({ item }) =>
+              <CourseLearning
+                item={item} />
+            }
+          />
+        </View>
+      }
     </SafeAreaView>
   )
 }

@@ -5,24 +5,43 @@ import { useNavigation } from '@react-navigation/native';
 import CardScreen from '../screens/CardScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../contexts/AuthContext';
+import axios from 'axios';
+import { Url } from '../contexts/constants'
 
 export default function HeaderTitle({ name, title, isBack }) {
     const nav = useNavigation();
     const [numCart, setnumCart] = useState(0);
     const [mode, setMode] = useState();
-    const { textSearch, setTextSearch,userInfo } = useContext(AuthContext);
+    const { textSearch, setTextSearch,carts, setCarts } = useContext(AuthContext);
 
     const getMode = async () => {
         const mode = await AsyncStorage.getItem('mode');
         setMode(mode)
     }
     useEffect(()=>{
+        if (carts.length == 0) getCart();
+        setnumCart(carts.length)
         getMode()
-        const setnumCartt=async()=>{
-            await setnumCart(userInfo.Cart.length);
-        }
-        setnumCartt();
     },[])
+
+    useEffect(()=>{
+        setnumCart(carts.length)
+    },[carts])
+
+
+  const getCart = async () => {
+    try {
+      const result = await axios.get(`${Url}/user/getCart`);
+      if (result.data) {
+        setCarts(result.data)
+        // console.log(result.data);
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
     return (
         <View className="flex-row items-center justify-center w-screen h-14 px-5">
             <View className="w-10/12 flex-row">

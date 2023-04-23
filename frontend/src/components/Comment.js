@@ -1,13 +1,15 @@
 import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Rating } from 'react-native-ratings'
 import moment from 'moment';
 import 'moment/locale/vi';
 import axios from 'axios';
 import { Url } from '../contexts/constants'
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function Comment({ item }) {
     const [reply, setReply] = useState(undefined);
+    const { userInfo} = useContext(AuthContext);
     const getReply = async () => {
         try {
             const res = await axios.get(`${Url}/comment/` + item._id + '/getreply');
@@ -24,7 +26,8 @@ export default function Comment({ item }) {
     })
     return (
         <View className="mt-5">
-            <Text className="text-white text-base font-medium">{item.Sender.Name}</Text>
+            <Text className="text-white text-base font-medium">
+                {item.Sender._id===userInfo._id? 'Bạn':item.Sender.Name}</Text>
             <View className="flex-row items-end mt-1">
                 <Rating
                     className="items-start"
@@ -36,7 +39,8 @@ export default function Comment({ item }) {
                 />
                 <Text className="text-gray-500 ml-5">{moment(item.createdAt).fromNow()}</Text>
             </View>
-            <Text className="text-base text-gray-300 mt-1">{item.Content}</Text>
+            <Text className="text-base text-gray-300 mt-1">
+                {item.Content? item.Content:'Học viên không viết  gì cả.'}</Text>
 
             {reply ?
                 <View className="mt-2 ml-5">

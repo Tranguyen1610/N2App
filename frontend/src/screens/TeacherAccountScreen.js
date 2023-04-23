@@ -259,7 +259,7 @@ export default function TeacherAccountScreen({ navigation }) {
                 </View> :
                 <View className="flex-row justify-center mb-10">
                   <Text className=" p-3 text-xl font-bold text-[#1273FE]">Đang đăng xuất</Text>
-                  <ActivityIndicator size={'large'} className="" />
+                  <ActivityIndicator size={'large'} color={'#1273FE'} className="" />
                 </View>}
             </View>
           </View>

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle'
@@ -11,10 +11,11 @@ import { Url } from '../contexts/constants'
 export default function CourseOfTypeScreen({ route }) {
   const type = route.params.type;
   const [listcourse, setListCourse] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getCourseOfType = async () => {
     try {
-      const res = await axios.get(`${Url}/course/`+type._id+'/getcourseoftype');
+      const res = await axios.get(`${Url}/course/` + type._id + '/getcourseoftype');
       // console.log(res.data);
       setListCourse(res.data);
     } catch (err) {
@@ -22,25 +23,33 @@ export default function CourseOfTypeScreen({ route }) {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 500);
     getCourseOfType();
-  },[])
+  }, [])
 
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
       <HeaderTitle name='CourseOfTypeScreen' title={type.Name} isBack={true} />
-      {listcourse.length==0?
-        <Text className="text-gray-300 text-xl text-center mt-20">
-          Hiện tại chưa có khóa học</Text>:<></>}
-      <FlatList
-        className="mt-5"
-        showsHorizontalScrollIndicator={false}
-        data={listcourse}
-        renderItem={({ item }) =>
-          <CoursesList
-            item={item} />
-        }
-      />
+      {isLoading ?
+        <View className="bg-[#0A0909] flex-1 justify-center items-center">
+          <ActivityIndicator size={'large'} color={'#1273FE'} />
+        </View> :
+        <View>
+          {listcourse.length == 0 ?
+            <Text className="text-gray-300 text-xl text-center mt-20">
+              Hiện tại chưa có khóa học</Text> : <></>}
+          < FlatList
+            className="mt-5"
+            showsHorizontalScrollIndicator={false}
+            data={listcourse}
+            renderItem={({ item }) =>
+              <CoursesList
+                item={item} />
+            }
+          />
+        </View>
+      }
     </SafeAreaView>
   )
 }

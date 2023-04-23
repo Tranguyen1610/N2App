@@ -11,12 +11,14 @@ import TeacherAccountScreen from '../screens/TeacherAccountScreen';
 import AddCourseScreen from '../screens/AddCourseScreen';
 import AddVideoScreen from '../screens/AddVideoScreen';
 import AddCourseStep2Screen from '../screens/AddCourseStep2Screen';
+import PaymentScreen from '../screens/PaymentScreen';
+import OrderScreen from '../screens/OrderScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName={ SwitchNavigator }
+      initialRouteName={SwitchNavigator}
       screenOptions={() => ({
         headerShown: false,
         statusBarColor: "#0A0909",
@@ -47,7 +49,17 @@ const RootNavigator = () => {
           headerShown: true,
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
-          title: ''
+          title: 'Giỏ hàng'
+        }} />
+      <Stack.Screen
+        name="PaymentScreen"
+        component={PaymentScreen}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Thanh toán'
         }} />
       <Stack.Screen
         name="TeacherAccountScreen"
@@ -65,7 +77,7 @@ const RootNavigator = () => {
           headerTintColor: '#ffffff',
           title: 'Tạo khóa học mới'
         }} />
-        <Stack.Screen
+      <Stack.Screen
         name="AddCourseStep2Screen"
         component={AddCourseStep2Screen}
         options={{
@@ -85,6 +97,17 @@ const RootNavigator = () => {
           headerTintColor: '#ffffff',
           title: 'Thêm video'
         }} />
+      <Stack.Screen
+        name="OrderScreen"
+        component={OrderScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Đơn hàng'
+        }} />
+
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
       <Stack.Screen
         name="SettingScreen"

@@ -12,7 +12,7 @@ export default function CourseSearch({ item }) {
         else return "0";
     }
     const formatPrice = (num) => {
-        if (num!="")
+        if (num!=null)
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return "";
     }
