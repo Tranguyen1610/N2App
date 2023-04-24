@@ -53,7 +53,7 @@ export default function CoursesPropose({ item }) {
         getComments();
     }, [])
     return (
-        <TouchableOpacity className="bg-[#1B212D] mr-5 w-56 p-3"
+        <TouchableOpacity className="bg-[#1B212D] mr-5 w-56 p-3 rounded-md"
             onPress={() => nav.navigate("CoursesDetail", { course: item })}>
             <Image
                 source={{ uri: item.Image }}

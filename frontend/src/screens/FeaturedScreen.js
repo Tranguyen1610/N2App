@@ -8,11 +8,13 @@ import HeaderTitle from '../components/HeaderTitle'
 import { Courses, dataType } from '../contexts/Data'
 import axios from 'axios';
 import { Url } from '../contexts/constants'
+import FavoriteType from '../components/FavoriteType'
+
 
 export default function FeaturedScreen({ navigation }) {
-  const { userInfo, listType, setListType, courses, setCourses } = useContext(AuthContext);
-  const [topFiveCourse,setTopFiveCourse] = useState([]);
-  const [isLoading,setIsLoading]= useState(true);
+  const { userInfo, listType, setListType, courses, setCourses, listFavoriteType, setListFavoriteType } = useContext(AuthContext);
+  const [topFiveCourse, setTopFiveCourse] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getType = async () => {
     let list = [];
@@ -37,26 +39,35 @@ export default function FeaturedScreen({ navigation }) {
       console.log(err);
     }
     setCourses(list)
-    setTopFiveCourse(list.slice(0,5))
+    setTopFiveCourse(list.slice(0, 5))
   }
-
+  const getFavoriteType = async () => {
+    try {
+      const res = await axios.get(`${Url}/user/getFavoriteType`);
+      // console.log(res.data);
+      setListFavoriteType(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     setTimeout(() => setIsLoading(false), 900)
     getType();
     getCourse();
+    getFavoriteType();
   }, [])
-  if (isLoading) 
-    return(
-      <SafeAreaView  className="bg-[#0A0909] flex-1 justify-center items-center">
-         <ActivityIndicator size={'large'} color={'#1273FE'}/>
+  if (isLoading)
+    return (
+      <SafeAreaView className="bg-[#0A0909] flex-1 justify-center items-center">
+        <ActivityIndicator size={'large'} color={'#1273FE'} />
       </SafeAreaView>
     )
   return (
-    <SafeAreaView className="bg-[#0A0909] flex-1">
-      <StatusBar/>
+    <SafeAreaView className="bg-[#0A0909] flex-1 p-5">
+      <StatusBar />
       <HeaderTitle name='FeaturedScreen' title='' isBack={false} />
-      <ScrollView className="px-5 pt-5"
+      <ScrollView className=""
         showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center">
           <Image source={require("../image/user_logo.png")}
@@ -64,7 +75,7 @@ export default function FeaturedScreen({ navigation }) {
           <Text className="text-white text-base ml-2">Chào bạn! {userInfo.Name}</Text>
         </View>
         <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-2xl font-bold">Đề xuất cho bạn</Text>
+          <Text className="text-white text-xl font-bold">Đề xuất cho bạn</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("ProposalScreen")
@@ -85,7 +96,7 @@ export default function FeaturedScreen({ navigation }) {
           />
         </View>
         <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-2xl font-bold">Thể loại</Text>
+          <Text className="text-white text-xl font-bold">Thể loại</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("AllTypeScreen")
@@ -104,26 +115,24 @@ export default function FeaturedScreen({ navigation }) {
             }
           />
         </ScrollView>
-        <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-2xl font-bold">CNTT & Phần mềm</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("ProposalScreen")
-            }}>
-            <Text className="text-[#1273FE]">Xem tất cả</Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <FlatList
-            className="mt-5 mb-20"
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={topFiveCourse}
+
+        {/* <FlatList
+            className="mt-5"
+            showsVerticalScrollIndicator={false}
+            data={listFavoriteType}
             renderItem={({ item }) =>
-              <CoursesPropose
-                item={item} />
+              <View>
+                <Text className="text-white text-2xl font-bold">{item.Name}</Text>
+              </View>
             }
-          />
+          /> */}
+        <View>
+          {listFavoriteType.map((item) => (
+            <FavoriteType
+              key={item._id}
+              item={item}
+            />
+          ))}
         </View>
       </ScrollView >
     </SafeAreaView>
