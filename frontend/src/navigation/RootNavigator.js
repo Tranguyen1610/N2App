@@ -13,6 +13,7 @@ import AddVideoScreen from '../screens/AddVideoScreen';
 import AddCourseStep2Screen from '../screens/AddCourseStep2Screen';
 import PaymentScreen from '../screens/PaymentScreen';
 import OrderScreen from '../screens/OrderScreen';
+import OrderDetailScreen from '../screens/OrderDetailScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -106,6 +107,16 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Đơn hàng'
+        }} />
+      <Stack.Screen
+        name="OrderDetailScreen"
+        component={OrderDetailScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Chi tiết đơn hàng'
         }} />
 
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
