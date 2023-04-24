@@ -1,18 +1,69 @@
-import { View, Text, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native'
-import React, { useContext } from 'react'
+import { View, Text, TouchableOpacity, FlatList, ScrollView, Image, ActivityIndicator } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Courses } from '../contexts/Data'
 import CoursesPropose from '../components/CoursesPropose'
 import { AuthContext } from '../contexts/AuthContext'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios';
+import { Url } from '../contexts/constants'
 
 export default function CoursesTeacherScreen() {
   const nav = useNavigation()
-  const { userInfo } = useContext(AuthContext)
+  const { userInfo, coursesTC, setCoursesTC,coursesTCUF,setCoursesTCUF } = useContext(AuthContext);
+  const [topFiveCourseTC, setTopFiveCourseTC] = useState([]);
+  const [topFiveCourseTCUF, setTopFiveCourseTCUF] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getCourseTC = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/course/getCourseofTeacher`);
+      // console.log(res.data);
+      const listcourse = res.data;
+      for (let index = 0; index < listcourse.length; index++) {
+        list.push(listcourse[index])
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setCoursesTC(list)
+    setTopFiveCourseTC(list.slice(0, 5))
+  }
+
+  const getCourseTCUF = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/course/getCourseUnFinishOfTeacher`);
+      // console.log(res.data);
+      const listcourse = res.data;
+      for (let index = 0; index < listcourse.length; index++) {
+        list.push(listcourse[index])
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setCoursesTCUF(list)
+    setTopFiveCourseTCUF(list.slice(0, 5))
+  }
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 900)
+    getCourseTC();
+    getCourseTCUF();
+  }, [])
+
+  if (isLoading)
+    return (
+      <SafeAreaView className="bg-[#0A0909] flex-1 justify-center items-center">
+        <ActivityIndicator size={'large'} color={'#1273FE'} />
+      </SafeAreaView>
+    )
+
   return (
 
-    <SafeAreaView className="flex-1 bg-[#0A0909]">
-      <ScrollView className="px-5"
+    <SafeAreaView className="flex-1 bg-[#0A0909] p-5">
+      <ScrollView className=""
         showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center mt-10">
           <Image source={require("../image/user_logo.png")}
@@ -20,24 +71,20 @@ export default function CoursesTeacherScreen() {
           <Text className="text-white text-base ml-2">Chào bạn! {userInfo.Name}</Text>
         </View>
         <View className="flex-row mt-10 justify-between">
-          <TouchableOpacity className="mr-3 mb-3 rounded-xl border border-white bg-[#1B212D]"
-            onPress={()=>
+          <TouchableOpacity className="mr-3 mb-3 rounded-xl bg-[#1273FE] w-[45%]"
+            onPress={() =>
               nav.navigate('AddCourseScreen')}>
-            <Text className="text-white p-2 text-base font-semibold">Thêm khóa học</Text>
+            <Text className="text-white p-2 text-base font-semibold text-center">Thêm khóa học</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="mr-3 mb-3 rounded-xl border border-white bg-[#1B212D]"
-            onPress={()=>nav.navigate('AddVideoScreen',{idCourse:"6435a8bb0e91caa468999a8c"})}>
-            <Text className="text-white p-2 text-base font-semibold">Tìm kiếm</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="mr-3 mb-3 rounded-xl border border-white bg-[#1B212D]">
-            <Text className="text-white p-2 text-base font-semibold">Phản hồi đánh giá</Text>
+          <TouchableOpacity className="mr-3 mb-3 rounded-xl bg-[#1273FE] w-[45%]">
+            <Text className="text-white p-2 text-base font-semibold text-center">Phản hồi đánh giá</Text>
           </TouchableOpacity>
         </View>
         <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-2xl font-bold">Khóa học thêm bởi bạn</Text>
+          <Text className="text-white text-xl font-bold">Khóa học thêm bởi bạn</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("ProposalScreen")
+              nav.navigate("AllCourseTeacher")
             }}>
             <Text className="text-[#1273FE]">Xem tất cả</Text>
           </TouchableOpacity>
@@ -47,7 +94,7 @@ export default function CoursesTeacherScreen() {
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={Courses}
+            data={topFiveCourseTC}
             renderItem={({ item }) =>
               <CoursesPropose
                 item={item} />
@@ -55,10 +102,10 @@ export default function CoursesTeacherScreen() {
           />
         </View>
         <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-2xl font-bold">Khóa học chưa hoàn tất</Text>
+          <Text className="text-white text-xl font-bold">Khóa học chưa hoàn tất</Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("ProposalScreen")
+              nav.navigate("AllCourseTeacherUnFinish")
             }}>
             <Text className="text-[#1273FE]">Xem tất cả</Text>
           </TouchableOpacity>
@@ -68,7 +115,7 @@ export default function CoursesTeacherScreen() {
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={Courses}
+            data={topFiveCourseTCUF}
             renderItem={({ item }) =>
               <CoursesPropose
                 item={item} />
