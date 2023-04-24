@@ -15,6 +15,7 @@ const {
   getAllCart,
   getCoursePurchased,
   getFavoriteType,
+  updateFavoriteType,
 } = require("../controllers/userControllers");
 const User = require('../models/userModel.js');
 const router = express.Router();
@@ -36,5 +37,6 @@ router.route("/deleteCart/:courseId").put(protect,deleteCourseOfCard);
 router.route("/isTeacher").post(protect,onTeacher);
 router.route("/getCart").get(protect,getAllCart);
 router.route("/getFavoriteType").get(protect,getFavoriteType);
+router.route("/updateFavoriteType").put(protect,updateFavoriteType);
 
 module.exports = router;

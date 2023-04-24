@@ -51,7 +51,7 @@ const getInfo = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.userId)
       .select('-Password')
-      .populate("Cart").populate("WishList").populate("CoursePurchased")
+      .populate("Cart").populate("WishList").populate("CoursePurchased").populate("FavoriteType")
     if (!user)
       return res.status(400).json({ success: false, message: 'User not found' })
     res.json({ success: true, user })
@@ -247,6 +247,27 @@ const onTeacher = asyncHandler(async (req, res) => {
   }
 
 })
+
+const updateFavoriteType = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndUpdate(
+    req.userId,
+    { FavoriteType: req.body.types },
+    { new: true }
+  );
+  // console.log(user);
+  if (user) {
+    res.json({
+      _id: user._id,
+      Name: user.Name,
+      Email: user.Email,
+      FavoriteType: user.FavoriteType,
+    });
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
+})
+
 module.exports = {
   registerUser,
   authUser,
@@ -264,4 +285,5 @@ module.exports = {
   deleteCourseOfCard,
   getCoursePurchased,
   getFavoriteType,
+  updateFavoriteType,
 };
