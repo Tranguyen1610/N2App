@@ -8,6 +8,7 @@ const uploadRoutes = require("./routes/uploadRoutes");
 const orderRouters = require("./routes/orderRoutes");
 const typeRouters = require("./routes/typeRoutes");
 const commentRouters = require("./routes/commentRoutes");
+const paymentMethodRoutes = require("./routes/paymentMethodRoutes");
 
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/middleware");
@@ -23,6 +24,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/type",typeRouters);
 app.use("/api/comment",commentRouters);
 app.use("/api/order",orderRouters);
+app.use("/api/paymentMedthod",paymentMethodRoutes);
 
 
 app.use(notFound);
