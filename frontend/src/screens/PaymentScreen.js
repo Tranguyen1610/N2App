@@ -8,13 +8,15 @@ import axios from 'axios';
 import { Url } from '../contexts/constants'
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../contexts/AuthContext';
+import PaymentMethod from '../components/PaymentMethod';
 
 export default function PaymentScreen({ route }) {
     const payments = route.params.payments;
     const total = route.params.total;
     const nav = useNavigation();
-    const { setWishLists,setCarts,setCoursePurchaseds} = useContext(AuthContext);
-    const [paymentMethods, setPaymentMethods] = useState({ name: '', logo: '' });
+    const { setWishLists, setCarts, setCoursePurchaseds } = useContext(AuthContext);
+    const [paymentMethods, setPaymentMethods] = useState([]);
+    const [paymentMethod, setPaymentMethod] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [paymentIds, setPaymentIds] = useState([]);
     const formatPrice = (num) => {
@@ -38,7 +40,7 @@ export default function PaymentScreen({ route }) {
         else {
             try {
                 const data = {
-                    PayMentType: "MOMO",
+                    PayMentType: paymentMethod._id,
                     MoneyTotal: total,
                     MoneyFinal: total,
                     Detail: paymentIds,
@@ -56,8 +58,8 @@ export default function PaymentScreen({ route }) {
 
     const PaymentSuccess = async (orderId) => {
         try {
-            const res = await axios.put(`${Url}/order/PaymentSuccessOrder/`+orderId);
-            if(res.data){
+            const res = await axios.put(`${Url}/order/PaymentSuccessOrder/` + orderId);
+            if (res.data) {
                 getCart();
                 getWishList();
                 getCoursePurchased();
@@ -105,7 +107,21 @@ export default function PaymentScreen({ route }) {
         }
     }
 
+    const getPaymentMethod = async () => {
+        try {
+            const result = await axios.get(`${Url}/paymentMedthod`);
+            if (result.data) {
+                setPaymentMethods(result.data)
+                // console.log(result.data);
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
+        getPaymentMethod();
         let list = [];
         payments.forEach((p) => {
             list.push(p._id);
@@ -133,14 +149,15 @@ export default function PaymentScreen({ route }) {
                     <View className="items-center flex-row w-5/6">
                         <MaterialIcons name="monetization-on" size={24} color="#1273FE" />
                         <Text className="text-white ml-3 text-base">
-                            {paymentMethods.name != '' ? paymentMethods.name : 'Chọn phương thức thanh toán'}
+                            {paymentMethod ? paymentMethod.Description : 'Chọn phương thức thanh toán'}
                         </Text>
                     </View>
-                    <View className='w-1/6b justify-center'>
+                    <View className='w-1/6 justify-center'>
+                        {paymentMethod?
                         <Image
-                            source={paymentMethods.logo}
+                            source={{ uri: paymentMethod.Logo }}
                             className="w-10 h-10 ml rounded-md"
-                        />
+                        />:<></>}
                     </View>
                 </TouchableOpacity>
                 <View className="flex-row w-screen h-14 ">
@@ -170,38 +187,17 @@ export default function PaymentScreen({ route }) {
                             </TouchableOpacity>
                         </View>
                         <View className="justify-center items-center mb-3">
-                            <TouchableOpacity className="flex-row mt-5"
-                                onPress={() => {
-                                    setPaymentMethods({ name: 'Thanh toán bằng ví Momo', logo: require('../image/momo_icon_square_pinkbg_RGB.png') });
-                                    setModalVisible(false);
-                                }}>
-                                <View className="items-center flex-row">
-                                    <Text className="text-white ml-3 text-base">
-                                        Thanh toán bằng ví MoMo
-                                    </Text>
-                                </View>
-                                <View className='justify-start ml-5'>
-                                    <Image
-                                        source={require('../image/momo_icon_square_pinkbg_RGB.png')}
-                                        className="w-10 h-10 ml rounded-md" />
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity className="flex-row mt-5"
-                                onPress={() => {
-                                    setPaymentMethods({ name: 'Thanh toán bằng ZaloPay', logo: require('../image/ZaloPay-vuong.png') });
-                                    setModalVisible(false);
-                                }}>
-                                <View className="items-center flex-row">
-                                    <Text className="text-white ml-3 text-base">
-                                        Thanh toán bằng ZaloPay
-                                    </Text>
-                                </View>
-                                <View className='justify-start ml-5'>
-                                    <Image
-                                        source={require('../image/ZaloPay-vuong.png')}
-                                        className="w-10 h-10 ml rounded-md" />
-                                </View>
-                            </TouchableOpacity>
+                            <FlatList
+                                showsHorizontalScrollIndicator={false}
+                                data={paymentMethods}
+                                renderItem={({ item }) =>
+                                    <PaymentMethod
+                                        item={item}
+                                        setPaymentMethod={setPaymentMethod}
+                                        setModalVisible={setModalVisible}
+                                    />
+                                }
+                            />
                         </View>
                     </View>
                 </View>

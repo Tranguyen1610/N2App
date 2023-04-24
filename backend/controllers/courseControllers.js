@@ -84,6 +84,19 @@ const allCourses = asyncHandler(async (req, res) => {
   .populate("Teacher", "-Password");
   res.send(courses);
 });
+
+const getInfoCourse = asyncHandler(async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id)
+    if (!course)
+      return res.status(400).json('Course not found')
+    res.json(course)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json('Internal server error')
+  }
+})
+
 const deleteCourse = asyncHandler(async (req, res) => {
   // const findCourse = await Course.find(req.params.courseId)
   await Course.findByIdAndDelete(req.params.id).then((data) => {
@@ -164,5 +177,6 @@ module.exports = {
   updateCoures,
   sortCourse,
   getVideoOfCourse,
-  getCourseofType
+  getCourseofType,
+  getInfoCourse,
 };

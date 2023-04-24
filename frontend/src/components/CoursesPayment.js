@@ -40,10 +40,8 @@ export default function CoursesCart({ item, carts, setCCarts, setTotal, setIsAll
                     source={{ uri: item.Image }}
                     className="w-20 h-20" />
             </View>
-            <View className="w-9/12 ml-2">
-                <TouchableOpacity>
-                    <Text className="text-white text-lg font-semibold">{names(item.Name)}</Text>
-                </TouchableOpacity>
+            <View className="w-9/12 pl-3">
+                <Text className="text-white text-lg font-semibold">{names(item.Name)}</Text>
                 <Text className="text-gray-400 text-base">hfhf</Text>
                 <Text className='text-white font-semibold text-base'>{formatPrice(item.Price)}</Text>
             </View>
