@@ -21,7 +21,7 @@ export const AuthContextProvider = ({ children }) => {
 	const [listOrderCancel, setListOrderCancel] = useState([]);
 	const [listOrderSuccess, setListOrderSuccess] = useState([]);
 	const [listOrderUnPaid, setListOrderUnPaid] = useState([]);
-
+	const [listFavoriteType, setListFavoriteType] = useState([]);
 	useEffect(() => {
 		loadUser();
 	  }, []); 
@@ -147,7 +147,8 @@ export const AuthContextProvider = ({ children }) => {
 			isLoading,userInfo,types,setTypes,courses,setCourses,textSearch, setTextSearch,
 			listType,setListType,wishlists, setWishLists,carts, setCarts,coursePurchaseds, 
 			setCoursePurchaseds,listOrderCancel, setListOrderCancel,listOrderSuccess, 
-			setListOrderSuccess,listOrderUnPaid, setListOrderUnPaid
+			setListOrderSuccess,listOrderUnPaid, setListOrderUnPaid, listFavoriteType,
+			setListFavoriteType
 		}}>
 			{children}
 		</AuthContext.Provider>

@@ -24,7 +24,7 @@ const courseSchema = mongoose.Schema(
     ]
   },
   {
-    Timestamp: true,
+    timestamp: true,
   }
   
 );

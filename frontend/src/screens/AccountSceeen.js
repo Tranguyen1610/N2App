@@ -83,12 +83,7 @@ export default function AccountSceeen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
           onPress={() => {
-            setModalVisible(true)
-            setPassword("")
-            setNewPassword("")
-            setCfNewPassword("")
-            setVisible(true)
-            setAlertt("")
+            navigation.navigate('FavoriteTypeScreen')
           }}>
           <Ionicons
             name='apps-outline'

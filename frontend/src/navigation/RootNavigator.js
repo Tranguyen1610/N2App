@@ -14,6 +14,7 @@ import AddCourseStep2Screen from '../screens/AddCourseStep2Screen';
 import PaymentScreen from '../screens/PaymentScreen';
 import OrderScreen from '../screens/OrderScreen';
 import OrderDetailScreen from '../screens/OrderDetailScreen';
+import FavoriteTypeScreen from '../screens/FavoriteTypeScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -117,6 +118,16 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Chi tiết đơn hàng'
+        }} />
+      <Stack.Screen
+        name="FavoriteTypeScreen"
+        component={FavoriteTypeScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Thể loại yêu thích'
         }} />
 
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />

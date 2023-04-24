@@ -8,7 +8,7 @@ const videoSchema = mongoose.Schema(
     Description: { type: String, trim: true },
   },
   {
-    Timestamp: true,
+    timestamp: true,
   }
 );
 const Video = mongoose.model("Video", videoSchema);

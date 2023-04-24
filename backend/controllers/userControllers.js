@@ -166,6 +166,13 @@ const getAllCart = asyncHandler(async (req, res) => {
   .then((data) => { res.json(data.Cart) })
   // res.json(course.WishList)
 })
+
+const getFavoriteType = asyncHandler(async (req, res) => {
+  const course = await User.findById(req.userId).populate('FavoriteType')
+    .then((data) => { res.json(data.FavoriteType) })
+  // res.json(course.WishList)
+})
+
 const addCart = asyncHandler(async (req, res) => {
   const { courseId } = req.params.courseId;
 
@@ -256,4 +263,5 @@ module.exports = {
   deleteWishList,
   deleteCourseOfCard,
   getCoursePurchased,
+  getFavoriteType,
 };

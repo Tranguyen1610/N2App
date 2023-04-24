@@ -43,10 +43,16 @@ const userSchema = mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment",
       }
-    ]
+    ],
+    FavoriteType:[
+      {
+      type: mongoose.Schema.Types.ObjectId,
+        ref: "Type",
+      }
+    ],
   },
   {
-    Timestamp: true,
+    timestamp: true,
   }
 );
 userSchema.methods.matchPassword = async function (enteredPassword) {
