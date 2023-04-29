@@ -157,7 +157,7 @@ const getVideoOfCourse = asyncHandler(async(req,res)=>{
     throw new Error("Course not found");
   }
 })
-const getCourseofType =asyncHandler(async(req,res)=>{
+const getCourseofType = asyncHandler(async(req,res)=>{
   await Course.find({ Type: req.params.typeId }).populate("Type")
   .then((data) => {
     var result = data;
@@ -167,6 +167,29 @@ const getCourseofType =asyncHandler(async(req,res)=>{
     res.status(400).send(error.message || error);
   });
 })
+
+const getCourseofTeacher = asyncHandler(async(req,res)=>{
+  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true } }).populate("Teacher")
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+})
+
+const getCourseUnFinishOfTeacher = asyncHandler(async(req,res)=>{
+  await Course.find({ Teacher: req.userId,ListVideo: {  $size: 0 } }).populate("Teacher")
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+})
+
 module.exports = {
   createCourse,
   addVideotoCourse,
@@ -179,4 +202,6 @@ module.exports = {
   getVideoOfCourse,
   getCourseofType,
   getInfoCourse,
+  getCourseofTeacher,
+  getCourseUnFinishOfTeacher,
 };

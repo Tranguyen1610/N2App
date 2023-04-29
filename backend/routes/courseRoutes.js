@@ -12,6 +12,8 @@ const {
   getVideoOfCourse,
   getCourseofType,
   getInfoCourse,
+  getCourseofTeacher,
+  getCourseUnFinishOfTeacher,
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
@@ -27,4 +29,6 @@ router.route("/update").put(protect, updateCoures);
 router.route("/deleteVideo/:videoId").post(protect, deleteVideoOfCourse);
 router.route("/sort").get(protect,sortCourse);
 router.route("/:typeId/getcourseoftype").get(protect,getCourseofType);
+router.route("/getcourseofTeacher").get(protect,getCourseofTeacher);
+router.route("/getCourseUnFinishOfTeacher").get(protect,getCourseUnFinishOfTeacher);
 module.exports = router;

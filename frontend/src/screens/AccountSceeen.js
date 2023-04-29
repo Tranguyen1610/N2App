@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, Alert, StyleSheet, Modal, TextInput, ActivityIndicator } from 'react-native'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
@@ -7,10 +7,15 @@ import HeaderTitle from '../components/HeaderTitle'
 import StartScreen from './StartScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
+import DropDownPicker from 'react-native-dropdown-picker'
+import { Url } from '../contexts/constants';
+import axios from 'axios';
+import Toast from 'react-native-root-toast'
 
 export default function AccountSceeen({ navigation }) {
-  const { userInfo, logout } = useContext(AuthContext)
+  const { userInfo, logout, types, setTypes, listFavoriteType, setListFavoriteType } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalFavoriteType, setModalFavoriteType] = useState(false);
   const [modalLogoutVisible, setModalLogoutVisible] = useState(false);
   const ref_inputPassword = useRef();
   const ref_inputNewPassword = useRef();
@@ -21,6 +26,8 @@ export default function AccountSceeen({ navigation }) {
   const [cfNewPassword, setCfNewPassword] = useState('');
   const [alertt, setAlertt] = useState('');
   const [isLogout, setIsLogout] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [value, setValue] = useState([]);
 
   const switchType = async () => {
     await AsyncStorage.setItem('mode', "Teacher")
@@ -33,6 +40,62 @@ export default function AccountSceeen({ navigation }) {
     }, 1000)
     logout();
   }
+  const getType = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/type`);
+      // console.log(res.data);
+      const listtype = res.data;
+      for (let index = 0; index < listtype.length; index++) {
+        list.push({ label: listtype[index].Name, value: listtype[index]._id })
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setTypes(list);
+  }
+
+  const getFavoriteType = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/user/getFavoriteType`);
+      // console.log(res.data);
+      const listtype = res.data;
+      setListFavoriteType(res.data);
+      for (let index = 0; index < listtype.length; index++) {
+        list.push(listtype[index]._id)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setValue(list);
+  }
+
+  const updateFavoriteType = async () => {
+    try {
+      const res = await axios.put(`${Url}/user/updateFavoriteType`, {types:value});
+      if (res.data) {
+        getFavoriteType();
+        setModalFavoriteType(false);
+        Toast.show('Thành công',
+          {
+            backgroundColor: '#3B404F',
+            textColor: '#ffffff',
+            opacity: 1,
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.CENTER,
+            animation: true,
+          })
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getFavoriteType();
+    getType();
+  }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
       <HeaderTitle name={AccountSceeen} title={'Tài khoản'} isBack={false} />
@@ -83,12 +146,8 @@ export default function AccountSceeen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
           onPress={() => {
-            setModalVisible(true)
-            setPassword("")
-            setNewPassword("")
-            setCfNewPassword("")
-            setVisible(true)
-            setAlertt("")
+            setIsOpen(true);
+            setModalFavoriteType(true);
           }}>
           <Ionicons
             name='apps-outline'
@@ -101,7 +160,7 @@ export default function AccountSceeen({ navigation }) {
             color="white" />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
-        onPress={()=>navigation.navigate('OrderScreen')}>
+          onPress={() => navigation.navigate('OrderScreen')}>
           <Ionicons
             name="clipboard-outline"
             size={25}
@@ -273,6 +332,55 @@ export default function AccountSceeen({ navigation }) {
                   <Text className=" p-3 text-xl font-bold text-[#1273FE]">Đang đăng xuất</Text>
                   <ActivityIndicator size={'large'} color={'#1273FE'} className="" />
                 </View>}
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          visible={modalFavoriteType}
+          transparent={true}
+          onRequestClose={() => setModalFavoriteType(false)}
+          animationType='slide'
+          hardwareAccelerated>
+          <View className="flex-1 justify-end mb-[60px] bg-[#00000099]" >
+            <View className="bg-[#1B212D] w-[100%] rounded-tl-lg rounded-tr-lg px-5 py-3">
+              <View className="flex-row justify-between items-center">
+                <Text className="text-lg font-bold text-white">Thể loại yêu thích</Text>
+                <TouchableOpacity
+                  onPress={() => setModalFavoriteType(false)}>
+                  <Ionicons name="close-circle" size={25} color="#1273FE" />
+                </TouchableOpacity>
+              </View>
+              <View className="justify-start items-center my-5">
+                <DropDownPicker
+                  className='mb-[200px]'
+                  items={types}
+                  open={isOpen}
+                  setOpen={setIsOpen}
+                  value={value}
+                  setValue={setValue}
+                  maxHeight={200}
+                  scrollViewProps
+                  autoScroll
+                  placeholder='Chọn thể loại'
+                  dropDownDirection='BOTTOM'
+                  theme='DARK'
+                  textStyle={{
+                    color: "#fff"
+                  }}
+                  mode="BADGE"
+                  badgeColors={"#1273FE"}
+                  showBadgeDot={true}
+                  badgeDotColors={"#EC2612"}
+                  multiple={true}
+                  
+                />
+                <TouchableOpacity className="ml-auto mt-3"
+                  onPress={() => updateFavoriteType()}>
+                  <Text className="text-base text-white text-center bg-[#1273FE] p-2 rounded-md font-medium ml-5">
+                    Cập nhật
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>

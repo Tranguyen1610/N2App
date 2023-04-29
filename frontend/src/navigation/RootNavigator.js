@@ -14,6 +14,8 @@ import AddCourseStep2Screen from '../screens/AddCourseStep2Screen';
 import PaymentScreen from '../screens/PaymentScreen';
 import OrderScreen from '../screens/OrderScreen';
 import OrderDetailScreen from '../screens/OrderDetailScreen';
+import AllCourseTeacher from '../screens/AllCourseTeacher';
+import AllCourseTeacherUnFinish from '../screens/AllCourseTeacherUnFinish';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -117,6 +119,26 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Chi tiết đơn hàng'
+        }} />
+      <Stack.Screen
+        name="AllCourseTeacher"
+        component={AllCourseTeacher}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Thêm bởi bạn'
+        }} />
+      <Stack.Screen
+        name="AllCourseTeacherUnFinish"
+        component={AllCourseTeacherUnFinish}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Chưa hoàn tất'
         }} />
 
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
