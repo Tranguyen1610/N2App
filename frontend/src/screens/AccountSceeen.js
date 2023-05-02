@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, Alert, StyleSheet, Modal, TextInput, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Alert, StyleSheet, Modal, TextInput, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -98,6 +98,7 @@ export default function AccountSceeen({ navigation }) {
   }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <HeaderTitle name={AccountSceeen} title={'Tài khoản'} isBack={false} />
       <View className="px-5">
         <View className="items-center">

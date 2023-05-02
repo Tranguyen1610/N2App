@@ -1,4 +1,4 @@
-import {FlatList,Text, TouchableOpacity, View } from 'react-native'
+import {FlatList,StatusBar,Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native';
@@ -73,6 +73,7 @@ export default function CardScreen() {
 
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1">
+            <StatusBar backgroundColor={"#0A0909"}/>
             {Ccarts.length == 0 ?
                 <Text className="text-gray-300 text-xl text-center mt-20">
                     Giỏ hàng hiện tại rỗng</Text> : <></>}

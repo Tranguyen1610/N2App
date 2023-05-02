@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, Keyboard, Alert, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, Keyboard, Alert, TouchableOpacity, StatusBar } from 'react-native'
 import React, { useRef, useState } from 'react'
 
 export default function VerificationScreen({ route }) {
@@ -12,6 +12,7 @@ export default function VerificationScreen({ route }) {
     const [pin4v, setPin4v] = useState("");
     return (
         <View className="bg-[#0A0909] flex-1 px-2 items-center">
+            <StatusBar backgroundColor={"#0A0909"}/>
             <Image
                 source={require('../image/verification.png')}
                 className="w-40 h-40 rounded-full mt-14" />

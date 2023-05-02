@@ -11,7 +11,6 @@ export default function AuthNavigator() {
     return (
         <Stack.Navigator
             screenOptions={{
-                statusBarColor:'#0A0909'
             }}>
             
             <Stack.Screen 

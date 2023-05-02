@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ActivityIndicator, TouchableOpacity, Keyboard } from 'react-native'
+import { View, Text, TextInput, ActivityIndicator, TouchableOpacity, Keyboard, StatusBar } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
@@ -47,9 +47,10 @@ export default function AddVideoScreen({ route }) {
     });
 
     // Explore the result 
-    if (!result.cancelled) {
-      handleUploadVideo(result)
-    }
+    if (!result.canceled) {
+      // console.log(result);
+      handleUploadVideo(result.assets[0])
+  }
   }
 
   const handleUploadVideo = async (e) => {
@@ -133,9 +134,10 @@ export default function AddVideoScreen({ route }) {
               textColor: '#ffffff',
               opacity: 1,
               duration: Toast.durations.SHORT,
-              position: Toast.positions.BOTTOM,
+              position: Toast.positions.CENTER,
               animation: true,
             })
+          reset();
         } catch (error) {
           console.log(error);
         }
@@ -171,6 +173,7 @@ export default function AddVideoScreen({ route }) {
   }
   return (
     <View className="flex-1 bg-[#0A0909] p-5">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <TextInput
         placeholder='Tên'
         placeholderTextColor={'#7F889A'}
@@ -203,7 +206,7 @@ export default function AddVideoScreen({ route }) {
       <TouchableOpacity
         className="justify-center items-center mt-5"
         onPress={() => showVideoPicker()}>
-        <Text className="text-white bg-gray-800 font-semibold text-base p-3  rounded-xl">Chọn video giới thiệu</Text>
+        <Text className="text-white bg-gray-800 font-semibold text-base p-3  rounded-xl">Chọn video</Text>
       </TouchableOpacity>
       <Text className="text-red-600 text-base italic text-center mt-5" >{alertValue}</Text>
       {!isKeyboardOpen ?
@@ -223,7 +226,6 @@ export default function AddVideoScreen({ route }) {
               className="justify-center items-center mt-2"
               onPress={() => {
                 check()
-                reset()
               }}>
               <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl ml-5">Tiếp tục thêm mới</Text>
             </TouchableOpacity>

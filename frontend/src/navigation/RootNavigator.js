@@ -16,6 +16,8 @@ import OrderScreen from '../screens/OrderScreen';
 import OrderDetailScreen from '../screens/OrderDetailScreen';
 import AllCourseTeacher from '../screens/AllCourseTeacher';
 import AllCourseTeacherUnFinish from '../screens/AllCourseTeacherUnFinish';
+import ResultPayment from '../screens/ResultPayment';
+import AllCourseTeacherNS from '../screens/AllCourseTeacherNS';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -24,7 +26,6 @@ const RootNavigator = () => {
       initialRouteName={SwitchNavigator}
       screenOptions={() => ({
         headerShown: false,
-        statusBarColor: "#0A0909",
         // navigationBarColor: "#1C1717",
       })}
     >
@@ -128,7 +129,17 @@ const RootNavigator = () => {
           headerShown: true,
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
-          title: 'Thêm bởi bạn'
+          title: 'Đang bán'
+        }} />
+      <Stack.Screen
+        name="AllCourseTeacherNS"
+        component={AllCourseTeacherNS}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Chưa bán'
         }} />
       <Stack.Screen
         name="AllCourseTeacherUnFinish"
@@ -139,6 +150,16 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Chưa hoàn tất'
+        }} />
+       <Stack.Screen
+        name="ResultPayment"
+        component={ResultPayment}
+        options={{
+          animation: 'none',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Kết quả thanh toán'
         }} />
 
       {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />

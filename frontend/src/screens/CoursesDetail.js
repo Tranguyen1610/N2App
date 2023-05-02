@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle';
@@ -313,6 +313,13 @@ export default function CoursesDetail({ route }) {
                 console.log(err);
             }
     }
+
+    const handleOrder = () => {
+        const coursePayments = [];
+            coursePayments.push(course);
+        nav.navigate("PaymentScreen", { payments: coursePayments, total: course.Price })
+    }
+
     useEffect(() => {
         if (wishlists.length == 0) getWishList();
         if (coursePurchaseds.length == 0) getCoursePurchased();
@@ -330,6 +337,7 @@ export default function CoursesDetail({ route }) {
     }, [carts])
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1">
+            <StatusBar backgroundColor={"#0A0909"}/>
             <HeaderTitle name='CoursesDetail' title='' isBack={true} />
             {isLoading ?
                 <View className="bg-[#0A0909] flex-1 justify-center items-center">
@@ -427,7 +435,8 @@ export default function CoursesDetail({ route }) {
                                 onPress={() => handleAddCart()}>
                                 <MaterialCommunityIcons name="cart-plus" size={35} color="#1273FE" />
                             </TouchableOpacity>
-                            <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12">
+                            <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12"
+                                onPress={()=>handleOrder()}>
                                 <Text className="text-white font-semibold text-xl">Mua ngay</Text>
                             </TouchableOpacity>
                         </View>

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import { Video } from 'expo-av'
@@ -48,8 +48,9 @@ export default function AddCourseStep2Screen({ route }) {
         );
 
         // Explore the result 
-        if (!result.cancelled) {
-            handleUpload(result)
+        if (!result.canceled) {
+            handleUpload(result.assets[0])
+            // console.log(result.assets[0]);
         }
     }
     const showVideoPicker = async () => {
@@ -80,8 +81,9 @@ export default function AddCourseStep2Screen({ route }) {
         });
 
         // Explore the result 
-        if (!result.cancelled) {
-            handleUploadVideo(result)
+        if (!result.canceled) {
+            // console.log(result);
+            handleUploadVideo(result.assets[0])
         }
     }
 
@@ -167,6 +169,7 @@ export default function AddCourseStep2Screen({ route }) {
     }
     const createCourse = async()=>{
         try {
+            // console.log(data);
             const res = await axios.post(`${Url}/course/createCourse`, data);
             console.log(res.data);
             nav.navigate('AddVideoScreen',{idCourse:res.data._id});
@@ -177,12 +180,13 @@ export default function AddCourseStep2Screen({ route }) {
 
     return (
         <View className="flex-1 bg-[#0A0909] p-5">
+            <StatusBar backgroundColor={"#0A0909"}/>
             <View
                 className="w-max h-48 border border-gray-900 justify-center rounded-sm">
                 {isLoading ?
                     <ActivityIndicator size={'large'} /> :
                     <Image
-                        className="w-max h-48 rounded-sm border-gray-900"
+                        className="w-max h-48 rounded-sm "
                         source={{ uri: image }}
                     />}
             </View>

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Url } from '../contexts/constants';
 import axios from 'axios';
@@ -86,6 +86,7 @@ export default function AddCourseScreen() {
   }, []);
   return (
     <View className="flex-1 bg-[#0A0909] p-5">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <TextInput
         placeholder='Tên khóa học'
         placeholderTextColor={'#7F889A'}
@@ -93,11 +94,14 @@ export default function AddCourseScreen() {
         value={name}
         onChangeText={(e) => setName(e)} />
       <DropDownPicker
+        style={{
+          marginBottom: isOpen ? 200:0,
+        }}
         items={types}
         open={isOpen}
-        setOpen={() => setIsOpen(!isOpen)}
+        setOpen={setIsOpen}
         value={type}
-        setValue={(val) => setType(val)}
+        setValue={setType}
         maxHeight={200}
         scrollViewProps
         autoScroll

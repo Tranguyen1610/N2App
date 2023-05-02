@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, FlatList, ScrollView, Image, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, ScrollView, Image, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Courses } from '../contexts/Data'
@@ -10,9 +10,10 @@ import { Url } from '../contexts/constants'
 
 export default function CoursesTeacherScreen() {
   const nav = useNavigation()
-  const { userInfo, coursesTC, setCoursesTC,coursesTCUF,setCoursesTCUF } = useContext(AuthContext);
+  const { userInfo, coursesTC, setCoursesTC, coursesTCUF, setCoursesTCUF,coursesTCNS,setCoursesTCNS } = useContext(AuthContext);
   const [topFiveCourseTC, setTopFiveCourseTC] = useState([]);
   const [topFiveCourseTCUF, setTopFiveCourseTCUF] = useState([]);
+  const [topFiveCourseTCNS, setTopFiveCourseTCNS] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const getCourseTC = async () => {
@@ -47,15 +48,33 @@ export default function CoursesTeacherScreen() {
     setTopFiveCourseTCUF(list.slice(0, 5))
   }
 
+  const getCourseTCNS = async () => {
+    let list = [];
+    try {
+      const res = await axios.get(`${Url}/course/getCourseofTeacherNotSale`);
+      // console.log(res.data);
+      const listcourse = res.data;
+      for (let index = 0; index < listcourse.length; index++) {
+        list.push(listcourse[index])
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setCoursesTCNS(list)
+    setTopFiveCourseTCNS(list.slice(0, 5))
+  }
+
   useEffect(() => {
     setTimeout(() => setIsLoading(false), 900)
     getCourseTC();
     getCourseTCUF();
+    getCourseTCNS();
   }, [])
 
   if (isLoading)
     return (
       <SafeAreaView className="bg-[#0A0909] flex-1 justify-center items-center">
+        <StatusBar backgroundColor={"#0A0909"} />
         <ActivityIndicator size={'large'} color={'#1273FE'} />
       </SafeAreaView>
     )
@@ -63,6 +82,7 @@ export default function CoursesTeacherScreen() {
   return (
 
     <SafeAreaView className="flex-1 bg-[#0A0909] p-5">
+      <StatusBar backgroundColor={"#0A0909"} />
       <ScrollView className=""
         showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center mt-10">
@@ -81,7 +101,28 @@ export default function CoursesTeacherScreen() {
           </TouchableOpacity>
         </View>
         <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-xl font-bold">Khóa học thêm bởi bạn</Text>
+          <Text className="text-white text-xl font-bold">Khóa học chưa hoàn tất</Text>
+          <TouchableOpacity
+            onPress={() => {
+              nav.navigate("AllCourseTeacherUnFinish")
+            }}>
+            <Text className="text-[#1273FE]">Xem tất cả</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <FlatList
+            className="mt-5"
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={topFiveCourseTCUF}
+            renderItem={({ item }) =>
+              <CoursesPropose
+                item={item} />
+            }
+          />
+        </View>
+        <View className="flex-row mt-7 items-center justify-between">
+          <Text className="text-white text-xl font-bold">Khóa học đang bán</Text>
           <TouchableOpacity
             onPress={() => {
               nav.navigate("AllCourseTeacher")
@@ -102,10 +143,10 @@ export default function CoursesTeacherScreen() {
           />
         </View>
         <View className="flex-row mt-7 items-center justify-between">
-          <Text className="text-white text-xl font-bold">Khóa học chưa hoàn tất</Text>
+          <Text className="text-white text-xl font-bold">Khóa học chưa bán</Text>
           <TouchableOpacity
             onPress={() => {
-              nav.navigate("AllCourseTeacherUnFinish")
+              nav.navigate("AllCourseTeacherNS")
             }}>
             <Text className="text-[#1273FE]">Xem tất cả</Text>
           </TouchableOpacity>
@@ -115,7 +156,7 @@ export default function CoursesTeacherScreen() {
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={topFiveCourseTCUF}
+            data={topFiveCourseTCNS}
             renderItem={({ item }) =>
               <CoursesPropose
                 item={item} />

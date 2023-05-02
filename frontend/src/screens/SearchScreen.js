@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ScrollView, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Search from '../components/Search'
@@ -50,6 +50,7 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <HeaderTitle name={'SearchScreen'} title="" isBack={false} />
       {listSearchCourse.length > 0 ?
         <View className="mx-5 mt-5">

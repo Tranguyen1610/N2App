@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle';
@@ -15,6 +15,7 @@ export default function VideoPreviewScreen({ route }) {
     }, []);
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1 ">
+            <StatusBar backgroundColor={"#0A0909"}/>
             <HeaderTitle name='AllTypeScreen' title='' isBack={true} />
             <View className=" flex-1 justify-center items-center">
                 <Video

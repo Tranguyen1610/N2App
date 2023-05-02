@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Image, TouchableOpacity, StatusBar } from 'react-native'
 import React, { useEffect } from 'react'
 import CoursesPayment from '../components/CoursesPayment';
 import moment from 'moment';
@@ -14,6 +14,7 @@ export default function OrderDetailScreen({ route }) {
     }, [])
     return (
         <View className="flex-1 bg-[#0A0909] p-5">
+            <StatusBar backgroundColor={"#0A0909"}/>
             <View className='bg-[#1273FE] p-5 rounded-md mb-5'>
                 {order.IsPayment ?
                     <Text className="text-white text-base font-medium">

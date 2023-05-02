@@ -60,12 +60,13 @@ export default function FeaturedScreen({ navigation }) {
   if (isLoading)
     return (
       <SafeAreaView className="bg-[#0A0909] flex-1 justify-center items-center">
+        <StatusBar backgroundColor={"#0A0909"}/>
         <ActivityIndicator size={'large'} color={'#1273FE'} />
       </SafeAreaView>
     )
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 p-5">
-      <StatusBar />
+      <StatusBar backgroundColor={"#0A0909"}/>
       <HeaderTitle name='FeaturedScreen' title='' isBack={false} />
       <ScrollView className=""
         showsVerticalScrollIndicator={false}>

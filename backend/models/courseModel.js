@@ -11,8 +11,7 @@ const courseSchema = mongoose.Schema(
     ],
     Description: { type: String, trim: true },
     Type: { type:mongoose.Schema.Types.ObjectId, ref:"Type" },
-    OriginPrice: { type: Number, trim: true },
-    FinalPrice: { type: Number, trim: true },
+    Price: { type: Number, trim: true },
     LastUpdate: { type: Date, trim: true },
     Image: {type: String, trim: true },
     Video: {type: String, trim: true },
@@ -21,7 +20,8 @@ const courseSchema = mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
          ref: "Comment",
       }
-    ]
+    ],
+    OnSale:{type:Boolean,default:false},
   },
   {
     timestamp: true,
