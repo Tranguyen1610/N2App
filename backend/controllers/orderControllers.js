@@ -25,7 +25,26 @@ const createOrder = asyncHandler(async (req, res) => {
       BuyerId: req.userId,
     });
     const saveOrder = await order.save();
-    res.status(200).json(saveOrder);
+    const orderf = await Order.findById(saveOrder._id).populate('BuyerId').populate('Detail').populate('PayMentType');
+    if (saveOrder) {
+      try {
+        saveOrder.Detail.forEach(async (o) => {
+          await User.findByIdAndUpdate(
+            saveOrder.BuyerId,
+            {
+              $pull: { Cart: o, WishList: o },
+            },
+            { new: true }
+          );
+        });
+        res.status(200).json(orderf);
+      } catch (err) {
+        res.status(500).json(err);
+      }
+    } else {
+      return res.status(404).send('Order not found');
+    }
+
     // res.send(order)
   } catch (err) {
     res.status(500).json(err);
@@ -37,22 +56,17 @@ const paymentSuccessOrder = asyncHandler(async (req, res) => {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
       { IsPayment: true },
-      { new: true });
+      { new: true }).populate('BuyerId').populate('Detail').populate('PayMentType');
     if (order) {
-      try {
-        order.Detail.forEach(async (o) => {
-          await User.findByIdAndUpdate(
-            order.BuyerId,
-            {
-              $addToSet: { CoursePurchased: o },
-              $pull: { Cart: o, WishList: o },
-            },
-            { new: true }
-          );
-        });
-      } catch (err) {
-        res.status(500).json(err);
-      }
+      order.Detail.forEach(async (o) => {
+        await User.findByIdAndUpdate(
+          order.BuyerId,
+          {
+            $addToSet: { CoursePurchased: o },
+          },
+          { new: true }
+        );
+      });
       res.status(200).json(order);
     }
     else {

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import { Url } from '../contexts/constants'
@@ -29,6 +29,7 @@ export default function OrderSuccessScreen() {
 
   return (
     <View className="flex-1 bg-[#0A0909] p-2">
+      <StatusBar backgroundColor={"#0A0909"}/>
       {isLoading ?
         <View className="bg-[#0A0909] flex-1 justify-center items-center">
           <ActivityIndicator size={'large'} color={'#1273FE'} />

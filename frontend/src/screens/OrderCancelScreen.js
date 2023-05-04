@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Order from '../components/Order'
 import axios from 'axios';
@@ -25,6 +25,7 @@ export default function OrderCancelScreen() {
   }, [])
   return (
     <View className="flex-1 bg-[#0A0909] p-2">
+      <StatusBar backgroundColor={"#0A0909"}/>
       {listOrderCancel.length == 0 ?
         <Text className="text-gray-300 text-xl text-center mt-20">
           Chưa có đơn hàng</Text> : <></>}

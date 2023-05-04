@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle'
@@ -30,6 +30,7 @@ export default function CourseOfTypeScreen({ route }) {
 
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <HeaderTitle name='CourseOfTypeScreen' title={type.Name} isBack={true} />
       {isLoading ?
         <View className="bg-[#0A0909] flex-1 justify-center items-center">

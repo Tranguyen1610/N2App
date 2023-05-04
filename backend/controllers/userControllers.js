@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
+const bcrypt = require("bcryptjs");
 
 const registerUser = asyncHandler(async function (req, res) {
   const { Email, Password, Name, DateOfBirth } = req.body;
@@ -37,6 +38,7 @@ const authUser = asyncHandler(async (req, res) => {
         message: 'Đăng nhập thành công',
         Id: user._id,
         token: generateToken(user._id),
+        IsVerified: user.IsVerified,
       });
     } else {
       res.status(400)
@@ -84,10 +86,10 @@ const SearchUser = asyncHandler(async (req, res) => {
   }
 });
 const updateProfile = asyncHandler(async (req, res) => {
-  const { _id, Name } = req.body;
+  const { Name } = req.body;
 
   const updateInfo = await User.findByIdAndUpdate(
-    _id,
+    req.userId,
     {
       Name,
     },
@@ -131,7 +133,7 @@ const addWishList = asyncHandler(async (req, res) => {
 const deleteWishList = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndUpdate(
     req.userId,
-    {$pull: { WishList: req.params.videoId }},
+    { $pull: { WishList: req.params.videoId } },
     { new: true }
   );
   // console.log(user);
@@ -163,7 +165,7 @@ const getCoursePurchased = asyncHandler(async (req, res) => {
 
 const getAllCart = asyncHandler(async (req, res) => {
   const cart = await User.findById(req.userId).populate('Cart')
-  .then((data) => { res.json(data.Cart) })
+    .then((data) => { res.json(data.Cart) })
   // res.json(course.WishList)
 })
 
@@ -204,7 +206,7 @@ const addCart = asyncHandler(async (req, res) => {
 const deleteCourseOfCard = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndUpdate(
     req.userId,
-    {$pull: { Cart: req.params.courseId }},
+    { $pull: { Cart: req.params.courseId } },
     { new: true }
   );
   // console.log(user);
@@ -268,6 +270,38 @@ const updateFavoriteType = asyncHandler(async (req, res) => {
   }
 })
 
+const changePassword = asyncHandler(async (req, res) => {
+  const { PasswordOld, PasswordNew, Cfpassword } = req.body
+  if (!PasswordOld || !PasswordNew || !Cfpassword)
+    return res
+      .status(400)
+      .json({ success: false, message: 'Chưa nhập đủ dữ liệu' })
+  try {
+    const user = await User.findById(req.userId)
+    const passwordValid = await user.matchPassword(PasswordOld)
+    if (!passwordValid) {
+      return res.status(400).json({ success: false, message: 'Mật khẩu hiện tại không đúng' });
+    }
+
+    if (PasswordNew === Cfpassword) {
+      const salt = await bcrypt.genSalt(10); //10 rounds
+      const Pw = await bcrypt.hash(PasswordNew, salt);
+      await User.findByIdAndUpdate(req.userId, {
+        $set: { "Password": Pw }
+      }
+        , { new: true })
+      res.json({ success: true, message: 'Đổi mật khẩu thành công' })
+    }
+    else {
+      return res.status(400).json({ success: false, message: 'Mật khẩu mới nhập lại không đúng' });
+    }
+  }
+  catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+})
+
 module.exports = {
   registerUser,
   authUser,
@@ -286,4 +320,5 @@ module.exports = {
   getCoursePurchased,
   getFavoriteType,
   updateFavoriteType,
+  changePassword,
 };

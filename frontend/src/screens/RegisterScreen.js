@@ -10,7 +10,7 @@ export default function RegisterScreen({ navigation }) {
     const [visible, setVisible] = useState(true)
     const [visiblePre, setVisiblePre] = useState(true)
 
-    const { register,setUserToken,loadUser_Register } = useContext(AuthContext)
+    const { register, loadUser} = useContext(AuthContext)
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -52,16 +52,16 @@ export default function RegisterScreen({ navigation }) {
                 if (prePassword === password) {
                     try {
                         const registerData = await register({ Name: name, Email: email, Password: password, DateOfBirth: birthday })
-                        console.log(registerData);
+                        // console.log(registerData);
                         if (registerData.success) {
                             setAlert("Tạo tài khoản thành công")
                             setIsRegisterSuccess(true)
                             setTimeout(() => {
-                                setUserToken(registerData.token);
-                                AsyncStorage.setItem('userToken',registerData.token);
-                                loadUser_Register() ;
+                                // loadUser();
+                                setAlert("");
                                 setIsRegisterSuccess(false)
-                            }, 2000)
+                                navigation.navigate('VerificationScreen',{email:email});
+                            }, 1000)
                         } else {
                             setAlert(registerData.message)
                             setIsRegisterSuccess(false)
@@ -82,7 +82,7 @@ export default function RegisterScreen({ navigation }) {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView className="bg-[#0A0909] flex-1 px-4">
-                <StatusBar />
+                <StatusBar backgroundColor={"#0A0909"} />
                 <Text className="text-white text-3xl font-medium mt-16">Đăng ký</Text>
                 <View className="flex-row">
                     <Text className="text-[#7F889A] text-sm mr-2">Bạn đã có tài khoản?</Text>
@@ -208,7 +208,6 @@ export default function RegisterScreen({ navigation }) {
                         <Text className="text-white text-center text-base font-medium">Đăng ký</Text> :
                         <View className="flex-row justify-center items-center">
                             <ActivityIndicator size={'large'} />
-                            <Text className="text-white text-center text-base font-medium pl-2">Đăng nhập</Text>
                         </View>
                     }
                 </TouchableOpacity>

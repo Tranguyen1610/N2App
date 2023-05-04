@@ -169,7 +169,18 @@ const getCourseofType = asyncHandler(async(req,res)=>{
 })
 
 const getCourseofTeacher = asyncHandler(async(req,res)=>{
-  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true } }).populate("Teacher")
+  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:true }).populate("Teacher")
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+})
+
+const getCourseofTeacherNotSale = asyncHandler(async(req,res)=>{
+  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:false }).populate("Teacher")
   .then((data) => {
     var result = data;
     res.json(result);
@@ -204,4 +215,5 @@ module.exports = {
   getInfoCourse,
   getCourseofTeacher,
   getCourseUnFinishOfTeacher,
+  getCourseofTeacherNotSale,
 };

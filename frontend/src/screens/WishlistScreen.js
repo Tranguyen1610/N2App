@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle'
@@ -29,6 +29,7 @@ export default function WishlistScreen() {
   }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <HeaderTitle name={WishlistScreen} title='Wishlist' isBack={false} />
       {isLoading ?
         <View className="bg-[#0A0909] flex-1 justify-center items-center">

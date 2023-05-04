@@ -14,6 +14,7 @@ const {
   getInfoCourse,
   getCourseofTeacher,
   getCourseUnFinishOfTeacher,
+  getCourseofTeacherNotSale,
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
@@ -31,4 +32,5 @@ router.route("/sort").get(protect,sortCourse);
 router.route("/:typeId/getcourseoftype").get(protect,getCourseofType);
 router.route("/getcourseofTeacher").get(protect,getCourseofTeacher);
 router.route("/getCourseUnFinishOfTeacher").get(protect,getCourseUnFinishOfTeacher);
+router.route("/getCourseofTeacherNotSale").get(protect,getCourseofTeacherNotSale);
 module.exports = router;

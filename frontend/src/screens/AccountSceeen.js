@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, Alert, StyleSheet, Modal, TextInput, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Alert, StyleSheet, Modal, TextInput, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -8,20 +8,22 @@ import StartScreen from './StartScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import DropDownPicker from 'react-native-dropdown-picker'
-import { Url } from '../contexts/constants';
+import { apiUrl, Url } from '../contexts/constants';
 import axios from 'axios';
 import Toast from 'react-native-root-toast'
 
 export default function AccountSceeen({ navigation }) {
-  const { userInfo, logout, types, setTypes, listFavoriteType, setListFavoriteType } = useContext(AuthContext)
+  const { userInfo, setUserInfo, logout, types, setTypes, listFavoriteType, setListFavoriteType, changePassword } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false);
   const [modalFavoriteType, setModalFavoriteType] = useState(false);
   const [modalLogoutVisible, setModalLogoutVisible] = useState(false);
+  const [modalRenameVisible, setModalRenameVisible] = useState(false);
   const ref_inputPassword = useRef();
   const ref_inputNewPassword = useRef();
   const ref_inputCfNewPassword = useRef();
   const [visible, setVisible] = useState(true)
   const [password, setPassword] = useState('');
+  const [name, setName] = useState(userInfo.Name);
   const [newPassword, setNewPassword] = useState('');
   const [cfNewPassword, setCfNewPassword] = useState('');
   const [alertt, setAlertt] = useState('');
@@ -73,7 +75,7 @@ export default function AccountSceeen({ navigation }) {
 
   const updateFavoriteType = async () => {
     try {
-      const res = await axios.put(`${Url}/user/updateFavoriteType`, {types:value});
+      const res = await axios.put(`${Url}/user/updateFavoriteType`, { types: value });
       if (res.data) {
         getFavoriteType();
         setModalFavoriteType(false);
@@ -92,12 +94,77 @@ export default function AccountSceeen({ navigation }) {
     }
   }
 
+  const updateName = async () => {
+    if (name.length > 0) {
+      try {
+        const res = await axios.put(`${Url}/user/update`, { Name: name });
+        if (res.data) {
+          setModalRenameVisible(false);
+          Toast.show('Thành công',
+            {
+              backgroundColor: '#3B404F',
+              textColor: '#ffffff',
+              opacity: 1,
+              duration: Toast.durations.SHORT,
+              position: Toast.positions.CENTER,
+              animation: true,
+            })
+          try {
+            const response = await axios.get(`${apiUrl}`)
+            if (response.data.success) {
+              setUserInfo(response.data.user)
+            }
+
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    else {
+      setAlertt("Tên không được trống");
+      setTimeout(() => setAlertt(""), 5000)
+    }
+  }
+
+  const handleUpdatePassword = async () => {
+    const data = {
+      PasswordOld: password,
+      PasswordNew: newPassword,
+      Cfpassword: cfNewPassword
+    }
+    try {
+        const changPassData = await changePassword(data)
+        if (!changPassData.success) {
+            setAlertt(changPassData.message)
+            setTimeout(() => setAlertt(""), 5000)
+        } else {
+            setAlertt('')
+            setModalVisible(false);
+            Toast.show('Thành công',
+            {
+              backgroundColor: '#3B404F',
+              textColor: '#ffffff',
+              opacity: 1,
+              duration: Toast.durations.SHORT,
+              position: Toast.positions.CENTER,
+              animation: true,
+            })
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
   useEffect(() => {
     getFavoriteType();
     getType();
   }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
+      <StatusBar backgroundColor={"#0A0909"} />
       <HeaderTitle name={AccountSceeen} title={'Tài khoản'} isBack={false} />
       <View className="px-5">
         <View className="items-center">
@@ -114,7 +181,8 @@ export default function AccountSceeen({ navigation }) {
           }}>
           <Text className="text-[#1273FE] text-center font-bold text-base mt-5">Chuyển sang chế độ giảng viên</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600 mt-5">
+        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600 mt-5"
+          onPress={() => setModalRenameVisible(true)}>
           <MaterialIcons
             name="drive-file-rename-outline"
             size={24}
@@ -183,21 +251,6 @@ export default function AccountSceeen({ navigation }) {
             color="white" />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
-          // onPress={() =>
-          //   Alert.alert("Thông báo", "Bạn có chắc chắn đăng xuất", [
-          //     {
-          //       text: 'Hủy',
-          //       style: 'cancel',
-          //     },
-          //     {
-          //       text: 'Đăng xuất',
-          //       onPress: () => {
-          //         logout()
-          //       }
-
-          //     }
-          //   ])
-          // }>
           onPress={() => {
             setModalLogoutVisible(true)
           }}>
@@ -221,7 +274,7 @@ export default function AccountSceeen({ navigation }) {
                 >
                   <TextInput
                     ref={ref_inputPassword}
-                    className="text-white text-base"
+                    className="text-white text-base w-full"
                     placeholderTextColor={"gray"}
                     placeholder='Mật khẩu'
                     value={password}
@@ -236,7 +289,7 @@ export default function AccountSceeen({ navigation }) {
                   className="flex-row justify-between w-[90%] border-[#C1C1C1] border rounded-md p-2 mt-3">
                   <TextInput
                     ref={ref_inputNewPassword}
-                    className="text-white text-base"
+                    className="text-white text-base w-full"
                     placeholderTextColor={"gray"}
                     placeholder='Mật khẩu mới'
                     value={newPassword}
@@ -251,7 +304,7 @@ export default function AccountSceeen({ navigation }) {
                   className="flex-row justify-between w-[90%] border-[#C1C1C1] border rounded-md p-2 mt-3">
                   <TextInput
                     ref={ref_inputCfNewPassword}
-                    className="text-white text-base"
+                    className="text-white text-base w-full"
                     placeholderTextColor={"gray"}
                     placeholder='Nhập lại mật khẩu mới'
                     value={cfNewPassword}
@@ -372,13 +425,62 @@ export default function AccountSceeen({ navigation }) {
                   showBadgeDot={true}
                   badgeDotColors={"#EC2612"}
                   multiple={true}
-                  
+
                 />
                 <TouchableOpacity className="ml-auto mt-3"
                   onPress={() => updateFavoriteType()}>
                   <Text className="text-base text-white text-center bg-[#1273FE] p-2 rounded-md font-medium ml-5">
                     Cập nhật
                   </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          visible={modalRenameVisible}
+          transparent={true}
+          onRequestClose={() => setModalRenameVisible(false)}
+          animationType='fade'
+          hardwareAccelerated>
+          <View className="flex-1 justify-center items-center bg-[#00000099]" >
+            <View className="bg-[#1B212D] w-[90%] rounded-md">
+              <Text className="border-b border-[#fff] p-3 text-lg font-bold text-white">Đổi tên</Text>
+              <View className="mt-5 justify-center items-center">
+                <View
+                  className="flex-row justify-between w-[90%] border-[#C1C1C1] border rounded-md p-2">
+                  <TextInput
+                    ref={ref_inputCfNewPassword}
+                    className="text-white text-base w-full"
+                    placeholderTextColor={"gray"}
+                    placeholder='Nhập tên'
+                    value={name}
+                    onChangeText={(value) => { setName(value); setAlertt('') }}
+                    onPressIn={() =>
+                      setAlertt('')}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    marginTop: 10,
+                    color: '#E33333',
+                  }}>{alertt}</Text>
+
+              </View>
+              <View className="flex-row p-5 justify-end">
+                <TouchableOpacity
+                  onPress={() => setModalRenameVisible(false)}>
+                  <Text
+                    className="text-base text-white"
+                  >Hủy</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    updateName();
+                  }}>
+                  <Text className="text-base text-[#1273FE] ml-5"
+                  >Lưu</Text>
                 </TouchableOpacity>
               </View>
             </View>

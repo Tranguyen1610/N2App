@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import HeaderTitle from '../components/HeaderTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -29,6 +29,7 @@ export default function MyLearningScreen({ navigation }) {
   }, [])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
+      <StatusBar backgroundColor={"#0A0909"}/>
       <HeaderTitle name={MyLearningScreen} title={'Học tập'} isBack={false} />
       {isLoading ?
         <View className="bg-[#0A0909] flex-1 justify-center items-center">
