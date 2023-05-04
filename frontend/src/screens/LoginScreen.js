@@ -1,19 +1,17 @@
-import { Image, Keyboard, KeyboardAvoidingView, StatusBar, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { ActivityIndicator, Image, Keyboard, KeyboardAvoidingView, StatusBar, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useContext, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { AuthContext } from '../contexts/AuthContext'
-import axios from 'axios'
-import { apiUrl } from '../contexts/constants'
 
 export default function LoginScreen({ navigation }) {
   const [visible, setVisible] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loadingg, setLoadingg] = useState(false)
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const [alert, setAlert] = useState('')
 
-  const { login } = useContext(AuthContext)
+  const { login, loadUser, userInfo } = useContext(AuthContext)
 
   const ref_inputEmail = useRef()
   const ref_inputPassword = useRef()
@@ -34,7 +32,20 @@ export default function LoginScreen({ navigation }) {
           const loginData = await login({ Email: email, Password: password })
           if (!loginData.success) {
             setAlert(loginData.message)
+            setIsLoginSuccess(false)
             setTimeout(() => setAlert(''), 5000)
+          }
+          else {
+            setAlert("Đăng nhập thành công")
+            setIsLoginSuccess(true)
+            setTimeout(() => {
+              setAlert("")
+              if (loginData.IsVerified)
+                loadUser();
+              else
+                navigation.navigate('VerificationScreen',{email:email});
+              setIsLoginSuccess(false);
+            }, 1000)
           }
         } catch (error) {
           console.log(error)
@@ -43,7 +54,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-[#0A0909] px-4">
-        <StatusBar backgroundColor={"#0A0909"}/>
+        <StatusBar backgroundColor={"#0A0909"} />
         <Text className="text-white text-3xl font-medium mt-16">Đăng nhập</Text>
         <View className="flex-row">
           <Text className="text-[#7F889A] text-sm mr-2">Bạn chưa có tài khoản?</Text>
@@ -113,7 +124,12 @@ export default function LoginScreen({ navigation }) {
           onPress={() => {
             login_onpress()
           }}>
-          <Text className="text-white text-center text-base font-medium">Đăng nhập</Text>
+          {!isLoginSuccess ?
+            <Text className="text-white text-center text-base font-medium">Đăng nhập</Text> :
+            <View className="flex-row justify-center items-center">
+              <ActivityIndicator size={'large'} />
+            </View>
+          }
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-center items-center h-12 rounded-md bg-[#3B3B3B] mt-5">
           <Image

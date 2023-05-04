@@ -9,6 +9,7 @@ const orderRouters = require("./routes/orderRoutes");
 const typeRouters = require("./routes/typeRoutes");
 const commentRouters = require("./routes/commentRoutes");
 const paymentMethodRoutes = require("./routes/paymentMethodRoutes");
+const otpRoutes = require("./routes/otpRoutes");
 
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/middleware");
@@ -25,6 +26,7 @@ app.use("/api/type", typeRouters);
 app.use("/api/comment", commentRouters);
 app.use("/api/order", orderRouters);
 app.use("/api/paymentMedthod", paymentMethodRoutes);
+app.use("/api/otp", otpRoutes);
 
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);

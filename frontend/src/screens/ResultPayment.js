@@ -12,7 +12,7 @@ export default function ResultPayment({ route }) {
   const order = route.params.orderdl;
   const nav = useNavigation();
   const [orderS,setOrderS]= useState(order);
-  const { setCoursePurchaseds } = useContext(AuthContext);
+  const { setCoursePurchaseds,setListOrderSuccess,setListOrderUnPaid } = useContext(AuthContext);
 
   const getCoursePurchased = async () => {
     try {
@@ -25,12 +25,36 @@ export default function ResultPayment({ route }) {
       console.log(err);
     }
   }
+  const getOrderUnPaid = async () => {
+    try {
+      const result = await axios.get(`${Url}/order/getOrderUnPaid`);
+      if (result.data) {
+        setListOrderUnPaid(result.data)
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+  const getOrderSuccess = async () => {
+    try {
+      const result = await axios.get(`${Url}/order/getOrderSuccess`);
+      if (result.data) {
+        setListOrderSuccess(result.data)
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
 
   const PaymentSuccess = async (orderId) => {
     try {
       const res = await axios.put(`${Url}/order/PaymentSuccessOrder/` + orderId);
       if (res.data) {
         getCoursePurchased();
+        getOrderUnPaid();
+        getOrderSuccess();
         setOrderS(res.data);
       }
     } catch (err) {
@@ -40,7 +64,7 @@ export default function ResultPayment({ route }) {
   useEffect(()=>{
     if(result)
       PaymentSuccess(order._id);
-  },[])
+  },[order,result])
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 items-center">
       <StatusBar backgroundColor={"#0A0909"} />

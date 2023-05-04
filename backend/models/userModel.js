@@ -50,6 +50,10 @@ const userSchema = mongoose.Schema(
         ref: "Type",
       }
     ],
+    IsVerified:{
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamp: true,

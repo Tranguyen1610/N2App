@@ -389,7 +389,7 @@ export default function PaymentScreen({ route }) {
             mac: mac,
         };
 
-        console.log(order);
+        // console.log(order);
 
         let formBody = [];
         for (let i in order) {

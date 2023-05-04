@@ -14,7 +14,7 @@ import FavoriteType from '../components/FavoriteType'
 export default function FeaturedScreen({ navigation }) {
   const { userInfo, listType, setListType, courses, setCourses, listFavoriteType, setListFavoriteType } = useContext(AuthContext);
   const [topFiveCourse, setTopFiveCourse] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getType = async () => {
     let list = [];
@@ -52,11 +52,12 @@ export default function FeaturedScreen({ navigation }) {
   }
 
   useEffect(() => {
+    setIsLoading(true);
     setTimeout(() => setIsLoading(false), 900)
     getType();
     getCourse();
     getFavoriteType();
-  }, [])
+  }, [userInfo])
   if (isLoading)
     return (
       <SafeAreaView className="bg-[#0A0909] flex-1 justify-center items-center">
