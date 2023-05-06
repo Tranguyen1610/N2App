@@ -1,10 +1,27 @@
 import { ActivityIndicator, Image, Keyboard, KeyboardAvoidingView, StatusBar, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { AuthContext } from '../contexts/AuthContext'
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import * as Facebook from "expo-auth-session/providers/facebook";
+
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }) {
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: "1092431594513-qomdue900jrbtvo02mc243g9ptal3otp.apps.googleusercontent.com",
+    expoClientId: "1092431594513-5dk7fveo3gumq52nm0vooppspvirfces.apps.googleusercontent.com"
+  });
+  // const [request, response, promptAsync] = Facebook.useAuthRequest({
+  //   clientId: "969162717664704", // change this for yours
+  // });
+
+  const [token, setToken] = useState("");
+  const [userInfoo, setUserInfoo] = useState(null);
+
   const [visible, setVisible] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -43,7 +60,7 @@ export default function LoginScreen({ navigation }) {
               if (loginData.IsVerified)
                 loadUser();
               else
-                navigation.navigate('VerificationScreen',{email:email});
+                navigation.navigate('VerificationScreen', { email: email });
               setIsLoginSuccess(false);
             }, 1000)
           }
@@ -51,6 +68,29 @@ export default function LoginScreen({ navigation }) {
           console.log(error)
         }
   }
+  useEffect(() => {
+    if (response?.type === "success") {
+      setToken(response.authentication.accessToken);
+      getUserInfoo();
+    }
+  }, [response, token]);
+  const getUserInfoo = async () => {
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const user = await response.json();
+      setUserInfoo(user);
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-[#0A0909] px-4">
@@ -131,7 +171,8 @@ export default function LoginScreen({ navigation }) {
             </View>
           }
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-center items-center h-12 rounded-md bg-[#3B3B3B] mt-5">
+        <TouchableOpacity className="flex-row justify-center items-center h-12 rounded-md bg-[#3B3B3B] mt-5"
+          onPress={() => promptAsync()}>
           <Image
             source={require('../image/google.png')}
             className="w-8 h-8" />

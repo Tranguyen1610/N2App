@@ -327,7 +327,7 @@ export default function CoursesDetail({ route }) {
         getComments();
         getVideos();
         checkIsCoursePurchased();
-    }, [])
+    }, [coursePurchaseds])
     useEffect(() => {
         checkIsInWishList();
     }, [wishlists])
