@@ -1,53 +1,34 @@
-import { AppleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Divider, Form, Input, Typography } from "antd";
+import { Alert, Button, Divider, Form, Input, Typography } from "antd";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigate, useNavigation } from "react-router-dom";
-import axios from "axios";
-const { Item: FormItem } = Form;
 const LoginScreen = () => {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassWord] = useState("");
-  const [alert, setAlert] = useState('')
-  const [form]=Form.useForm();
-  // const { login, loadUser, userInfo } = useContext(AuthContext)
-  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
-  const navigate  =useNavigate()
+  const nav = useNavigate();
+  const [form] = Form.useForm();
+  const {login} = useContext(AuthContext);
+  const [err,setErr] = useState("");
   const Login = async () => {
-    const {email,password}= form.getFieldValue();
-          try {
-            let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-     
-            if (reg.test(email) === false) {
-              setAlert("Định dạng email không đúng")
-              // ref_inputEmail.current.focus()
-              setTimeout(() => setAlert(''), 5000)
-            }
-            const res = await axios.post('/api/user/login',{
-              Email:email,
-              Password:password
-            })
-            if (!res) {
-              setAlert(res.message)
-              setIsLoginSuccess(false)
-              setTimeout(() => setAlert(''), 5000)
-            }
-            else {
-              console.log("Thanh Cong");
-              setAlert("Đăng nhập thành công")
-              setIsLoginSuccess(true)
-              navigate("/");
+    const { email, password } = form.getFieldValue();
+    try {
+      const loginData = await login({
+        Email:email,
+        Password:password
+      })
+      if (!loginData.success) {
+        // setAlert({ type: 'danger', message: loginData.message })
+        // setTimeout(() => setAlert(null), 5000)
+        // Alert('fkkffk');
+        setErr(loginData.message)
+        setTimeout(() => setErr(''), 3000)
+      }
+      else
+      {
+        setErr('');
+        nav("/");
+      }
 
-              // setTimeout(() => {
-              //   setAlert("")
-              //   if (loginData.IsVerified)
-              //     loadUser();
-              //   else
-              //   setIsLoginSuccess(false);
-              // }, 1000)
-            }
-    }finally{
-
+    } catch (error) {
+      console.log(error)
     }
   }
   return (
@@ -57,36 +38,42 @@ const LoginScreen = () => {
         background: "#f2f2f7",
         display: "flex",
         justifyContent: "center",
-        alignItems:"center"
+        alignItems: "center"
       }}
       className="login-page"
     >
-            <Form className="loginForm" form={form} onFinish={Login}>
-              <Typography.Title>N2App</Typography.Title>
-              <Form.Item
-              rules={[
-                {
-                  required:true,
-                  type:"email",
-                  message:"Please enter valid email",
-                },
-              ]}
-              label="Email" name={"email"}>
-                <Input placeholder="Enter your email"/>
-              </Form.Item>
-              <Form.Item
-               rules={[
-                {
-                  required:true,
-                  message:"Please enter valid password",
-                },
-              ]}
-              label="Password" name={"password"}>
-                <Input.Password
-                placeholder="Enter your passwrod"/>
-              </Form.Item>
-              <Button block type="primary" htmlType="submit">Login</Button>
-            </Form>
+      <Form className="loginForm" form={form} onFinish={Login}>
+        <Typography.Title>N2App</Typography.Title>
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              type: "email",
+              message: "Please enter valid email",
+            },
+          ]}
+          label="Email" name={"email"}>
+          <Input placeholder="Enter your email" />
+        </Form.Item>
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: "Please enter valid password",
+            },
+          ]}
+          label="Password" name={"password"}>
+          <Input.Password
+            placeholder="Enter your passwrod" />
+        </Form.Item>
+        <div
+          style={{
+            textAlign:'center',
+            padding:5,
+            color:'red'
+          }}>{err}</div>
+        <Button block type="primary" htmlType="submit">Login</Button>
+      </Form>
     </div>
   );
 };
