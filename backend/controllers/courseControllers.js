@@ -81,7 +81,7 @@ const allCourses = asyncHandler(async (req, res) => {
     : {};
   // console.log("abc");
   const courses = await Course.find(keyword)
-  .populate("Teacher", "-Password");
+  .populate("Teacher", "-Password").populate("Type");
   res.send(courses);
 });
 

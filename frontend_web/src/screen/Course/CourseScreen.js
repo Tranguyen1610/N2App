@@ -9,9 +9,9 @@ function CourseScreen() {
   const [loading,setLoading]=useState(false);
   useEffect(()=>{
     setLoading(true)
-    getCourseOfType();
+    getCourse();
   },[])
-  const getCourseOfType = async () => {
+  const getCourse = async () => {
     try {
       const res = await axios.get(`/api/course/`);
       // console.log(res.data);
@@ -42,10 +42,10 @@ function CourseScreen() {
           ></Column>
           <Column
           title="Loại"
-          dataIndex="Type"
-          // render={(text, record) => (
-          //   <span>{record..name}</span>
-          // )}
+          dataIndex=""
+          render={(text, record) => (
+            <span>{record.Type?.Name}</span>
+  )}
           ></Column>
           <Column
           title="Đánh giá"

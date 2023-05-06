@@ -1,7 +1,6 @@
 import { createContext, useEffect, useRef, useState } from 'react'
 import { apiUrl } from './constants'
 import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import setAuthToken from '../utils/setAuthToken'
 
 export const AuthContext = createContext()
@@ -22,11 +21,11 @@ export const AuthContextProvider = ({ children }) => {
 	//Login
 	const login = async userForm =>{
 		try{
-			const response = await axios.post(`${apiUrl}/login`, userForm)
+			const response = await axios.post(`user/login`, userForm)
 			if (response.data.success){
 				setUserToken(response.data.accessToken);
-				AsyncStorage.setItem('userToken',response.data.token);
-				AsyncStorage.setItem('mode','Student')
+				localStorage.setItem('userToken',response.data.token);
+				localStorage.setItem('mode','Student')
 				await loadUser()
 			}
 			return response.data
@@ -44,8 +43,8 @@ export const AuthContextProvider = ({ children }) => {
 		setTimeout(()=>{
 			setUserInfo({});
 			setUserToken(null);
-			AsyncStorage.removeItem('userToken')
-			AsyncStorage.removeItem('mode')
+			localStorage.removeItem('userToken')
+			localStorage.removeItem('mode')
 			setIsLoading(false)},1000);
 	}
 	//LoadUser
@@ -54,10 +53,10 @@ export const AuthContextProvider = ({ children }) => {
 		setTimeout(()=>{
 			setIsLoading(false)},1000);
 
-		if( await AsyncStorage.getItem('userToken')){
-			setAuthToken(await AsyncStorage.getItem('userToken'))
-			setUserToken(await AsyncStorage.getItem('userToken') )
-			console.log('UserToken:',await AsyncStorage.getItem('userToken'));
+		if( await localStorage.getItem('userToken')){
+			setAuthToken(await localStorage.getItem('userToken'))
+			setUserToken(await localStorage.getItem('userToken') )
+			console.log('UserToken:',await localStorage.getItem('userToken'));
 		}
 		try { 
 			const response = await axios.get(`${apiUrl}`)
@@ -75,10 +74,10 @@ export const AuthContextProvider = ({ children }) => {
 		}
 	}
 	const loadUser_Register = async () =>{
-		if( await AsyncStorage.getItem('userToken')){
-			setAuthToken(await AsyncStorage.getItem('userToken'))
-			setUserToken(await AsyncStorage.getItem('userToken') )
-			console.log('UserToken:',await AsyncStorage.getItem('userToken'));
+		if( await localStorage.getItem('userToken')){
+			setAuthToken(await localStorage.getItem('userToken'))
+			setUserToken(await localStorage.getItem('userToken') )
+			console.log('UserToken:',await localStorage.getItem('userToken'));
 		}
 		try { 
 			const response = await axios.get(`${apiUrl}`)
@@ -104,7 +103,7 @@ export const AuthContextProvider = ({ children }) => {
 		} catch (error) {
 			if (error.response.data) {
 				console.log(error.response.data);
-				AsyncStorage.setItem('mode','Student')
+				localStorage.setItem('mode','Student')
 				return error.response.data
 			}
 			else{
