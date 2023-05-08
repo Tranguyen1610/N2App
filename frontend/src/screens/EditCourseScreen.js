@@ -6,17 +6,19 @@ import DropDownPicker from 'react-native-dropdown-picker'
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { Keyboard } from 'react-native';
+import Toast from 'react-native-root-toast';
 
 
-export default function AddCourseScreen() {
+export default function EditCourseScreen({ route }) {
+  const course = route.params.course;
   const { types, setTypes } = useContext(AuthContext);
   const nav = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
   const [alertValue, setAlertValue] = useState("");
-  const [type, setType] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [des, setDes] = useState("");
+  const [type, setType] = useState(course.Type._id);
+  const [name, setName] = useState(course.Name);
+  const [price, setPrice] = useState(String(course.Price));
+  const [des, setDes] = useState(course.Description);
 
   const getType = async () => {
     let list = [];
@@ -37,14 +39,8 @@ export default function AddCourseScreen() {
     const regexPrice = /^[1-9][0-9]*$/;
     if (name !== "" && type !== "" && price !== "" && des !== "") {
       if (regexPrice.test(price)) {
-        setAlertValue("")
-        const datas ={
-          Name:name,
-          Type:type,
-          Price:price,
-          Description:des
-        }
-        nav.navigate('AddCourseStep2Screen',{data:datas})
+        setAlertValue("");
+        updateCourse();
       }
       else {
         setAlertValue("Giá phải là số lớn hơn 0")
@@ -54,6 +50,41 @@ export default function AddCourseScreen() {
     else {
       setAlertValue("Phải điền đầy đủ thông tin")
       setTimeout(() => setAlertValue(''), 3000)
+    }
+  }
+
+  const updateCourse = async () => {
+    try {
+      const datas = {
+        Name: name,
+        Type: type,
+        Price: price,
+        Description: des,
+        _id: course._id,
+      }
+      const res = await axios.put(`${Url}/course/update`, datas);
+      if (res.data) {
+        Toast.show('Thành công',
+          {
+            backgroundColor: '#3B404F',
+            textColor: '#ffffff',
+            opacity: 1,
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.CENTER,
+            animation: true,
+          })
+        try {
+          const courseId = course._id;
+          const response = await axios.get(`${Url}/course/getInfoCourse/${courseId}`)
+          if (response.data) {
+            nav.navigate("CoursesDetailTeacher", { course: response.data })
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -86,7 +117,7 @@ export default function AddCourseScreen() {
   }, []);
   return (
     <View className="flex-1 bg-[#0A0909] p-5">
-      <StatusBar backgroundColor={"#0A0909"}/>
+      <StatusBar backgroundColor={"#0A0909"} />
       <TextInput
         placeholder='Tên khóa học'
         placeholderTextColor={'#7F889A'}
@@ -95,7 +126,7 @@ export default function AddCourseScreen() {
         onChangeText={(e) => setName(e)} />
       <DropDownPicker
         style={{
-          marginBottom: isOpen ? 200:0,
+          marginBottom: isOpen ? 200 : 0,
         }}
         items={types}
         open={isOpen}
@@ -131,14 +162,18 @@ export default function AddCourseScreen() {
         }}
         value={des}
         onChangeText={(e) => setDes(e)} />
+      <TouchableOpacity
+        className="justify-center items-center mt-2"
+        onPress={() => nav.navigate('ListVideoScreen', { course: course })}>
+        <Text className="text-white bg-[#1273FE] font-semibold text-base p-2 rounded-xl">Danh sách video</Text>
+      </TouchableOpacity>
       <Text className="text-red-600 text-base italic text-center mt-10" >{alertValue}</Text>
       {!isKeyboardOpen ?
         <View className="absolute bottom-10 right-5 items-end">
-          <Text className="text-[#7F889A] italic">Nhấn "Bước tiếp" để thêm ảnh bìa, video giới thiệu</Text>
           <TouchableOpacity
             className="justify-center items-center mt-2"
             onPress={() => check()}>
-            <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Bước tiếp</Text>
+            <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Lưu</Text>
           </TouchableOpacity>
         </View> : <></>}
     </View>

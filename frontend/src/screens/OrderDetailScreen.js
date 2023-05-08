@@ -134,12 +134,8 @@ export default function OrderDetailScreen({ route }) {
                 // payOrder(total)
                 console.log("Chưa tích hợp");
             else
-                if (order.PayMentType.Name === 'MoMo')
-                    // onPress();
-                    console.log("Chưa tích hợp");
-                else
-                    if (order.PayMentType.Name === 'Stripe')
-                        payment(order);
+                if (order.PayMentType.Name === 'Stripe')
+                    payment(order);
         }
     }
 
@@ -221,7 +217,7 @@ export default function OrderDetailScreen({ route }) {
                             <Text className="text-white font-semibold text-lg">Hủy</Text>
                         </TouchableOpacity>
                         <TouchableOpacity className="bg-[#1273FE] items-center justify-center mt-3 p-2 rounded-md w-[45%]"
-                        onPress={() => handlePayment()}
+                            onPress={() => handlePayment()}
                         >
                             <Text className="text-white font-semibold text-lg">Thanh Toán</Text>
                         </TouchableOpacity>

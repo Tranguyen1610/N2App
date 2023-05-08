@@ -87,7 +87,7 @@ const allCourses = asyncHandler(async (req, res) => {
 
 const getInfoCourse = asyncHandler(async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id)
+    const course = await Course.findById(req.params.id).populate("Teacher").populate("Type")
     if (!course)
       return res.status(400).json('Course not found')
     res.json(course)
@@ -169,7 +169,7 @@ const getCourseofType = asyncHandler(async(req,res)=>{
 })
 
 const getCourseofTeacher = asyncHandler(async(req,res)=>{
-  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:true }).populate("Teacher")
+  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:true }).populate("Teacher").populate("Type")
   .then((data) => {
     var result = data;
     res.json(result);
@@ -180,7 +180,7 @@ const getCourseofTeacher = asyncHandler(async(req,res)=>{
 })
 
 const getCourseofTeacherNotSale = asyncHandler(async(req,res)=>{
-  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:false }).populate("Teacher")
+  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:false }).populate("Teacher").populate("Type")
   .then((data) => {
     var result = data;
     res.json(result);
@@ -191,7 +191,7 @@ const getCourseofTeacherNotSale = asyncHandler(async(req,res)=>{
 })
 
 const getCourseUnFinishOfTeacher = asyncHandler(async(req,res)=>{
-  await Course.find({ Teacher: req.userId,ListVideo: {  $size: 0 } }).populate("Teacher")
+  await Course.find({ Teacher: req.userId,ListVideo: {  $size: 0 } }).populate("Teacher").populate("Type")
   .then((data) => {
     var result = data;
     res.json(result);

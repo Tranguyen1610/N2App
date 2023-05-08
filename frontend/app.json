@@ -2,7 +2,7 @@
   "expo": {
     "name": "N2App",
     "slug": "N2App",
-    "scheme": "N2App",
+    "scheme": "n2app",
     "version": "1.0.0",
     "icon": "./src/image/icon.png",
     "userInterfaceStyle": "light",
@@ -25,10 +25,15 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.frontend"
+      "package": "com.tranguyen1610.N2App"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "85d49727-2af8-4c35-96ad-29b8281a2141"
+      }
     }
   }
 }

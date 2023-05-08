@@ -4,11 +4,13 @@ import { Rating } from 'react-native-ratings';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Url } from '../contexts/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CoursesPropose({ item }) {
     const nav = useNavigation();
     const [numStarAVG, setNumStarAVG] = useState(0);
     const [numCmt, setNumCmt] = useState(0);
+    const [mode, setMode] = useState("");
 
     const formatNumStart = (num) => {
         if (num != 0)
@@ -48,13 +50,19 @@ export default function CoursesPropose({ item }) {
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return ""
     }
+    const getMode = async()=>{
+        setMode(await AsyncStorage.getItem('mode'));
+    }
 
     useEffect(() => {
         getComments();
+        getMode();
     }, [])
     return (
         <TouchableOpacity className="bg-[#1B212D] mr-5 w-56 p-3 rounded-md"
-            onPress={() => nav.navigate("CoursesDetail", { course: item })}>
+            onPress={() => {
+                nav.navigate(mode==="Teacher"?"CoursesDetailTeacher":"CoursesDetail", { course: item })
+                }}>
             <Image
                 source={{ uri: item.Image }}
                 className="w-max h-28" />

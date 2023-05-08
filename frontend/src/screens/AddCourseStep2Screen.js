@@ -48,8 +48,8 @@ export default function AddCourseStep2Screen({ route }) {
         );
 
         // Explore the result 
-        if (!result.canceled) {
-            handleUpload(result.assets[0])
+        if (!result.cancelled) {
+            handleUpload(result)
             // console.log(result.assets[0]);
         }
     }
@@ -81,9 +81,9 @@ export default function AddCourseStep2Screen({ route }) {
         });
 
         // Explore the result 
-        if (!result.canceled) {
+        if (!result.cancelled) {
             // console.log(result);
-            handleUploadVideo(result.assets[0])
+            handleUploadVideo(result)
         }
     }
 

@@ -6,20 +6,12 @@ import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-ic
 import HeaderTitle from '../components/HeaderTitle'
 import StartScreen from './StartScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
 
 export default function TeacherAccountScreen({ navigation }) {
+  const nav = useNavigation();
   const { userInfo, logout } = useContext(AuthContext)
-  const [modalVisible, setModalVisible] = useState(false);
   const [modalLogoutVisible, setModalLogoutVisible] = useState(false);
-  const ref_inputPassword = useRef();
-  const ref_inputNewPassword = useRef();
-  const ref_inputCfNewPassword = useRef();
-  const [visible, setVisible] = useState(true)
-  const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [cfNewPassword, setCfNewPassword] = useState('');
-  const [alertt, setAlertt] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
 
   const switchType = async () => {
@@ -35,7 +27,7 @@ export default function TeacherAccountScreen({ navigation }) {
   }
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
-      <StatusBar backgroundColor={"#0A0909"}/>
+      <StatusBar backgroundColor={"#0A0909"} />
       <HeaderTitle name={TeacherAccountScreen} title={'Tài khoản'} isBack={false} />
       <View className="px-5">
         <View className="items-center">
@@ -52,82 +44,28 @@ export default function TeacherAccountScreen({ navigation }) {
           }}>
           <Text className="text-[#1273FE] text-center font-bold text-base mt-5">Chuyển sang chế độ học viên</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600 mt-5">
-          <MaterialIcons
-            name="drive-file-rename-outline"
-            size={24}
-            color="#129EF9" />
-          <Text className="ml-2.5 mr-auto text-base text-white">Đổi tên</Text>
-          <Ionicons
-            name='chevron-forward'
-            size={25}
-            color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
-          onPress={() => {
-            setModalVisible(true)
-            setPassword("")
-            setNewPassword("")
-            setCfNewPassword("")
-            setVisible(true)
-            setAlertt("")
-          }}>
-          <Ionicons
-            name='key-outline'
-            size={25}
-            color='#17D8B7' />
-          <Text className="ml-2.5 mr-auto text-base text-white">Đổi mật khẩu</Text>
-          <Ionicons
-            name='chevron-forward'
-            size={25}
-            color="white" />
-        </TouchableOpacity>
-        {/* <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
-          onPress={() => {
-            setModalVisible(true)
-            setPassword("")
-            setNewPassword("")
-            setCfNewPassword("")
-            setVisible(true)
-            setAlertt("")
-          }}>
-          <Ionicons
-            name='apps-outline'
-            size={25}
-            color='#FCC61F' />
-          <Text className="ml-2.5 mr-auto text-base text-white"></Text>
-          <Ionicons
-            name='chevron-forward'
-            size={25}
-            color="white" />
-        </TouchableOpacity> */}
-        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600">
-          <Ionicons
-            name='language'
-            size={25}
-            color='#E572F6' />
-          <Text className="ml-2.5 mr-auto text-base text-white">Ngôn ngữ</Text>
-          <Ionicons
-            name='chevron-forward'
-            size={25}
-            color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
-          // onPress={() =>
-          //   Alert.alert("Thông báo", "Bạn có chắc chắn đăng xuất", [
-          //     {
-          //       text: 'Hủy',
-          //       style: 'cancel',
-          //     },
-          //     {
-          //       text: 'Đăng xuất',
-          //       onPress: () => {
-          //         logout()
-          //       }
 
-          //     }
-          //   ])
-          // }>
+        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600 mt-5"
+          onPress={() =>
+            nav.navigate('AddCourseScreen')}>
+          <Ionicons name="md-add-circle-outline" size={24} color="#17D8B7" />
+          <Text className="ml-2.5 mr-auto text-base text-white">Thêm khóa học</Text>
+          <Ionicons
+            name='chevron-forward'
+            size={25}
+            color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
+          onPress={() =>
+            nav.navigate('AddCourseScreen')}>
+          <Ionicons name="clipboard-outline" size={24} color="#129EF9" />
+          <Text className="ml-2.5 mr-auto text-base text-white">Tất cả yêu cầu</Text>
+          <Ionicons
+            name='chevron-forward'
+            size={25}
+            color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
           onPress={() => {
             setModalLogoutVisible(true)
           }}>
@@ -138,100 +76,9 @@ export default function TeacherAccountScreen({ navigation }) {
           <Text className="ml-2.5 mr-auto text-base text-white">Đăng xuất</Text>
         </TouchableOpacity>
         <Modal
-          visible={modalVisible}
-          transparent={true}
-          onRequestClose={() => setModalVisible(false)}
-          animationType='fade'
-          hardwareAccelerated>
-          <View className="flex-1 justify-center items-center bg-[#00000099]" >
-            <View className="bg-[#1B212D] w-[90%] rounded-md">
-              <Text className="border-b border-[#fff] p-3 text-lg font-bold text-white">Đổi mật khẩu</Text>
-              <View className="mt-5 justify-center items-center">
-                <View className="flex-row justify-between w-[90%] border-[#C1C1C1] border rounded-md p-2"
-                >
-                  <TextInput
-                    ref={ref_inputPassword}
-                    className="text-white text-base"
-                    placeholderTextColor={"gray"}
-                    placeholder='Mật khẩu'
-                    value={password}
-                    onChangeText={(value) => setPassword(value)}
-                    secureTextEntry={visible}
-                    onEndEditing={() => ref_inputNewPassword.current.focus()}
-                    onPressIn={() =>
-                      setAlertt('')}
-                  />
-                </View>
-                <View
-                  className="flex-row justify-between w-[90%] border-[#C1C1C1] border rounded-md p-2 mt-3">
-                  <TextInput
-                    ref={ref_inputNewPassword}
-                    className="text-white text-base"
-                    placeholderTextColor={"gray"}
-                    placeholder='Mật khẩu mới'
-                    value={newPassword}
-                    onChangeText={(value) => setNewPassword(value)}
-                    secureTextEntry={visible}
-                    onSubmitEditing={() => ref_inputNewPassword.current.focus()}
-                    onPressIn={() =>
-                      setAlertt('')}
-                  />
-                </View>
-                <View
-                  className="flex-row justify-between w-[90%] border-[#C1C1C1] border rounded-md p-2 mt-3">
-                  <TextInput
-                    ref={ref_inputCfNewPassword}
-                    className="text-white text-base"
-                    placeholderTextColor={"gray"}
-                    placeholder='Nhập lại mật khẩu mới'
-                    value={cfNewPassword}
-                    onChangeText={(value) => setCfNewPassword(value)}
-                    secureTextEntry={visible}
-                    onPressIn={() =>
-                      setAlertt('')}
-
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 17,
-                    marginTop: 10,
-                    color: '#E33333',
-                  }}>{alertt}</Text>
-
-              </View>
-              <View className="flex-row p-5 justify-end">
-                <TouchableOpacity
-                  className="mr-5"
-                  onPress={() => {
-                    setVisible(!visible);
-                  }}>
-                  <Ionicons
-                    name={visible === false ? 'eye-outline' : 'eye-off-outline'}
-                    size={26} color={"#1273FE"}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(false)}>
-                  <Text
-                    className="text-base text-white"
-                  >Hủy</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    handleUpdatePassword()
-                  }}>
-                  <Text className="text-base text-[#1273FE] ml-5"
-                  >Lưu</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-        <Modal
           visible={modalLogoutVisible}
           transparent={true}
-          onRequestClose={() => setModalVisible(false)}
+          onRequestClose={() => setModalLogoutVisible(false)}
           animationType='fade'
           hardwareAccelerated>
           <View className="flex-1 justify-center items-center bg-[#00000099]" >

@@ -18,6 +18,9 @@ import AllCourseTeacher from '../screens/AllCourseTeacher';
 import AllCourseTeacherUnFinish from '../screens/AllCourseTeacherUnFinish';
 import ResultPayment from '../screens/ResultPayment';
 import AllCourseTeacherNS from '../screens/AllCourseTeacherNS';
+import CoursesDetailTeacher from '../screens/CoursesDetailTeacher';
+import EditCourseScreen from '../screens/EditCourseScreen';
+import ListVideoScreen from '../screens/ListVideoScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -36,6 +39,12 @@ const RootNavigator = () => {
       <Stack.Screen
         name="CoursesDetail"
         component={CoursesDetail}
+        options={{
+          animation: 'none'
+        }} />
+      <Stack.Screen
+        name="CoursesDetailTeacher"
+        component={CoursesDetailTeacher}
         options={{
           animation: 'none'
         }} />
@@ -102,6 +111,16 @@ const RootNavigator = () => {
           title: 'Thêm video'
         }} />
       <Stack.Screen
+        name="EditCourseScreen"
+        component={EditCourseScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Chỉnh sửa khóa học'
+        }} />
+      <Stack.Screen
         name="OrderScreen"
         component={OrderScreen}
         options={{
@@ -151,7 +170,7 @@ const RootNavigator = () => {
           headerTintColor: '#ffffff',
           title: 'Chưa hoàn tất'
         }} />
-       <Stack.Screen
+      <Stack.Screen
         name="ResultPayment"
         component={ResultPayment}
         options={{
@@ -161,109 +180,19 @@ const RootNavigator = () => {
           headerTintColor: '#ffffff',
           title: 'Kết quả thanh toán'
         }} />
+      <Stack.Screen
+        name="ListVideoScreen"
+        component={ListVideoScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Danh sách  video'
+        }} />
 
-      {/* <Stack.Screen name="ChattingScreen" component={ChattingScreen} />
-      <Stack.Screen
-        name="SettingScreen"
-        component={SettingScreen}
-        options={() => ({
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#056282",
-          },
-          title: "Cài đặt",
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontSize: 17,
-          },
-        })}
-      />
-      <Stack.Screen
-        name="AddFriendScreen"
-        component={AddFriendScreen}
-        options={() => ({
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#056282",
-          },
-          title: "Thêm bạn",
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontSize: 17,
-          },
-        })}
-      />
-      <Stack.Screen
-        name="MoreInfo"
-        component={MoreInfo}
-        options={() => ({
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#056282",
-          },
-          title: "Tùy chọn",
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontSize: 17,
-          },
-        })}
-      />
-      <Stack.Screen
-        name="ManageMember"
-        component={ManageMember}
-        options={() => ({
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#056282",
-          },
-          title: "Quản lý thành viên",
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontSize: 17,
-          },
-        })}
-      />
-      <Stack.Screen
-        name="FriendRequest"
-        component={FriendRequest}
-        options={() => ({
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#056282",
-          },
-          title: "Lời mời kết bạn",
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontSize: 17,
-          },
-        })}
-      />
-      <Stack.Screen name="CreateGroup" component={CreateGroup} />
-      <Stack.Screen name="AddUserScreen" component={AddUserScreen} />
-      <Stack.Screen name="SearchScreen" component={SearchScreen} />
-      <Stack.Screen name="UserInfoScreen" component={UserInfoScreen} /> */}
     </Stack.Navigator>
   );
 };
-// const styles = StyleSheet.create({
-//   search_nav: {
-//     display: "flex",
-//     flexDirection: "row",
-//     padding: 10,
-//     justifyContent: "space-around",
-//     alignItems: "center",
-//   },
-//   search_con: {
-//     display: "flex",
-//     flexDirection: "row",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   search_text: {
-//     color: "#fff",
-//     width: 300,
-//     padding: 10,
-//   },
-// });
 
 export default RootNavigator;
