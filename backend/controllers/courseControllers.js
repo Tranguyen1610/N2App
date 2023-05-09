@@ -203,7 +203,7 @@ const getCourseUnFinishOfTeacher = asyncHandler(async(req,res)=>{
 const CheckCourse = asyncHandler(async(req,res)=>{
   const course =await Course.findByIdAndUpdate(req.params.id,
     {
-      isCheck:true
+      OnSale:true
     },
     {
       new:true,

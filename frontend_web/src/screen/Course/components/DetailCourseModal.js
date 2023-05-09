@@ -55,9 +55,9 @@ export const DetailCourseModal = (
                         <span>{selectedOrder?.Type?.Name}</span>
                     </Descriptions.Item>
                     <Descriptions.Item
-                    label="Kiểm duyệt"
+                    label="Trạng thái"
                     >
-                        <span style={{color:"red"}}>{selectedOrder?.isCheck==false?"Chưa được kiểm duyệt":"Đã được kiểm duyệt"}</span>
+                        <span style={{color:"red"}}>{selectedOrder?.OnSale==false?"Chưa bán":"Đang bán"}</span>
                     </Descriptions.Item>
                 </Descriptions>
             </Col>

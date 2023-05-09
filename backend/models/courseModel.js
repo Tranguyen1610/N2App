@@ -15,7 +15,6 @@ const courseSchema = mongoose.Schema(
     LastUpdate: { type: Date, trim: true },
     Image: {type: String, trim: true },
     Video: {type: String, trim: true },
-    isCheck:{type:Boolean,default:false},
     Comment:[
       {
         type: mongoose.Schema.Types.ObjectId,
