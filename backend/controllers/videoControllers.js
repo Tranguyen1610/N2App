@@ -37,7 +37,7 @@ const allVideos = asyncHandler(async (req, res) => {
       }
     : {};
   console.log("abc");
-  const courses = await Video.find(keyword);
+  const courses = await Video.find(keyword).populate("CourseId");
   res.send(courses);
 });
 const searchVideoById = asyncHandler(async (req, res) => {

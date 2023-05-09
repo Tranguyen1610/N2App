@@ -1,11 +1,14 @@
-import { Spin, Table, Typography } from 'antd';
+import { Button, Space, Spin, Table, Typography } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { OrderModal } from './components/OrderModal';
 const {Column}=Table;
 
 const OrderScreen = () => {
   const [dataSource,setDateSource]=useState([])
   const [loading,setLoading]=useState(false);
+  const [selectedOrder, setSelectedOrder] = useState();
+  const [visible, setVisible] = useState(false);
   useEffect(()=>{
     setLoading(true)
     getAllOrder()
@@ -25,38 +28,70 @@ const OrderScreen = () => {
   return (
     <div>
        <Typography.Title level={4} >Order</Typography.Title>
-      <Spin>
+      <Spin spinning={loading}>
         <Table
-        //  dataSource={dataSource}
+          dataSource={dataSource}
          loading={loading}
         >
           <Column
-          title="Tên Khóa học"
-          dataIndex="Name"
+          align='center'
+          title="Ngày tạo"
+          dataIndex="createdAt"
           key={"course.name"}
           ></Column>
           <Column
-          title="Giá"
-          dataIndex="Price"
+          align='right'
+          title="Tổng tiền"
+          dataIndex="MoneyTotal"
           ></Column>
           <Column
-          title="Loại"
-          dataIndex="Type"
+           align="right"
+          title="Tổng tiền cuối cùng"
+          dataIndex="MoneyFinal"
           ></Column>
           <Column
-          title="Đánh giá"
+          align='center'
+          title="Loại thanh toán"
           dataIndex=""
+          render={(text,record)=>(
+            <span>{record.PayMentType?.Name}</span>
+          )}
           ></Column>
           <Column
-          title="Nổi bật"
-          dataIndex="isHighlight"
+          align='center'
+          title="Người mua"
+          dataIndex=""
+          render={(text,record)=>(
+            <span>{record.BuyerId?.Name}</span>
+          )}
           ></Column>
           <Column
-          title="Trạng thái"
-          dataIndex="isActive"
-          ></Column>
+              width={300}
+              align="left"
+              key="action"
+              render={(text, record) => (
+                <Space>
+                  <Button
+                    ghost
+                    type="primary"
+                    onClick={() => {
+                    setSelectedOrder(record)
+                     setVisible(true)
+                    }}
+                  >
+                    Chi tiết
+                  </Button>
+
+                </Space>
+              )}
+            />
         </Table>
       </Spin>
+      <OrderModal
+      visible={visible}
+      selectedOrder={selectedOrder}
+      onClose={()=>setVisible(false)}
+      />
     </div>
   )
 }
