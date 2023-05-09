@@ -1,4 +1,4 @@
-package com.frontend.zpmodule;
+package com.tranguyen1610.n2app.zpmodule;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -76,7 +76,7 @@ public class ZPModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void payOrder(String zpTransToken) {
         Activity currentActivity = getCurrentActivity();
-        ZaloPaySDK.getInstance().payOrder(currentActivity, zpTransToken, "demo://app", listener);
+        ZaloPaySDK.getInstance().payOrder(currentActivity, zpTransToken, "n2app://", listener);
     }
 
     @ReactMethod

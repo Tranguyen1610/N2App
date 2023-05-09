@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons'
 import { AuthContext } from '../contexts/AuthContext'
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import * as Facebook from "expo-auth-session/providers/facebook";
 
 
 WebBrowser.maybeCompleteAuthSession();
@@ -15,12 +14,8 @@ export default function LoginScreen({ navigation }) {
     androidClientId: "1092431594513-qomdue900jrbtvo02mc243g9ptal3otp.apps.googleusercontent.com",
     expoClientId: "1092431594513-5dk7fveo3gumq52nm0vooppspvirfces.apps.googleusercontent.com"
   });
-  // const [request, response, promptAsync] = Facebook.useAuthRequest({
-  //   clientId: "969162717664704", // change this for yours
-  // });
 
   const [token, setToken] = useState("");
-  const [userInfoo, setUserInfoo] = useState(null);
 
   const [visible, setVisible] = useState(true)
   const [email, setEmail] = useState('')
@@ -28,7 +23,7 @@ export default function LoginScreen({ navigation }) {
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const [alert, setAlert] = useState('')
 
-  const { login, loadUser, userInfo } = useContext(AuthContext)
+  const { login, loadUser, loginGoogle } = useContext(AuthContext)
 
   const ref_inputEmail = useRef()
   const ref_inputPassword = useRef()
@@ -68,10 +63,37 @@ export default function LoginScreen({ navigation }) {
           console.log(error)
         }
   }
+
+  const handleLoginGoogle = async (email) => {
+    try {
+      const loginData = await loginGoogle({ Email: email})
+      if (!loginData.success) {
+        setAlert(loginData.message)
+        setIsLoginSuccess(false)
+        setTimeout(() => setAlert(''), 5000)
+      }
+      else {
+        setAlert("Đăng nhập thành công")
+        setIsLoginSuccess(true)
+        setTimeout(() => {
+          setAlert("")
+          if (loginData.IsVerified)
+            loadUser();
+          else
+            navigation.navigate('VerificationScreen', { email: email });
+          setIsLoginSuccess(false);
+        }, 1000)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (response?.type === "success") {
       setToken(response.authentication.accessToken);
       getUserInfoo();
+
     }
   }, [response, token]);
   const getUserInfoo = async () => {
@@ -82,10 +104,8 @@ export default function LoginScreen({ navigation }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       const user = await response.json();
-      setUserInfoo(user);
-      console.log(user);
+      handleLoginGoogle(user.email);
     } catch (error) {
       console.log(error);
     }

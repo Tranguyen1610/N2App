@@ -1,4 +1,4 @@
-package com.frontend.zpmodule;
+package com.tranguyen1610.n2app.zpmodule;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;

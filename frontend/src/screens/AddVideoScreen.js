@@ -47,9 +47,9 @@ export default function AddVideoScreen({ route }) {
     });
 
     // Explore the result 
-    if (!result.canceled) {
+    if (!result.cancelled) {
       // console.log(result);
-      handleUploadVideo(result.assets[0])
+      handleUploadVideo(result)
   }
   }
 

@@ -117,6 +117,7 @@ export default function AddCourseScreen() {
         placeholderTextColor={'#7F889A'}
         className="text-white text-base  px-2 border border-gray-900 w-full h-12 my-5 rounded-sm "
         value={price}
+        keyboardType={'numeric'}
         onChangeText={(e) => setPrice(e)} />
       <TextInput
         multiline={true}
