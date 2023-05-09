@@ -34,7 +34,7 @@ const addType = asyncHandler(async (req, res) => {
           ],
         }
       : {};
-    console.log("abc");
+    // console.log("abc");
     const types = await Type.find(keyword);
     res.send(types);
   });

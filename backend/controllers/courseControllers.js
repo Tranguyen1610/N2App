@@ -7,7 +7,7 @@ const createCourse = asyncHandler(async (req, res) => {
 
   if (!Name || !Description || !Type || !Price || !Image || !Video) {
     res.status(400);
-    throw new Error("Please Enter all the Feilds");
+    throw new Error("Please Enter all the Fields");
   }
   const course = await Course.create({
     Name,
@@ -81,13 +81,13 @@ const allCourses = asyncHandler(async (req, res) => {
     : {};
   // console.log("abc");
   const courses = await Course.find(keyword)
-  .populate("Teacher", "-Password").populate("Type");
+  .populate("Teacher", "-Password").populate("Type").populate("ListVideo").populate("Comment");
   res.send(courses);
 });
 
 const getInfoCourse = asyncHandler(async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id)
+    const course = await Course.findById(req.params.id).populate("Type").populate("ListVideo")
     if (!course)
       return res.status(400).json('Course not found')
     res.json(course)
@@ -200,7 +200,28 @@ const getCourseUnFinishOfTeacher = asyncHandler(async(req,res)=>{
     res.status(400).send(error.message || error);
   });
 })
-
+const CheckCourse = asyncHandler(async(req,res)=>{
+  const course =await Course.findByIdAndUpdate(req.params.id,
+    {
+      isCheck:true
+    },
+    {
+      new:true,
+    })
+    if (!course) {
+      res.status(400);
+      throw new Error("Course not found");
+    } else {
+      res.json({
+        _id: course._id,
+        Name: course.Name,
+        Description: course.Description,
+        Type: course.Type,
+        Price: course.Price,
+        isCheck:course.isCheck,
+      });
+    }
+})
 module.exports = {
   createCourse,
   addVideotoCourse,
@@ -216,4 +237,5 @@ module.exports = {
   getCourseofTeacher,
   getCourseUnFinishOfTeacher,
   getCourseofTeacherNotSale,
+  CheckCourse,
 };

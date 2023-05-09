@@ -1,25 +1,81 @@
 import { Spin, Table, Typography } from 'antd'
-import React from 'react'
+import Link from 'antd/es/typography/Link'
+import axios from 'axios'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { VideoModal } from '../Course/components/VideoModal'
 
 const {Column}= Table
 const VideoScreen = () => {
+  const [dataSource,setDateSource]=useState([])
+  const [loading,setLoading]=useState(false);
+  const [selectedCourse, setSelectedCourse] = useState();
+  const [visible, setVisible] = useState(false);
+  useEffect(()=>{
+    setLoading(true)
+    getAllVideo()
+  },[])
+  const getAllVideo = async () => {
+    try {
+      const res = await axios.get(`/api/video/`);
+      console.log("video data",res.data);
+      // setListCourse(res.data);
+      setDateSource(res.data)
+      setLoading(false)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div>
        <Typography.Title level={4} >Video</Typography.Title>
-      <Spin>
-        <Table>
+      <Spin spinning={loading}>
+        <Table
+        dataSource={dataSource}
+        loading={loading}
+        >
           <Column
           title="Tên Khóa học"
-          dataIndex="Name"
+          dataIndex=""
           key={"course.name"}
+          render={(text,record)=>{
+            return(
+              <span>{record?.CourseId?.Name}</span>
+            )
+          }}
           ></Column>
           <Column
-          title="Giá"
-          dataIndex="Price"
+          width={70}
+          title="Tên Video"
+          dataIndex="Name"
+          key={"video.name"}
+          render={(text,record)=>{
+            return(
+             <Link
+            onClick={()=>{
+                setVisible(true)
+                setSelectedCourse(record)
+            }}
+            >
+            {`${text}`}
+            </Link>)
+          }}
+          ></Column>
+          <Column
+          align='center'
+          title="Mô tả"
+          dataIndex="Description"
           ></Column>
           <Column
           title="Loại"
-          dataIndex="Type"
+          dataIndex=""
+          render={(text,record)=>{
+            return(
+
+              <span>{record?.CourseId?.Type}</span>
+            )
+          }}
           ></Column>
           <Column
           title="Đánh giá"
@@ -35,6 +91,11 @@ const VideoScreen = () => {
           ></Column>
         </Table>
       </Spin>
+      <VideoModal
+      visible={visible}
+      onClose={()=>{setVisible(false)}}
+      selectedOrder={selectedCourse}
+      />
     </div>
   )
 }
