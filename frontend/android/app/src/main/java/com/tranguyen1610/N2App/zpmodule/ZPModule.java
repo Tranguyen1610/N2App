@@ -76,7 +76,7 @@ public class ZPModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void payOrder(String zpTransToken) {
         Activity currentActivity = getCurrentActivity();
-        ZaloPaySDK.getInstance().payOrder(currentActivity, zpTransToken, "demo://app", listener);
+        ZaloPaySDK.getInstance().payOrder(currentActivity, zpTransToken, "n2app://", listener);
     }
 
     @ReactMethod

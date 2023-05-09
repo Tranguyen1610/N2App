@@ -21,6 +21,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="n2app"/>
         <data android:scheme="com.tranguyen1610.n2app"/>
       </intent-filter>
     </activity>

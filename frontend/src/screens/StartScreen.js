@@ -5,8 +5,10 @@ export default function StartScreen() {
         <View className="flex-1 items-center justify-center bg-[#043b6a]">
             <StatusBar backgroundColor={"#043b6a"} />
             <Image
-                source={require('../image/Logo.png')} />
-            <ActivityIndicator size={'large'}  className="bottom-10 absolute"/>
+                source={require('../image/icon.png')}
+                style={{width:300,height:300}} 
+                />
+            <ActivityIndicator size={'large'} color='#51CCEE'  className="bottom-10 absolute"/>
         </View>
     )
 }
