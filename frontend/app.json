@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.tranguyen1610.N2App"
+      "package": "com.tranguyen1610.n2app"
     },
     "web": {
       "favicon": "./assets/favicon.png"

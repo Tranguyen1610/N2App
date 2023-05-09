@@ -17,6 +17,7 @@ const {
   getFavoriteType,
   updateFavoriteType,
   changePassword,
+  authUserGoogle,
 } = require("../controllers/userControllers");
 const User = require('../models/userModel.js');
 const router = express.Router();
@@ -24,6 +25,7 @@ const { protect } = require("../middlewares/authMiddleware");
 
 
 router.post("/login", authUser);
+router.post("/loginGoogle", authUserGoogle);
 router.route("/").post(registerUser);
 router.route("/").get(protect,getInfo);
 router.route("/getAll").get(protect, allUsers);

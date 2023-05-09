@@ -1,4 +1,4 @@
-package com.frontend;
+package com.tranguyen1610.n2app;
 
 import android.os.Build;
 import android.os.Bundle;

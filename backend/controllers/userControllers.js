@@ -49,6 +49,27 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+const authUserGoogle = asyncHandler(async (req, res) => {
+  const { Email } = req.body;
+  try {
+    const user = await User.findOne({ Email })
+    if (user) {
+      res.json({
+        success: true,
+        message: 'Đăng nhập thành công',
+        Id: user._id,
+        token: generateToken(user._id),
+        IsVerified: user.IsVerified,
+      });
+    } else {
+      res.status(400)
+        .json({ success: false, message: 'Tài khoản chưa đăng ký' })
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+});
+
 const getInfo = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.userId)
@@ -305,6 +326,7 @@ const changePassword = asyncHandler(async (req, res) => {
 module.exports = {
   registerUser,
   authUser,
+  authUserGoogle,
   allUsers,
   SearchUser,
   updateProfile,

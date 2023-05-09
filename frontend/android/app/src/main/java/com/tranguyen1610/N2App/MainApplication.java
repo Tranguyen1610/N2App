@@ -1,4 +1,4 @@
-package com.frontend;
+package com.tranguyen1610.n2app;
 
 import android.app.Application;
 import android.content.res.Configuration;
@@ -15,7 +15,7 @@ import expo.modules.ReactNativeHostWrapper;
 import java.util.List;
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPaySDK;
-import com.frontend.zpmodule.PayZaloBridge;
+import com.tranguyen1610.n2app.zpmodule.PayZaloBridge;
 
 public class MainApplication extends Application implements ReactApplication {
 

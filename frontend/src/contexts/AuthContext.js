@@ -48,6 +48,26 @@ export const AuthContextProvider = ({ children }) => {
 
 	}
 
+	const loginGoogle = async userForm => {
+		try {
+			const response = await axios.post(`${apiUrl}/loginGoogle`, userForm)
+			if (response.data.success) {
+				// setUserToken(response.data.accessToken);
+				AsyncStorage.setItem('userToken', response.data.token);
+				setAuthToken(await AsyncStorage.getItem('userToken'));
+
+				AsyncStorage.setItem('mode', 'Student')
+				// await loadUser()
+			}
+			return response.data
+		} catch (error) {
+			if (error.response.data)
+				return error.response.data
+			else return { success: false, message: error.message }
+		}
+
+	}
+
 	//register
 	const register = async userForm => {
 		try {
@@ -154,7 +174,7 @@ export const AuthContextProvider = ({ children }) => {
 			setCoursePurchaseds, listOrderCancel, setListOrderCancel, listOrderSuccess,
 			setListOrderSuccess, listOrderUnPaid, setListOrderUnPaid, listFavoriteType,
 			setListFavoriteType, coursesTC, setCoursesTC, coursesTCUF, setCoursesTCUF,
-			coursesTCNS, setCoursesTCNS, setUserInfo, changePassword
+			coursesTCNS, setCoursesTCNS, setUserInfo, changePassword,loginGoogle
 		}}>
 			{children}
 		</AuthContext.Provider>
