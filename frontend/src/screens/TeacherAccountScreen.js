@@ -57,7 +57,7 @@ export default function TeacherAccountScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
           onPress={() =>
-            nav.navigate('AddCourseScreen')}>
+            nav.navigate('RequestScreen')}>
           <Ionicons name="clipboard-outline" size={24} color="#129EF9" />
           <Text className="ml-2.5 mr-auto text-base text-white">Tất cả yêu cầu</Text>
           <Ionicons

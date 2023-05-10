@@ -21,6 +21,8 @@ import AllCourseTeacherNS from '../screens/AllCourseTeacherNS';
 import CoursesDetailTeacher from '../screens/CoursesDetailTeacher';
 import EditCourseScreen from '../screens/EditCourseScreen';
 import ListVideoScreen from '../screens/ListVideoScreen';
+import RequestScreen from '../screens/RequestScreen';
+import CreateRequest from '../screens/CreateRequest';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -101,6 +103,16 @@ const RootNavigator = () => {
           title: 'Tạo khóa học mới'
         }} />
       <Stack.Screen
+        name="CreateRequest"
+        component={CreateRequest}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Tạo yêu cầu'
+        }} />
+      <Stack.Screen
         name="AddVideoScreen"
         component={AddVideoScreen}
         options={{
@@ -129,6 +141,16 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Đơn hàng'
+        }} />
+      <Stack.Screen
+        name="RequestScreen"
+        component={RequestScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Yêu cầu'
         }} />
       <Stack.Screen
         name="OrderDetailScreen"
