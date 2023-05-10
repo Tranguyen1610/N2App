@@ -39,6 +39,7 @@ const authUser = asyncHandler(async (req, res) => {
         Id: user._id,
         token: generateToken(user._id),
         IsVerified: user.IsVerified,
+        Role: user.Role,
       });
     } else {
       res.status(400)

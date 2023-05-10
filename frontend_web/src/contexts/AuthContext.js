@@ -16,17 +16,24 @@ export const AuthContextProvider = ({ children }) => {
 	const [textSearch, setTextSearch] = useState("");
 
 	useEffect(() => {
+		setAuthToken(localStorage.getItem('userToken'));
 		loadUser();
 	}, []);
 	//Login
 	const login = async userForm => {
 		try {
-			const response = await axios.post(`/api/user/login`, userForm)
+			let response = await axios.post(`/api/user/login`, userForm)
 			if (response.data.success) {
-				console.log(response.data);
-				setUserToken(response.data.token);
-				localStorage.setItem('userToken', response.data.token);
-				await loadUser()
+				if (response.data.Role === "admin") {
+					console.log(response.data);
+					setUserToken(response.data.token);
+					localStorage.setItem('userToken', response.data.token);
+					await loadUser()
+				}
+				else {
+					response.data.success=false;
+					response.data.message="Accout is not admin"
+				}
 			}
 			return response.data
 		} catch (error) {
@@ -38,10 +45,10 @@ export const AuthContextProvider = ({ children }) => {
 	}
 	//Logout
 	const logout = () => {
-			setUserInfo({});
-			setUserToken(null);
-			setAuthToken(null)
-			localStorage.removeItem('userToken')
+		setUserInfo({});
+		setUserToken(null);
+		setAuthToken(null)
+		localStorage.removeItem('userToken')
 	}
 	//LoadUser
 	const loadUser = async () => {

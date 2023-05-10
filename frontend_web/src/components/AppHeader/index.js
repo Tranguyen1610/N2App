@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext'
 import axios from 'axios';
 import { ItemRequest } from './components/ItemRequest';
+import icon from "../../image/icon.png"
 
 function AppHeader() {
   const {logout} = useContext(AuthContext);
@@ -39,8 +40,9 @@ function AppHeader() {
   return (
     <div className='AppHeader'>
       <Image
+        style={{borderRadius:100}}
         width={40}
-        src='https://www.freepnglogos.com/uploads/logo-website-png/logo-website-website-tools-design-website-name-logo-posters-and-25.png'
+        src={icon}
       >
       </Image>
       {/* <Typography.Title>N2App's Admin</Typography.Title> */}

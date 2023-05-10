@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const Request = require("../models/requestModel");
 const Course = require("../models/courseModel");
+const User = require("../models/userModel");
+const { use } = require("../routes/requestRoutes");
 
 const addRequest = asyncHandler(async (req, res) => {
   const { Course, Content } = req.body;
@@ -13,6 +15,7 @@ const addRequest = asyncHandler(async (req, res) => {
     Sender: req.userId,
     Course: req.body.Course,
     Content: req.body.Content,
+    Amount : req.body.Amount,
   });
   if (request) {
 
@@ -20,6 +23,7 @@ const addRequest = asyncHandler(async (req, res) => {
       _id: request._id,
       Course: request.Course,
       Content: request.Content,
+      Amount :request.Amount,
     });
   } else {
     res.status(400);
@@ -53,7 +57,8 @@ const acceptRequest = asyncHandler(async (req, res) => {
   try {
     const request = await Request.findByIdAndUpdate(
       req.params.id,
-      { Status: true },
+      { Status: true ,
+        Result:1},
       { new: true }).populate("Sender").populate("Content").populate("Course")
       console.log("request",request);
     if (request) {
@@ -66,6 +71,31 @@ const acceptRequest = asyncHandler(async (req, res) => {
           { new: true }
         );
       }
+      if (request.Content.Key === "withdrawmoney"){
+        const user=await User.findById(request.Sender._id);
+        const afterBalance = Number(user.Balance) - Number(request.Amount);
+        await User.findByIdAndUpdate(request.Sender._id,{$set:{Balance:afterBalance}},{new:true})
+      }
+      res.status(200).json(request);
+    }
+    else {
+      return res.status(404).send('Request not found');
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
+const denyRequest = asyncHandler(async (req, res) => {
+  try {
+    const request = await Request.findByIdAndUpdate(
+      req.params.id,
+      { Status: true ,
+        Result:0,
+        Note:req.body.Note},
+      { new: true }).populate("Sender").populate("Content").populate("Course")
+      console.log("request",request);
+    if (request) {
       res.status(200).json(request);
     }
     else {
@@ -81,4 +111,5 @@ module.exports = {
   allRequest,
   getRequestByTeacher,
   acceptRequest,
+  denyRequest,
 }

@@ -67,6 +67,12 @@ const paymentSuccessOrder = asyncHandler(async (req, res) => {
           { new: true }
         );
       });
+      for (const d of order.Detail) {
+        const user = await User.findById(d.Teacher);
+        const amount = d.Price - (d.Price * 10) / 100;
+        const afterBalance = Number(user.Balance) + Number(amount);
+        await User.findByIdAndUpdate(d.Teacher, { $set: { Balance: afterBalance } });
+      }      
       res.status(200).json(order);
     }
     else {

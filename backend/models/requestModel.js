@@ -6,6 +6,9 @@ const requestSchema = mongoose.Schema(
     Course: { type: mongoose.Types.ObjectId, ref: "Course" },
     Content: { type: mongoose.Types.ObjectId, ref: "Content" },
     Status: {type:Boolean, default:false},
+    Result: {type:Number,default:2},
+    Note: {type:String},
+    Amount:{type:Number}
   },
   { timestamps: true }
 );
