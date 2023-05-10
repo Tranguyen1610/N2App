@@ -94,7 +94,7 @@ const allUsers = asyncHandler(async (req, res) => {
     }
     : {};
   console.log("123", req.user);
-  const users = await User.find(keyword).find({ _id: { $ne: req.userId } }).populate("CoursePurchased");
+  const users = await User.find(keyword).find({ _id: { $ne: req.userId } }).populate("CoursePurchased").populate("CoursePosted").populate("WishList");
   res.send(users);
 });
 const SearchUser = asyncHandler(async (req, res) => {

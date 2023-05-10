@@ -14,17 +14,17 @@ function SideMenu() {
       }}
       items={[
         {
-          label:"Dashboard",
+          label:"DashBoard",
           icon:<AppstoreOutlined/>,
           key:"/"
         },
         {
-          label:"Course",
+          label:"Khóa học",
           key:"/Course",
           icon:<ShopOutlined/>
         },
         {
-          label:"Order",
+          label:"Hóa đơn",
           key:"/Order",
           icon:<ShopOutlined/>
         },
@@ -34,12 +34,7 @@ function SideMenu() {
           icon:<AppstoreOutlined/>
         },
         {
-          label:"Teacher",
-          key:"/Teacher",
-          icon:<AppstoreOutlined/>
-        },
-        {
-          label:"Student",
+          label:"Người dùng",
           key:"/Student",
           icon:<AppstoreOutlined/>
         }

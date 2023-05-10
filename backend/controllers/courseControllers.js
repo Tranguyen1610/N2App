@@ -1,6 +1,7 @@
 const { json } = require("express");
 const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
+const User = require("../models/userModel");
 
 const createCourse = asyncHandler(async (req, res) => {
   const { Name, Description, Type, Price, Image,Video } = req.body;
@@ -19,6 +20,7 @@ const createCourse = asyncHandler(async (req, res) => {
     Teacher:req.userId,
   });
   if (course) {
+   
     res.status(201).json({
       _id: course._id,
       Name: course.Name,
@@ -29,6 +31,8 @@ const createCourse = asyncHandler(async (req, res) => {
       Video: course.Video,
       Teacher:course.Teacher,
     });
+    const user =User.findById(req.userId);
+    await user.updateOne({$push:{CoursePosted:course._id}})
   } else {
     res.status(400);
     throw new Error("Course not found");
@@ -81,7 +85,10 @@ const allCourses = asyncHandler(async (req, res) => {
     : {};
   // console.log("abc");
   const courses = await Course.find(keyword)
-  .populate("Teacher", "-Password").populate("Type").populate("ListVideo").populate("Comment");
+  .populate("Teacher", "-Password")
+  .populate("Type")
+  .populate("ListVideo")
+  .populate("Comment");
   res.send(courses);
 });
 
