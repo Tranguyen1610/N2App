@@ -96,8 +96,11 @@ export default function CoursesTeacherScreen() {
               nav.navigate('AddCourseScreen')}>
             <Text className="text-white p-2 text-base font-semibold text-center">Thêm khóa học</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="mr-3 mb-3 rounded-xl bg-[#1273FE] w-[45%]">
-            <Text className="text-white p-2 text-base font-semibold text-center">Gửi yêu cầu</Text>
+          <TouchableOpacity className="mr-3 mb-3 rounded-xl bg-[#1273FE] w-[45%]"
+            onPress={()=>{
+              nav.navigate('CreateRequest')
+            }}>
+            <Text className="text-white p-2 text-base font-semibold text-center">Tạo yêu cầu</Text>
           </TouchableOpacity>
         </View>
         <View className="flex-row mt-7 items-center justify-between">

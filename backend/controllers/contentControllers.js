@@ -39,4 +39,10 @@ const addContent = asyncHandler(async (req, res) => {
     const contents = await Content.find(keyword);
     res.send(contents);
   });
-  module.exports={addContent,allContents}
+
+  const keyForContentId = asyncHandler(async (req,res) =>{
+    const contents = await Content.findById(req.params.id);
+    res.send(contents.Key);
+  })
+
+  module.exports={addContent,allContents,keyForContentId}

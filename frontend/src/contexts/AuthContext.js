@@ -24,6 +24,7 @@ export const AuthContextProvider = ({ children }) => {
 	const [coursesTC, setCoursesTC] = useState([]);
 	const [coursesTCUF, setCoursesTCUF] = useState([]);
 	const [coursesTCNS, setCoursesTCNS] = useState([]);
+	const [contents, setContents] = useState([]);
 	useEffect(() => {
 		LoadUserVerified();
 	}, []);
@@ -174,7 +175,8 @@ export const AuthContextProvider = ({ children }) => {
 			setCoursePurchaseds, listOrderCancel, setListOrderCancel, listOrderSuccess,
 			setListOrderSuccess, listOrderUnPaid, setListOrderUnPaid, listFavoriteType,
 			setListFavoriteType, coursesTC, setCoursesTC, coursesTCUF, setCoursesTCUF,
-			coursesTCNS, setCoursesTCNS, setUserInfo, changePassword,loginGoogle
+			coursesTCNS, setCoursesTCNS, setUserInfo, changePassword,loginGoogle,
+			contents, setContents
 		}}>
 			{children}
 		</AuthContext.Provider>
