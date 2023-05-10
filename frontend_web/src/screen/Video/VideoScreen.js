@@ -1,9 +1,10 @@
-import { Spin, Table, Typography } from 'antd'
+import { Button, Space, Spin, Table, Typography } from 'antd'
 import Link from 'antd/es/typography/Link'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { VideoModal } from '../Course/components/VideoModal'
+import { PlusOutlined } from '@ant-design/icons'
 
 const {Column}= Table
 const VideoScreen = () => {
@@ -30,6 +31,17 @@ const VideoScreen = () => {
   return (
     <div>
        <Typography.Title level={4} >Video</Typography.Title>
+       <Space>
+      <Button
+                onClick={() => {
+                  setVisible(true)
+                }}
+                type="primary"
+                icon={<PlusOutlined />}
+              >
+                Thêm mới
+              </Button>
+      </Space>
       <Spin spinning={loading}>
         <Table
         dataSource={dataSource}
@@ -56,6 +68,7 @@ const VideoScreen = () => {
             onClick={()=>{
                 setVisible(true)
                 setSelectedCourse(record)
+                console.log("link video",record);
             }}
             >
             {`${text}`}

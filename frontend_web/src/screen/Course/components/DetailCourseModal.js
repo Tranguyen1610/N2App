@@ -1,33 +1,50 @@
-import { Avatar, Col, Descriptions, Image, Modal, Spin, Table } from "antd";
+import { Avatar, Button, Col, Descriptions, Image, Modal, Spin, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { VideoModal } from "./VideoModal";
 import Link from "antd/es/typography/Link";
+import axios from "axios";
 
 const {Column}=Table;
 
 export const DetailCourseModal = (
-    { 
+    {
+        idRequest, 
     selectedOrder,
     visible,
     onClose,
     onSubmitOk,
     })=>{
         const [visibleVideo,setVisibleVideo]=useState(false);
-        const [selectedCourse, setSelectedCourse] = useState();
+        const [selectedCourse, setSelectedCourse] = useState(selectedOrder?.onSale);
+        const [isHidden,setIsHidden]=useState();
         useEffect(()=>{
-            console.log("dataCourseOfStudent:",selectedOrder);
+            console.log("dataCourseOfStudent:",selectedOrder?._id);
         })
         
-
+    const acceptRequest = async(id)=>{
+        try {
+            const res = await axios.put(`/api/request/acceptRequest/${id}`)
+            if (res)
+            setIsHidden(false)
+            window.location.reload(false);
+        } catch (err) {
+            
+        }
+    }
     return(
         <div>
         <Modal
+        okText={"Duyệt khóa học"}
+        onOk={()=>acceptRequest(idRequest)}
+        okButtonProps={{
+            hidden:selectedOrder?.OnSale==true?true:false
+        }}
         onCancel={onClose}
         open={visible}
         title={
             <>
-              Chi tiết khóa học{" "}
-                <span className="text-primary">{selectedOrder?._id}</span>
+              Thông tin khóa học
+               
             </>
         }
         style={{ top: 20 }}
@@ -41,13 +58,17 @@ export const DetailCourseModal = (
             >
                 <Descriptions
                 column={1}
-                title="Thông tin khóa học"
                 contentStyle={{fontWeight:"bold"}}
                 >
                     <Descriptions.Item
                     label="Mã khóa học"
                     >
                         <span>{selectedOrder?._id}</span>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                    label="Tên khóa học"
+                    >
+                        <span>{selectedOrder?.Name}</span>
                     </Descriptions.Item>
                     <Descriptions.Item
                     label="Thể loại"
@@ -61,7 +82,25 @@ export const DetailCourseModal = (
                     </Descriptions.Item>
                 </Descriptions>
             </Col>
-           
+            <Col
+            span={12}
+            >
+                <Descriptions
+                column={1}
+                contentStyle={{fontWeight:"bold"}}
+                >
+                    <Descriptions.Item
+                    label="Giảng viên"
+                    >
+                        <span>{selectedOrder?.Teacher?.Name}</span>
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                    label="Email"
+                    >
+                        <span>{selectedOrder?.Teacher?.Email}</span>
+                    </Descriptions.Item>
+                </Descriptions>
+            </Col>
             </div>
             <Col>
             <Spin spinning={false}>
@@ -103,6 +142,7 @@ export const DetailCourseModal = (
         </Table>
       </Spin>
             </Col>
+            
         </Modal>
         <VideoModal
       visible={visibleVideo}

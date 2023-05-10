@@ -55,6 +55,7 @@ const acceptRequest = asyncHandler(async (req, res) => {
       req.params.id,
       { Status: true },
       { new: true }).populate("Sender").populate("Content").populate("Course")
+      console.log("request",request);
     if (request) {
       if (request.Content.Key === "buycourse") {
         const course = await Course.findByIdAndUpdate(
