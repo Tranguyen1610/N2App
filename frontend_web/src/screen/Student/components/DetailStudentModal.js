@@ -79,8 +79,8 @@ export const DetailStudentModal = ({
             </Descriptions>
           </Col>
         </div>
-        <Space direction="vertical">
-        <Col>
+       
+        
           <Space direction="vertical">
             <Typography.Text
               style={{
@@ -118,7 +118,6 @@ export const DetailStudentModal = ({
               <Column title="Mô tả" dataIndex="Description"></Column>
             </Table>
           </Spin>
-        </Col>
        
           <Col>
             <Space direction="vertical">
@@ -198,7 +197,7 @@ export const DetailStudentModal = ({
               </Table>
             </Spin>
           </Col>
-        </Space>
+       
       </Modal>
       <DetailCourseModal
         visible={visibleCourse}
