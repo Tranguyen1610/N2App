@@ -3,9 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import DropDownPicker from 'react-native-dropdown-picker'
+import axios from 'axios'
+import { Url } from '../contexts/constants'
+import { useNavigation } from '@react-navigation/native'
 
 export default function RevenueTeacherScreen() {
-  const [mca, setmca] = useState(10000000)
+  const nav = useNavigation();
+  const [mca, setmca] = useState(0)
   const [isOpen, setIsOpen] = useState(false);
   const [type, setType] = useState("day");
   const [now, setNow] = useState("");
@@ -22,15 +26,25 @@ export default function RevenueTeacherScreen() {
     return ""
   }
 
-  const getDateNow=()=>{
+  const getDateNow = () => {
     const dateNow = new Date();
     setNow(dateNow.toLocaleDateString());
   }
 
-  useEffect(()=>{
-    getDateNow()
-  },[])
-  
+  const getAmount = async () => {
+    try {
+      const res = await axios.get(`${Url}/user/amount`);
+      setmca(res.data.user.Balance);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getDateNow();
+    getAmount();
+  }, [])
+
   return (
     <SafeAreaView className="flex-1 bg-[#0A0909]">
       <StatusBar backgroundColor={"#0A0909"} />
@@ -69,14 +83,14 @@ export default function RevenueTeacherScreen() {
           </View>
         </View>
         <View className="flex-row items-center w-full mt-3">
-              <Text className="text-white justify-start text-base">Tổng số đơn hàng:</Text>
-              <Text className="text-white text-base ml-10 text-xl">3</Text>
+          <Text className="text-white justify-start text-base">Tổng số đơn hàng:</Text>
+          <Text className="text-white text-base ml-10 text-xl">3</Text>
         </View>
         <View className="flex-row items-center w-full mt-3">
-              <Text className="text-white justify-start text-base">Doanh thu:</Text>
-              <Text className="text-white text-base ml-10 text-xl">{formatPrice(mca)}</Text>
+          <Text className="text-white justify-start text-base">Doanh thu:</Text>
+          <Text className="text-white text-base ml-10 text-xl">{formatPrice(mca)}</Text>
         </View>
-        
+
       </View>
       <View className="absolute bottom-0 flex-row w-screen h-14 ">
         <TouchableOpacity className="bg-[#242F41] items-center justify-center w-6/12 flex-row "
@@ -85,7 +99,7 @@ export default function RevenueTeacherScreen() {
           <Text className="text-white font-semibold text-xl ml-3">Tất cả đơn hàng</Text>
         </TouchableOpacity>
         <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12 flex-row"
-        // onPress={() => handleOrder()}
+          onPress={() => nav.navigate('CreateRequest',{type:"withdrawmoney"})}
         >
           <MaterialCommunityIcons name="cash" size={28} color="white" />
           <Text className="text-white font-semibold text-xl ml-3">Rút tiền</Text>

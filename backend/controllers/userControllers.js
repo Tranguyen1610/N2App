@@ -324,6 +324,19 @@ const changePassword = asyncHandler(async (req, res) => {
   }
 })
 
+const getAmount = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.userId)
+      .select('Balance')
+    if (!user)
+      return res.status(400).json({ success: false, message: 'User not found' })
+    res.json({ user })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+})
+
 module.exports = {
   registerUser,
   authUser,
@@ -344,4 +357,5 @@ module.exports = {
   getFavoriteType,
   updateFavoriteType,
   changePassword,
+  getAmount,
 };

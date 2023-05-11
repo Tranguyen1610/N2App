@@ -23,6 +23,7 @@ import EditCourseScreen from '../screens/EditCourseScreen';
 import ListVideoScreen from '../screens/ListVideoScreen';
 import RequestScreen from '../screens/RequestScreen';
 import CreateRequest from '../screens/CreateRequest';
+import RequestDetailScreen from '../screens/RequestDetailScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -151,6 +152,16 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Yêu cầu'
+        }} />
+      <Stack.Screen
+        name="RequestDetailScreen"
+        component={RequestDetailScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Chi tiết yêu cầu'
         }} />
       <Stack.Screen
         name="OrderDetailScreen"

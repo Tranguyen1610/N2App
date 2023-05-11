@@ -32,7 +32,7 @@ const addRequest = asyncHandler(async (req, res) => {
 });
 
 const allRequest = asyncHandler(async (req, res) => {
-  await Request.find().populate("Sender").populate("Course").populate("Content")
+  await Request.find().populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -43,7 +43,31 @@ const allRequest = asyncHandler(async (req, res) => {
 });
 
 const getRequestByTeacher = asyncHandler(async (req, res) => {
-  await Request.find({ Sender: req.userId }).populate("Sender").populate("Course").populate("Content")
+  await Request.find({ Sender: req.userId }).populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .then((data) => {
+      var result = data;
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message || error);
+    });
+})
+
+const getRequestByTeacherAccept = asyncHandler(async (req, res) => {
+  await Request.find({ Sender: req.userId, Status:true })
+  .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .then((data) => {
+      var result = data;
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message || error);
+    });
+})
+
+const getRequestByTeacherNoAccept = asyncHandler(async (req, res) => {
+  await Request.find({ Sender: req.userId,Status:false })
+  .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -112,4 +136,6 @@ module.exports = {
   getRequestByTeacher,
   acceptRequest,
   denyRequest,
+  getRequestByTeacherAccept,
+  getRequestByTeacherNoAccept,
 }

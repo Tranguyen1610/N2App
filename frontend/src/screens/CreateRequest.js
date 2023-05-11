@@ -1,11 +1,12 @@
-import { View, Text, StatusBar, ActivityIndicator, TouchableOpacity, Keyboard } from 'react-native'
+import { View, Text, StatusBar, ActivityIndicator, TouchableOpacity, Keyboard, TextInput } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { AuthContext } from '../contexts/AuthContext';
 import axios from 'axios';
 import { Url } from '../contexts/constants';
+import Toast from 'react-native-root-toast';
 
-export default function CreateRequest() {
+export default function CreateRequest({ route }) {
     const { contents, setContents } = useContext(AuthContext);
     const [content, setContent] = useState("");
     const [key, setKey] = useState("");
@@ -13,8 +14,25 @@ export default function CreateRequest() {
     const [isOpenCourse, setIsOpenCourse] = useState(false);
     const [coursesTCNSDr, setCoursesTCNSDr] = useState([]);
     const [course, setCourse] = useState("");
+    const [amount, setAmount] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+    const [mca, setmca] = useState(0)
+
+    const withdrawmoney = () => {
+        if (route.params)
+            if (route.params.type === "withdrawmoney") {
+                setContent("645a6bf4194fadd4d5da02ad")
+                setKey('withdrawmoney')
+            }
+    }
+
+    const formatPrice = (num) => {
+        if (num != null)
+            return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
+        return ""
+    }
+
     const getContent = async () => {
         let list = [];
         try {
@@ -58,9 +76,116 @@ export default function CreateRequest() {
         setCoursesTCNSDr(list)
     }
 
+    const getAmount = async () => {
+        try {
+            const res = await axios.get(`${Url}/user/amount`);
+            setmca(res.data.user.Balance);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const CreateRequest = async () => {
+        try {
+            const co = course !== "" ? course : null
+            const data = {
+                Course: co,
+                Amount: Number(amount),
+                Content: content,
+            }
+            const res = await axios.post(`${Url}/request/createRequest`, data);
+            if (res.data) {
+                reset();
+                Toast.show('Thành công',
+                    {
+                        backgroundColor: '#3B404F',
+                        textColor: '#ffffff',
+                        opacity: 1,
+                        duration: Toast.durations.SHORT,
+                        position: Toast.positions.CENTER,
+                        animation: true,
+                    })
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const reset = () => {
+        setContent("");
+        setAmount("");
+        setCourse("");
+        setKey("");
+    }
+
+    const handleCreateRequest = () => {
+        const regexPrice = /^[1-9][0-9]*$/;
+        if (content === "")
+            Toast.show('Chưa chọn loại yêu cầu',
+                {
+                    backgroundColor: '#3B404F',
+                    textColor: '#ffffff',
+                    opacity: 1,
+                    duration: Toast.durations.SHORT,
+                    position: Toast.positions.CENTER,
+                    animation: true,
+                })
+        else
+            if (key === 'buycourse')
+                if (course === "")
+                    Toast.show('Chưa chọn khóa học',
+                        {
+                            backgroundColor: '#3B404F',
+                            textColor: '#ffffff',
+                            opacity: 1,
+                            duration: Toast.durations.SHORT,
+                            position: Toast.positions.CENTER,
+                            animation: true,
+                        })
+                else CreateRequest();
+            else
+                if (key === 'withdrawmoney')
+                    if (amount === "")
+                        Toast.show('Chưa nhập số tiền',
+                            {
+                                backgroundColor: '#3B404F',
+                                textColor: '#ffffff',
+                                opacity: 1,
+                                duration: Toast.durations.SHORT,
+                                position: Toast.positions.CENTER,
+                                animation: true,
+                            })
+                    else
+                        if (!regexPrice.test(amount)) {
+                            Toast.show('Số tiền là số lớn hơn 0',
+                                {
+                                    backgroundColor: '#3B404F',
+                                    textColor: '#ffffff',
+                                    opacity: 1,
+                                    duration: Toast.durations.SHORT,
+                                    position: Toast.positions.CENTER,
+                                    animation: true,
+                                })
+                        }
+                        else
+                            if (Number(amount) > Number(mca))
+                                Toast.show('Số tiền vượt quá số dư',
+                                    {
+                                        backgroundColor: '#3B404F',
+                                        textColor: '#ffffff',
+                                        opacity: 1,
+                                        duration: Toast.durations.SHORT,
+                                        position: Toast.positions.CENTER,
+                                        animation: true,
+                                    })
+                            else CreateRequest();
+    }
     useEffect(() => {
         getContent();
         getCourseTCNS();
+        getAmount();
+        withdrawmoney();
     }, [])
 
     useEffect(() => {
@@ -140,15 +265,28 @@ export default function CreateRequest() {
                                     color: "#fff"
                                 }}
                             />
-                        </View> :
-                        <Text className="text-white mt-20 text-center">Tính năng đang phát triển</Text>}
+                        </View> : key === "withdrawmoney" ?
+                            <View className="items-center">
+                                <Text className="text-white text-base">Số dư hiện tại</Text>
+                                <Text className="text-[#1273FE] text-xl font-medium mt-3">{formatPrice(mca)}</Text>
+                                <TextInput
+                                    placeholder='Số tiền'
+                                    placeholderTextColor={'#7F889A'}
+                                    className="text-white text-base  px-2 border border-gray-300 w-full h-12 my-5 rounded-sm "
+                                    value={amount}
+                                    keyboardType={'numeric'}
+                                    onChangeText={(e) => setAmount(e)} />
+                            </View> : key === "createpromotioncode" ?
+                                <Text className="text-white mt-20 text-center">Tính năng đang phát triển</Text>
+                                : <></>
+                    }
                 </View>
             }
             {!isKeyboardOpen ?
                 <View className="absolute bottom-10 right-5 items-end">
                     <TouchableOpacity
                         className="justify-center items-center mt-2"
-                        onPress={() => check()}>
+                        onPress={() => handleCreateRequest()}>
                         <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Tạo yêu cầu</Text>
                     </TouchableOpacity>
                 </View> : <></>}
