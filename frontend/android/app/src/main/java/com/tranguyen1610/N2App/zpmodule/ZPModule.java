@@ -84,6 +84,16 @@ public class ZPModule extends ReactContextBaseJavaModule {
         ZaloPaySDK.getInstance().navigateToZaloOnStore(mReactContext);
     }
 
+    @ReactMethod
+    public void addListener(String eventName) {
+
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+
+    }
+
     private void sendEvent(ReactContext reactContext, String eventName, WritableMap params) {
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);

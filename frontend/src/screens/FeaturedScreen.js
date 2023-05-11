@@ -29,7 +29,7 @@ export default function FeaturedScreen({ navigation }) {
   const getCourse = async () => {
     let list = [];
     try {
-      const res = await axios.get(`${Url}/course`);
+      const res = await axios.get(`${Url}/course/onSale`);
       // console.log(res.data);
       const listcourse = res.data;
       for (let index = 0; index < listcourse.length; index++) {

@@ -8,7 +8,9 @@ const requestSchema = mongoose.Schema(
     Status: {type:Boolean, default:false},
     Result: {type:Number,default:2},
     Note: {type:String},
-    Amount:{type:Number}
+    Amount:{type:Number},
+    IsCancel: {type:Boolean, default:false},
+
   },
   { timestamps: true }
 );

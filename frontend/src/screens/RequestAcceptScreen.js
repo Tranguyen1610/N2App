@@ -7,15 +7,14 @@ import { AuthContext } from '../contexts/AuthContext';
 import Request from '../components/Request';
 
 export default function RequestAcceptScreen() {
-  // const { userInfo } = useContext(AuthContext);
-  // const {listOrderSuccess, setListOrderSuccess} = useContext(AuthContext);
+  const { listRequestAccept, setListRequestAccept } = useContext(AuthContext);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [listRequest, setListRequest] = useState(false);
-  const getRequset = async () => {
+  const getRequestAccept = async () => {
     try {
       const result = await axios.get(`${Url}/request/getRequestByTeacherAccept`);
       if (result.data) {
-        setListRequest(result.data)
+        setListRequestAccept(result.data)
       }
     }
     catch (err) {
@@ -26,7 +25,7 @@ export default function RequestAcceptScreen() {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 500)
-    getRequset();
+    getRequestAccept();
   }, [])
 
   return (
@@ -37,13 +36,13 @@ export default function RequestAcceptScreen() {
           <ActivityIndicator size={'large'} color={'#1273FE'} />
         </View> :
         <View>
-          {listRequest.length == 0 ?
+          {listRequestAccept.length == 0 ?
             <Text className="text-gray-300 text-xl text-center mt-20">
               Chưa có yêu cầu</Text> : <></>}
           <FlatList
             className=" px-2"
             showsHorizontalScrollIndicator={false}
-            data={listRequest}
+            data={listRequestAccept}
             renderItem={({ item }) =>
               <Request
                 item={item}

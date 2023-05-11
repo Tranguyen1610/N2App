@@ -11,8 +11,8 @@ export default function AddCourseStep2Screen({ route }) {
     const [image, setImage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [video, setVideo] = useState(null);
-    const [linkVideo,setLinkVideo] = useState("");
-    const [linkImage,setLinkImage] = useState("");
+    const [linkVideo, setLinkVideo] = useState("");
+    const [linkImage, setLinkImage] = useState("");
     const [isLoadingVideo, setIsLoadingVideo] = useState(false);
     const [alertValue, setAlertValue] = useState("")
     const videoRef = useRef();
@@ -136,10 +136,12 @@ export default function AddCourseStep2Screen({ route }) {
             setIsLoadingVideo(false);
         } catch (error) {
             console.log(error);
+            setAlertValue(error)
+            setTimeout(() => setAlertValue(''), 3000)
             setVideo(null);
             setIsLoadingVideo(false);
         }
-       
+
     }
 
     const handleOpenSettings = () => {
@@ -152,27 +154,26 @@ export default function AddCourseStep2Screen({ route }) {
     useEffect(() => {
         console.log(data)
     }, [])
-    const check=()=>{
-        if(image===null || video===null){
+    const check = () => {
+        if (image === null || video === null) {
             setAlertValue("Chọn đầy đủ ảnh bìa và video giới thiệu")
             setTimeout(() => setAlertValue(''), 3000)
         }
-        else
-        {
+        else {
             setAlertValue("")
             data.Image = linkImage;
             data.Video = linkVideo;
             // console.log(data);
             createCourse();
-            
+
         }
     }
-    const createCourse = async()=>{
+    const createCourse = async () => {
         try {
             // console.log(data);
             const res = await axios.post(`${Url}/course/createCourse`, data);
             console.log(res.data);
-            nav.navigate('AddVideoScreen',{idCourse:res.data._id});
+            nav.navigate('AddVideoScreen', { idCourse: res.data._id });
         } catch (err) {
             console.log(err);
         }
@@ -180,7 +181,7 @@ export default function AddCourseStep2Screen({ route }) {
 
     return (
         <View className="flex-1 bg-[#0A0909] p-5">
-            <StatusBar backgroundColor={"#0A0909"}/>
+            <StatusBar backgroundColor={"#0A0909"} />
             <View
                 className="w-max h-48 border border-gray-900 justify-center rounded-sm">
                 {isLoading ?

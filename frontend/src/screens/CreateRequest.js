@@ -7,12 +7,13 @@ import { Url } from '../contexts/constants';
 import Toast from 'react-native-root-toast';
 
 export default function CreateRequest({ route }) {
-    const { contents, setContents } = useContext(AuthContext);
+    const { contents, setContents, userInfo } = useContext(AuthContext);
     const [content, setContent] = useState("");
     const [key, setKey] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenCourse, setIsOpenCourse] = useState(false);
     const [coursesTCNSDr, setCoursesTCNSDr] = useState([]);
+    const [allRequest, setAllRequest] = useState([]);
     const [course, setCourse] = useState("");
     const [amount, setAmount] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,12 @@ export default function CreateRequest({ route }) {
                 setContent("645a6bf4194fadd4d5da02ad")
                 setKey('withdrawmoney')
             }
+            else
+                if (route.params.type === "buycourse") {
+                    setContent("645a6b80194fadd4d5da02a6")
+                    setKey('buycourse')
+                    setCourse(route.params.course)
+                }
     }
 
     const formatPrice = (num) => {
@@ -105,9 +112,22 @@ export default function CreateRequest({ route }) {
                         position: Toast.positions.CENTER,
                         animation: true,
                     })
+                getRequset();
             }
 
         } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getRequset = async () => {
+        try {
+            const result = await axios.get(`${Url}/request/`);
+            if (result.data) {
+                setAllRequest(result.data)
+            }
+        }
+        catch (err) {
             console.log(err);
         }
     }
@@ -121,33 +141,21 @@ export default function CreateRequest({ route }) {
 
     const handleCreateRequest = () => {
         const regexPrice = /^[1-9][0-9]*$/;
-        if (content === "")
-            Toast.show('Chưa chọn loại yêu cầu',
-                {
-                    backgroundColor: '#3B404F',
-                    textColor: '#ffffff',
-                    opacity: 1,
-                    duration: Toast.durations.SHORT,
-                    position: Toast.positions.CENTER,
-                    animation: true,
-                })
-        else
-            if (key === 'buycourse')
-                if (course === "")
-                    Toast.show('Chưa chọn khóa học',
-                        {
-                            backgroundColor: '#3B404F',
-                            textColor: '#ffffff',
-                            opacity: 1,
-                            duration: Toast.durations.SHORT,
-                            position: Toast.positions.CENTER,
-                            animation: true,
-                        })
-                else CreateRequest();
+        if (!checkRequest()) {
+            if (content === "")
+                Toast.show('Chưa chọn loại yêu cầu',
+                    {
+                        backgroundColor: '#3B404F',
+                        textColor: '#ffffff',
+                        opacity: 1,
+                        duration: Toast.durations.SHORT,
+                        position: Toast.positions.CENTER,
+                        animation: true,
+                    })
             else
-                if (key === 'withdrawmoney')
-                    if (amount === "")
-                        Toast.show('Chưa nhập số tiền',
+                if (key === 'buycourse')
+                    if (course === "")
+                        Toast.show('Chưa chọn khóa học',
                             {
                                 backgroundColor: '#3B404F',
                                 textColor: '#ffffff',
@@ -156,9 +164,11 @@ export default function CreateRequest({ route }) {
                                 position: Toast.positions.CENTER,
                                 animation: true,
                             })
-                    else
-                        if (!regexPrice.test(amount)) {
-                            Toast.show('Số tiền là số lớn hơn 0',
+                    else CreateRequest();
+                else
+                    if (key === 'withdrawmoney')
+                        if (amount === "")
+                            Toast.show('Chưa nhập số tiền',
                                 {
                                     backgroundColor: '#3B404F',
                                     textColor: '#ffffff',
@@ -167,10 +177,9 @@ export default function CreateRequest({ route }) {
                                     position: Toast.positions.CENTER,
                                     animation: true,
                                 })
-                        }
                         else
-                            if (Number(amount) > Number(mca))
-                                Toast.show('Số tiền vượt quá số dư',
+                            if (!regexPrice.test(amount)) {
+                                Toast.show('Số tiền là số lớn hơn 0',
                                     {
                                         backgroundColor: '#3B404F',
                                         textColor: '#ffffff',
@@ -179,13 +188,53 @@ export default function CreateRequest({ route }) {
                                         position: Toast.positions.CENTER,
                                         animation: true,
                                     })
-                            else CreateRequest();
+                            }
+                            else
+                                if (Number(amount) > Number(mca))
+                                    Toast.show('Số tiền vượt quá số dư',
+                                        {
+                                            backgroundColor: '#3B404F',
+                                            textColor: '#ffffff',
+                                            opacity: 1,
+                                            duration: Toast.durations.SHORT,
+                                            position: Toast.positions.CENTER,
+                                            animation: true,
+                                        })
+                                else CreateRequest();
+        }
+        else {
+            Toast.show('Yêu cầu đã tồn tại',
+                {
+                    backgroundColor: '#3B404F',
+                    textColor: '#ffffff',
+                    opacity: 1,
+                    duration: Toast.durations.SHORT,
+                    position: Toast.positions.CENTER,
+                    animation: true,
+                })
+        }
     }
+
+    const checkRequest = () => {
+        for (const r of allRequest) {
+            if (!r.Status && r.Content.Key === key && r.Sender._id === userInfo._id && !r.IsCancel) {
+                if (key === "withdrawmoney") {
+                    return true;
+                } else if (r.Course._id === course) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     useEffect(() => {
         getContent();
         getCourseTCNS();
         getAmount();
         withdrawmoney();
+        getRequset();
     }, [])
 
     useEffect(() => {

@@ -75,6 +75,8 @@ export default function AddVideoScreen({ route }) {
       setIsLoadingVideo(false);
     } catch (error) {
       console.log(error);
+      setAlertValue(error)
+      setTimeout(() => setAlertValue(''), 3000)
       setVideo(null);
       setIsLoadingVideo(false);
     }
@@ -218,7 +220,7 @@ export default function AddVideoScreen({ route }) {
               className="justify-center items-center mt-2"
               onPress={() => {
                 check()
-                nav.popToTop()
+                nav.navigate('TeacherNavigator')
                 }}>
               <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Hoàn thành</Text>
             </TouchableOpacity>

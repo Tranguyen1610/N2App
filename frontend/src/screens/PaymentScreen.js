@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, FlatList, Modal, StatusBar, NativeEventEmitter, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Image, FlatList, Modal, StatusBar, NativeEventEmitter, Alert, NativeModules } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -10,26 +10,11 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../contexts/AuthContext';
 import PaymentMethod from '../components/PaymentMethod';
 import { StripeProvider } from "@stripe/stripe-react-native";
-import NumberFormat from "react-number-format";
 import { useStripe } from "@stripe/stripe-react-native";
-
-import { NativeModules } from 'react-native';
 import CryptoJS from 'crypto-js';
 
-
 const { PayZaloBridge } = NativeModules;
-
 const payZaloBridgeEmitter = new NativeEventEmitter(PayZaloBridge);
-
-const subscription = payZaloBridgeEmitter.addListener('EventPayZalo', data => {
-    console.log(data.rereturnCode);
-    if (data.returnCode === 1) {
-        Alert.alert('Pay success!');
-    } else {
-        Alert.alert('Pay errror! ' + data.returnCode);
-    }
-    console.log(data);
-});
 
 export default function PaymentScreen({ route }) {
     const payments = route.params.payments;
@@ -40,6 +25,20 @@ export default function PaymentScreen({ route }) {
     const [paymentMethod, setPaymentMethod] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [paymentIds, setPaymentIds] = useState([]);
+
+    useEffect(() => {
+        const subscription = payZaloBridgeEmitter.addListener('EventPayZalo', (data) => {
+            if (data.returnCode === 1) {
+                Alert.alert('Pay success!');
+            } else {
+                Alert.alert('Pay error! ' + data.returnCode);
+            }
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, []);
 
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
@@ -74,24 +73,18 @@ export default function PaymentScreen({ route }) {
                 merchantDisplayName: "Thanh toán N2App",
             });
             if (initSheet.error) {
-                // console.error(initSheet.error);
-                //return Alert.alert(initSheet.error.message);
                 return nav.navigate('ResultPayment', { result: false, orderdl: order });
             }
             const presentSheet = await presentPaymentSheet({
-                // clientSecret: data.clientSecret
+
             });
             if (presentSheet.error) {
-                // console.error(presentSheet.error);
-                // return Alert.alert(presentSheet.error.message);
                 return nav.navigate('ResultPayment', { result: false, orderdl: order });
             }
             else
-                // Alert.alert("Payment successfully! Thank you for the purchase.");
                 return nav.navigate('ResultPayment', { result: true, orderdl: order });
         } catch (err) {
             console.error(err);
-            // Alert.alert("Payment failed!");
             return nav.navigate('ResultPayment', { result: false, orderdl: order });
         }
     };
@@ -147,8 +140,8 @@ export default function PaymentScreen({ route }) {
                         if (paymentMethod.Name === 'ZaloPay')
                             payOrder(total)
                         else
-                                if (paymentMethod.Name === 'Stripe')
-                                    payment(res.data);
+                            if (paymentMethod.Name === 'Stripe')
+                                payment(res.data);
                     }
                 } catch (err) {
                     console.log(err);
@@ -239,10 +232,6 @@ export default function PaymentScreen({ route }) {
             hmacInput,
             'PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL',
         );
-        console.log('====================================');
-        console.log('hmacInput: ' + hmacInput);
-        console.log('mac: ' + mac);
-        console.log('====================================');
         var order = {
             app_id: appid,
             app_user: appuser,
@@ -282,8 +271,6 @@ export default function PaymentScreen({ route }) {
                 console.log('error ', error);
             });
     }
-
-
     return (
         <StripeProvider
             publishableKey="pk_test_51N2yxYFoJ1QfXh83YViTJvMZD61nmNgrkgeKcP6tSWTfRKx2FWCTDFgZztq7QhmjncRi2iGRaZLmgevSAdZN4IWt00iVDlAIe3">

@@ -6,15 +6,14 @@ import Order from '../components/Order';
 import { AuthContext } from '../contexts/AuthContext';
 import Request from '../components/Request';
 
-export default function RequestAcceptScreen() {
-  const { listRequestNoAccept, setListRequestNoAccept } = useContext(AuthContext);
+export default function RequestCancelScreen() {
+  const { listRequestCancel, setListRequestCancel } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-
-  const getRequestNoAccept = async () => {
+  const getRequestcancel = async () => {
     try {
-      const result = await axios.get(`${Url}/request/getRequestByTeacherNoAccept`);
+      const result = await axios.get(`${Url}/request/getRequestByTeacherCancel`);
       if (result.data) {
-        setListRequestNoAccept(result.data)
+        setListRequestCancel(result.data)
       }
     }
     catch (err) {
@@ -25,7 +24,7 @@ export default function RequestAcceptScreen() {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 500)
-    getRequestNoAccept();
+    getRequestcancel();
   }, [])
 
   return (
@@ -36,13 +35,13 @@ export default function RequestAcceptScreen() {
           <ActivityIndicator size={'large'} color={'#1273FE'} />
         </View> :
         <View>
-          {listRequestNoAccept.length == 0 ?
+          {listRequestCancel.length == 0 ?
             <Text className="text-gray-300 text-xl text-center mt-20">
               Chưa có yêu cầu</Text> : <></>}
           <FlatList
             className=" px-2"
             showsHorizontalScrollIndicator={false}
-            data={listRequestNoAccept}
+            data={listRequestCancel}
             renderItem={({ item }) =>
               <Request
                 item={item}

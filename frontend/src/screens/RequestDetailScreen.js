@@ -19,8 +19,55 @@ export default function RequestDetailScreen({ route }) {
     }
     const nav = useNavigation();
     const request = route.params.request;
-    // const { setListOrderCancel, setListOrderUnPaid } = useContext(AuthContext);
+    const { setListRequestNoAccept, setListRequestCancel} = useContext(AuthContext);
     const [modalVisible, setModalVisible] = useState(false);
+
+    const handleCancelRequest = async () => {
+        try {
+            const res = await axios.put(`${Url}/request/cancelRequest/` + request._id);
+            if (res.data) {
+                getRequestNoAccept();
+                getRequestcancel();
+                nav.goBack();
+                Toast.show('Thành công',
+                    {
+                        backgroundColor: '#3B404F',
+                        textColor: '#ffffff',
+                        opacity: 1,
+                        duration: Toast.durations.SHORT,
+                        position: Toast.positions.CENTER,
+                        animation: true,
+                    })
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getRequestNoAccept = async () => {
+        try {
+            const result = await axios.get(`${Url}/request/getRequestByTeacherNoAccept`);
+            if (result.data) {
+                setListRequestNoAccept(result.data)
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    const getRequestcancel = async () => {
+        try {
+            const result = await axios.get(`${Url}/request/getRequestByTeacherCancel`);
+            if (result.data) {
+                setListRequestCancel(result.data)
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
         // console.log(order);
     }, [])
@@ -31,10 +78,13 @@ export default function RequestDetailScreen({ route }) {
                 {request.Status ?
                     <Text className="text-white text-base font-medium">
                         Yêu cầu đã được xử lý
-                    </Text> :
-                    <Text className="text-white text-base font-medium">
-                        Yêu cầu chưa được xử lý
-                    </Text>}
+                    </Text> : request.IsCancel ?
+                        <Text className="text-white text-base font-medium">
+                            Yêu cầu đã được hủy bỡi bạn
+                        </Text> :
+                        <Text className="text-white text-base font-medium">
+                            Yêu cầu chưa được xử lý
+                        </Text>}
             </View>
             <View>
                 <View className="mt-5">
@@ -73,8 +123,13 @@ export default function RequestDetailScreen({ route }) {
                         <Text className='text-white text-base'>Thời gian xử lý</Text>
                         <Text className='text-gray-400 text-base'>{moment(request.updatedAt).format('lll')}</Text>
                     </View> : <></>}
+                {request.IsCancel ?
+                    <View className='flex-row justify-between mt-1'>
+                        <Text className='text-white text-base'>Thời gian hủy</Text>
+                        <Text className='text-gray-400 text-base'>{moment(request.updatedAt).format('lll')}</Text>
+                    </View> : <></>}
 
-                {!request.Status ?
+                {!request.Status && !request.IsCancel ?
                     <View className='flex-row justify-end'>
                         <TouchableOpacity className="bg-red-600 requests-center  mt-3 p-2 rounded-md"
                             onPress={() => setModalVisible(true)}>
@@ -89,11 +144,11 @@ export default function RequestDetailScreen({ route }) {
                 onRequestClose={() => setModalVisible(false)}
                 animationType='fade'
                 hardwareAccelerated>
-                <View className="flex-1 justify-center requests-center bg-[#00000099]" >
+                <View className="flex-1 justify-center items-center bg-[#00000099]" >
                     <View className="bg-[#1B212D] w-[90%] rounded-lg">
                         <Text className=" p-3 text-lg font-bold text-white">Thông báo</Text>
                         <View>
-                            <View className="mt-2 ml-5 requests-start">
+                            <View className="mt-2 ml-5 items-start">
                                 <Text className="text-base text-white">Bạn có chắc chắn hủy đơn hàng?</Text>
                             </View>
                             <View className="flex-row p-5 justify-end">
@@ -105,7 +160,7 @@ export default function RequestDetailScreen({ route }) {
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        handleCancelOrder();
+                                        handleCancelRequest();
                                     }}>
                                     <Text className="text-base text-[#1273FE] ml-5"
                                     >Hủy</Text>

@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
 const User = require("../models/userModel");
 const OrderDetail = require("../models/orderDetailModel");
+const { count } = require("../models/orderModel");
 
 const createOrder = asyncHandler(async (req, res) => {
   try {
@@ -72,7 +73,7 @@ const paymentSuccessOrder = asyncHandler(async (req, res) => {
         const amount = d.Price - (d.Price * 10) / 100;
         const afterBalance = Number(user.Balance) + Number(amount);
         await User.findByIdAndUpdate(d.Teacher, { $set: { Balance: afterBalance } });
-      }      
+      }
       res.status(200).json(order);
     }
     else {
@@ -94,6 +95,28 @@ const getAllOrder = asyncHandler(async (req, res) => {
     : {};
   const orders = await Order.find(keyword).populate('BuyerId').populate('Detail').populate('PayMentType');
   res.send(orders);
+});
+
+const getAllOrderSuccess = asyncHandler(async (req, res) => {
+  await Order.find({ IsPayment: { $eq: true } })
+  .populate("Detail")
+  .sort({ createdAt: 'desc' })
+  .select('Detail updatedAt -_id')
+  .then((data) => {
+    let list=[];
+    var result = data;
+    data.forEach((order)=>{
+      const time = order.updatedAt;
+      order.Detail.forEach(detail=>{
+        list.push({course:detail, date:time})
+      })
+    }
+    )
+    res.json(list);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
 });
 
 const getOrderSuccess = asyncHandler(async (req, res) => {
@@ -175,4 +198,5 @@ module.exports = {
   getOrderUnPaid,
   getOrderCancel,
   cancelOrder,
+  getAllOrderSuccess,
 }
