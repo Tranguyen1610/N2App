@@ -4,16 +4,17 @@ import axios from 'axios';
 import { Url } from '../contexts/constants'
 import Order from '../components/Order';
 import { AuthContext } from '../contexts/AuthContext';
+import Request from '../components/Request';
 
 export default function RequestAcceptScreen() {
-  // const { userInfo } = useContext(AuthContext);
-  const {listOrderSuccess, setListOrderSuccess} = useContext(AuthContext);
+  const { listRequestAccept, setListRequestAccept } = useContext(AuthContext);
+
   const [isLoading, setIsLoading] = useState(false);
-  const getOrderSuccess = async () => {
+  const getRequestAccept = async () => {
     try {
-      const result = await axios.get(`${Url}/order/getOrderSuccess`);
+      const result = await axios.get(`${Url}/request/getRequestByTeacherAccept`);
       if (result.data) {
-        setListOrderSuccess(result.data)
+        setListRequestAccept(result.data)
       }
     }
     catch (err) {
@@ -24,7 +25,7 @@ export default function RequestAcceptScreen() {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 500)
-    getOrderSuccess();
+    getRequestAccept();
   }, [])
 
   return (
@@ -35,17 +36,17 @@ export default function RequestAcceptScreen() {
           <ActivityIndicator size={'large'} color={'#1273FE'} />
         </View> :
         <View>
-          {listOrderSuccess.length == 0 ?
+          {listRequestAccept.length == 0 ?
             <Text className="text-gray-300 text-xl text-center mt-20">
-              Chưa có đơn hàng</Text> : <></>}
+              Chưa có yêu cầu</Text> : <></>}
           <FlatList
             className=" px-2"
             showsHorizontalScrollIndicator={false}
-            data={listOrderSuccess}
+            data={listRequestAccept}
             renderItem={({ item }) =>
-              <Order
+              <Request
                 item={item}
-                setIsLoading={setIsLoading}
+                // setIsLoading={setIsLoading}
               />
             }
           />

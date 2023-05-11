@@ -23,6 +23,9 @@ import EditCourseScreen from '../screens/EditCourseScreen';
 import ListVideoScreen from '../screens/ListVideoScreen';
 import RequestScreen from '../screens/RequestScreen';
 import CreateRequest from '../screens/CreateRequest';
+import RequestDetailScreen from '../screens/RequestDetailScreen';
+import TransactionHistoryScreen from '../screens/TransactionHistoryScreen';
+import TeacherNavigator from './TeacherNavigator';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -36,6 +39,7 @@ const RootNavigator = () => {
     >
       <Stack.Screen name="SwitchNavigator" component={SwitchNavigator} />
       <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+      <Stack.Screen name="TeacherNavigator" component={TeacherNavigator} />
       <Stack.Screen name="SwitchStudent" component={SwitchStudent} />
       <Stack.Screen name="SwitchTeacher" component={SwitchTeacher} />
       <Stack.Screen
@@ -153,6 +157,16 @@ const RootNavigator = () => {
           title: 'Yêu cầu'
         }} />
       <Stack.Screen
+        name="RequestDetailScreen"
+        component={RequestDetailScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Chi tiết yêu cầu'
+        }} />
+      <Stack.Screen
         name="OrderDetailScreen"
         component={OrderDetailScreen}
         options={{
@@ -210,7 +224,17 @@ const RootNavigator = () => {
           headerShown: true,
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
-          title: 'Danh sách  video'
+          title: 'Danh sách video'
+        }} />
+      <Stack.Screen
+        name="TransactionHistoryScreen"
+        component={TransactionHistoryScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Lịch sử giao dịch'
         }} />
 
     </Stack.Navigator>

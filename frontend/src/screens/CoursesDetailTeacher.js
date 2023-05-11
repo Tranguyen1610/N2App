@@ -96,7 +96,7 @@ export default function CoursesDetailTeacher({ route }) {
                 <View className="flex-1">
                     <ScrollView className="mx-5"
                         showsVerticalScrollIndicator={false}
-                        style={{marginBottom: !isSale? 70:20 }}>
+                        style={{ marginBottom: !isSale ? 70 : 20 }}>
                         <TouchableOpacity
                             onPress={() =>
                                 nav.navigate("VideoPreviewScreen", { link: course.Video })
@@ -157,12 +157,12 @@ export default function CoursesDetailTeacher({ route }) {
                                 <Text className="text-white font-semibold text-xl ml-3">Chỉnh sửa</Text>
                             </TouchableOpacity>
                             <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12 flex-row"
-                            // onPress={() => handleOrder()}
+                                onPress={() => nav.navigate('CreateRequest', { type: "buycourse",course:course._id })}
                             >
                                 <MaterialCommunityIcons name="briefcase-upload-outline" size={24} color="white" />
                                 <Text className="text-white font-semibold text-xl ml-3">Đăng bán</Text>
                             </TouchableOpacity>
-                        </View>:<></>}
+                        </View> : <></>}
                 </View>}
         </SafeAreaView>
     )

@@ -92,6 +92,21 @@ const allCourses = asyncHandler(async (req, res) => {
   res.send(courses);
 });
 
+const allCoursesOnSale = asyncHandler(async(req,res)=>{
+  await Course.find({ OnSale : true })
+  .populate("Teacher", "-Password")
+  .populate("Type")
+  .populate("ListVideo")
+  .populate("Comment")
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+})
+
 const getInfoCourse = asyncHandler(async (req, res) => {
   try {
     const course = await Course.findById(req.params.id).populate("Type").populate("ListVideo").populate("Teacher")
@@ -165,7 +180,7 @@ const getVideoOfCourse = asyncHandler(async(req,res)=>{
   }
 })
 const getCourseofType = asyncHandler(async(req,res)=>{
-  await Course.find({ Type: req.params.typeId }).populate("Type")
+  await Course.find({ Type: req.params.typeId, OnSale : true }).populate("Type")
   .then((data) => {
     var result = data;
     res.json(result);
@@ -245,4 +260,5 @@ module.exports = {
   getCourseUnFinishOfTeacher,
   getCourseofTeacherNotSale,
   CheckCourse,
+  allCoursesOnSale,
 };

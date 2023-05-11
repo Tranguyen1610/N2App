@@ -15,7 +15,7 @@ const addRequest = asyncHandler(async (req, res) => {
     Sender: req.userId,
     Course: req.body.Course,
     Content: req.body.Content,
-    Amount : req.body.Amount,
+    Amount: req.body.Amount,
   });
   if (request) {
 
@@ -23,7 +23,7 @@ const addRequest = asyncHandler(async (req, res) => {
       _id: request._id,
       Course: request.Course,
       Content: request.Content,
-      Amount :request.Amount,
+      Amount: request.Amount,
     });
   } else {
     res.status(400);
@@ -32,7 +32,7 @@ const addRequest = asyncHandler(async (req, res) => {
 });
 
 const allRequest = asyncHandler(async (req, res) => {
-  await Request.find().populate("Sender").populate("Course").populate("Content")
+  await Request.find().populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -43,7 +43,43 @@ const allRequest = asyncHandler(async (req, res) => {
 });
 
 const getRequestByTeacher = asyncHandler(async (req, res) => {
-  await Request.find({ Sender: req.userId }).populate("Sender").populate("Course").populate("Content")
+  await Request.find({ Sender: req.userId }).populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .then((data) => {
+      var result = data;
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message || error);
+    });
+})
+
+const getRequestByTeacherAccept = asyncHandler(async (req, res) => {
+  await Request.find({ Sender: req.userId, Status: true, IsCancel: { $ne: true } })
+    .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .then((data) => {
+      var result = data;
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message || error);
+    });
+})
+
+const getRequestByTeacherCancel = asyncHandler(async (req, res) => {
+  await Request.find({ Sender: req.userId, IsCancel: { $eq: true } })
+    .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .then((data) => {
+      var result = data;
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message || error);
+    });
+})
+
+const getRequestByTeacherNoAccept = asyncHandler(async (req, res) => {
+  await Request.find({ Sender: req.userId, Status: false, IsCancel: { $ne: true } })
+    .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -57,24 +93,26 @@ const acceptRequest = asyncHandler(async (req, res) => {
   try {
     const request = await Request.findByIdAndUpdate(
       req.params.id,
-      { Status: true ,
-        Result:1},
+      {
+        Status: true,
+        Result: 1
+      },
       { new: true }).populate("Sender").populate("Content").populate("Course")
-      console.log("request",request);
+    console.log("request", request);
     if (request) {
       if (request.Content.Key === "buycourse") {
         const course = await Course.findByIdAndUpdate(
           request.Course._id,
           {
-            $set:{OnSale: true},
+            $set: { OnSale: true },
           },
           { new: true }
         );
       }
-      if (request.Content.Key === "withdrawmoney"){
-        const user=await User.findById(request.Sender._id);
+      if (request.Content.Key === "withdrawmoney") {
+        const user = await User.findById(request.Sender._id);
         const afterBalance = Number(user.Balance) - Number(request.Amount);
-        await User.findByIdAndUpdate(request.Sender._id,{$set:{Balance:afterBalance}},{new:true})
+        await User.findByIdAndUpdate(request.Sender._id, { $set: { Balance: afterBalance } }, { new: true })
       }
       res.status(200).json(request);
     }
@@ -90,11 +128,30 @@ const denyRequest = asyncHandler(async (req, res) => {
   try {
     const request = await Request.findByIdAndUpdate(
       req.params.id,
-      { Status: true ,
-        Result:0,
-        Note:req.body.Note},
+      {
+        Status: true,
+        Result: 0,
+        Note: req.body.Note
+      },
       { new: true }).populate("Sender").populate("Content").populate("Course")
-      console.log("request",request);
+    console.log("request", request);
+    if (request) {
+      res.status(200).json(request);
+    }
+    else {
+      return res.status(404).send('Request not found');
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
+const cancelRequest = asyncHandler(async (req, res) => {
+  try {
+    const request = await Request.findByIdAndUpdate(
+      req.params.id,
+      { IsCancel: true },
+      { new: true });
     if (request) {
       res.status(200).json(request);
     }
@@ -112,4 +169,8 @@ module.exports = {
   getRequestByTeacher,
   acceptRequest,
   denyRequest,
+  getRequestByTeacherAccept,
+  getRequestByTeacherNoAccept,
+  cancelRequest,
+  getRequestByTeacherCancel,
 }

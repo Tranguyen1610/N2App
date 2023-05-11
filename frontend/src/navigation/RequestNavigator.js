@@ -6,6 +6,7 @@ import OrderUnpaidScreen from '../screens/OrderUnpaidScreen'
 import OrderCancelScreen from '../screens/OrderCancelScreen';
 import RequestAcceptScreen from '../screens/RequestAcceptScreen';
 import RequestNoProcessScreen from '../screens/RequestNoProcessScreen';
+import RequestCancelScreen from '../screens/RequestCancelScreen';
 
 export default function RequestNavigator() {
     return (
@@ -26,6 +27,12 @@ export default function RequestNavigator() {
                 component={RequestNoProcessScreen}
                 options={() => ({
                     tabBarLabel: 'Chưa xử lý',
+                })} />
+            <Tab.Screen
+                name='RequestCancelScreen'
+                component={RequestCancelScreen}
+                options={() => ({
+                    tabBarLabel: 'Đã hủy',
                 })} />
         </Tab.Navigator>
     )

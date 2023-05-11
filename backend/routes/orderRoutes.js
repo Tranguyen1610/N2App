@@ -1,10 +1,11 @@
 const express = require("express");
 const { protect } = require("../middlewares/authMiddleware");
-const { getAllOrder, createOrder, deleteOrder, paymentSuccessOrder, getOrderSuccess, getOrderUnPaid, getOrderCancel, cancelOrder } = require("../controllers/orderControllers");
+const { getAllOrder, createOrder, deleteOrder, paymentSuccessOrder, getOrderSuccess, getOrderUnPaid, getOrderCancel, cancelOrder, getAllOrderSuccess } = require("../controllers/orderControllers");
 
 const router = express.Router();
 
 router.route("/").get(protect,getAllOrder);
+router.route("/allSuccess").get(protect,getAllOrderSuccess);
 router.route("/getOrderSuccess").get(protect,getOrderSuccess);
 router.route("/getOrderUnPaid").get(protect,getOrderUnPaid);
 router.route("/getOrderCancel").get(protect,getOrderCancel);
