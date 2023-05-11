@@ -31,15 +31,24 @@ export const DetailCourseModal = (
             
         }
     }
+    const denyRequest = async(id)=>{
+        try {
+            const res = await axios.put(`/api/request/denyRequest/${id}`)
+            if (res)
+            setIsHidden(false)
+            window.location.reload(false);
+        } catch (err) {
+            
+        }
+    }
     return(
         <div>
         <Modal
-        okText={"Duyệt khóa học"}
-        onOk={()=>acceptRequest(idRequest)}
-        okButtonProps={{
-            hidden:selectedOrder?.OnSale==true?true:false
-        }}
+        cancelText={"Thoát"}
         onCancel={onClose}
+        okButtonProps={{
+            hidden:true
+        }}
         open={visible}
         title={
             <>
@@ -141,8 +150,31 @@ export const DetailCourseModal = (
           ></Column> */}
         </Table>
       </Spin>
+      <div style={{
+            display:"flex",
+            justifyContent:"flex-end",
+            padding:10
+         }}>
+            <Button
+            style={{marginRight:5,backgroundColor:"#1677ff",color:"#FFF"}}
+            ghost
+            hidden={selectedOrder?.OnSale==true?true:false}
+            onClick={() => acceptRequest(idRequest)}
+          >
+            Duyệt khóa học
+          </Button>
+          <Button
+                        hidden={selectedOrder?.OnSale==true?true:false}
+
+            ghost
+            type="primary"
+            onClick={() =>denyRequest(idRequest)}
+          >
+            Từ chối
+          </Button>
+            </div>  
             </Col>
-            
+        
         </Modal>
         <VideoModal
       visible={visibleVideo}

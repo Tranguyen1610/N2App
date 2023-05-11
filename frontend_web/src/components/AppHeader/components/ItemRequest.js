@@ -2,9 +2,11 @@ import { Button, Col, Descriptions, List, Typography } from "antd";
 import { DetailCourseModal } from "../../../screen/Course/components/DetailCourseModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { DrawMoneyModal } from "./DrawMoneyModal";
 
 export function ItemRequest(item) {
   const [visible, setVisible] = useState(false);
+  const [DrawVisible, setDrawVisible] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState();
   const [dataSource, setDateSource] = useState([]);
   const [dataIdRequest, setDataIdRequest] = useState();
@@ -12,7 +14,6 @@ export function ItemRequest(item) {
     try {
       const res = await axios.get(`/api/course/getInfoCourse/${id}`);
       console.log("getCourseByIdInRequest", res.data);
-
       // setListCourse(res.data);
       setDateSource(res.data);
       return res.data;
@@ -20,9 +21,28 @@ export function ItemRequest(item) {
       console.log(err);
     }
   };
-  console.log("onSale", item?.Course.OnSale);
+  const acceptRequest = async(id)=>{
+    try {
+        const res = await axios.put(`/api/request/acceptRequest/${id}`)
+        if (res)
+        window.location.reload(false);
+    } catch (err) {
+        
+    }
+}
+const denyRequest = async(id)=>{
+    try {
+        const res = await axios.put(`/api/request/denyRequest/${id}`)
+        if (res)
+        window.location.reload(false);
+    } catch (err) {
+        
+    }
+}
   return (
-    <div>
+    <div style={{
+      marginBottom:10
+    }}>
       <List.Item className="ItemRequest">
         <Col
           style={{
@@ -37,7 +57,9 @@ export function ItemRequest(item) {
               <Descriptions.Item label={"Trạng thái"}>
                 <Typography style={item?.Status==true?{fontWeight:"bold",color:"green"}:{fontWeight:"bold",color:"red"}}>{item?.Status==true?"Đã xử lý":"Chưa xử lý"}</Typography>
               </Descriptions.Item>
-          
+              <Descriptions.Item label={"Kết quả"}>
+                <Typography style={item?.Result==1?{fontWeight:"bold",color:"green"}:item?.Result==0?{fontWeight:"bold",color:"red"}:{fontWeight:"bold",color:"gray"}}>{item?.Result==1?"Được phê duyệt":item?.Result==0?"Từ chối":"Chờ phê duyệt"}</Typography>
+              </Descriptions.Item>
             <Descriptions.Item label={"Người gửi"}>
               <Typography>{item?.Sender?.Name}</Typography>
             </Descriptions.Item>
@@ -45,6 +67,7 @@ export function ItemRequest(item) {
               <Typography>{item?.createdAt}</Typography>
             </Descriptions.Item>
           </Descriptions>
+          {item?.Content?.Key=="buycourse"?
           <Button
             block
             ghost
@@ -57,6 +80,44 @@ export function ItemRequest(item) {
           >
             Chi tiết
           </Button>
+          :item?.Content?.Key=="withdrawmoney"&&item?.Status==false?(
+            <div style={{display:"flex"}}>
+          <Button
+            block
+            ghost
+            type="primary"
+            onClick={() => {
+              setSelectedCourse(getCourseById(item?.Course?._id));
+              setVisible(true);
+              setDataIdRequest(item?._id);
+            }}
+          >
+            Duyệt
+          </Button>
+          <Button
+            style={{paddingLeft:5,paddingRight:5}}
+            block
+            ghost
+            type="primary"
+            onClick={() => {
+              denyRequest(item?._id)
+            }}
+          >
+            Từ chối
+          </Button>
+          <Button
+            block
+            ghost
+            type="primary"
+            onClick={() => {
+              acceptRequest(item?._id)
+            }}
+          >
+            Chi tiết
+          </Button>
+          </div>
+          )
+          :null}
         </Col>
       </List.Item>
       <DetailCourseModal
@@ -66,6 +127,12 @@ export function ItemRequest(item) {
         }}
         selectedOrder={dataSource}
         idRequest={dataIdRequest}
+      />
+      <DrawMoneyModal
+      DrawVisible={DrawVisible}
+      onClose={()=>{
+        setDrawVisible(false)
+      }}
       />
     </div>
   );
