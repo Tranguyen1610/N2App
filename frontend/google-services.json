@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1092431594513",
+    "project_id": "n2app-385716",
+    "storage_bucket": "n2app-385716.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092431594513:android:c8d8b3fcde4d5b45929db0",
+        "android_client_info": {
+          "package_name": "com.tranguyen1610.n2app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092431594513-5dk7fveo3gumq52nm0vooppspvirfces.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_ScKapFj6XU1r8SDa-UOayEn_0FsIyWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092431594513-5dk7fveo3gumq52nm0vooppspvirfces.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

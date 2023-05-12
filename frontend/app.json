@@ -25,7 +25,8 @@
         "foregroundImage": "./src/image/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.tranguyen1610.n2app"
+      "package": "com.tranguyen1610.n2app",
+      "googleServicesFile":"./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

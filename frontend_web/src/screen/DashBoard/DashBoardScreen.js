@@ -17,8 +17,6 @@ function DashBoardScreen() {
     getAllOrder()
     getAllVideo()
     getAllUser()
-    getTotalStudent()
-    getTotalTeacher()
   },[
     totalCourse,totalOrder,totalStudent,totalTeacher,totalVideo
   ])
@@ -36,22 +34,10 @@ function DashBoardScreen() {
   const getAllUser = async () => {
     try {
       const res = await axios.get(`${Url}/api/user/getAll`);
-      getTotalStudent(res.data)
-      getTotalTeacher(res.data)
       setDataUser(res.data)
     } catch (err) {
       console.log(err);
     }
-  }
-  const getTotalStudent =(data)=>{
-    const temp = dataUser.filter((item)=>item?.IsTeacher==="STUDENT")
-    console.log("totalStudent",temp.length);
-    setTotalStudent(temp.length)
-  }
-  const getTotalTeacher =(data)=>{
-    const temp = dataUser.filter((item)=>item?.IsTeacher!=="STUDENT")
-    console.log("totalTeacher",temp.length);
-    setTotalTeacher(temp.length)
   }
   const getAllVideo = async () => {
     try {
