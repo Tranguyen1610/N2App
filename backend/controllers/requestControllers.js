@@ -55,7 +55,7 @@ const getRequestByTeacher = asyncHandler(async (req, res) => {
 
 const getRequestByTeacherAccept = asyncHandler(async (req, res) => {
   await Request.find({ Sender: req.userId, Status: true, IsCancel: { $ne: true } })
-    .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .populate("Sender").populate("Course").populate("Content").sort({ updatedAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -67,7 +67,7 @@ const getRequestByTeacherAccept = asyncHandler(async (req, res) => {
 
 const getRequestByTeacherCancel = asyncHandler(async (req, res) => {
   await Request.find({ Sender: req.userId, IsCancel: { $eq: true } })
-    .populate("Sender").populate("Course").populate("Content").sort({ createdAt: 'desc' })
+    .populate("Sender").populate("Course").populate("Content").sort({ updatedAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -112,7 +112,20 @@ const acceptRequest = asyncHandler(async (req, res) => {
       if (request.Content.Key === "withdrawmoney") {
         const user = await User.findById(request.Sender._id);
         const afterBalance = Number(user.Balance) - Number(request.Amount);
-        await User.findByIdAndUpdate(request.Sender._id, { $set: { Balance: afterBalance } }, { new: true })
+        await User.findByIdAndUpdate(
+          request.Sender._id,
+          {
+            $set: { Balance: afterBalance },
+            $addToSet: {
+              HistoryMCA: {
+                Amount: user.Balance,
+                AmountAfter: afterBalance,
+                Description: `Trừ tiền từ yêu cầu rút tiền: ${request._id}`,
+                IsAdd: false,
+              }
+            },
+          },
+            { new: true })
       }
       res.status(200).json(request);
     }

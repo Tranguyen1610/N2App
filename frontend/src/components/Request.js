@@ -30,11 +30,11 @@ export default function Request({ item }) {
                     <View className="mt-2">
                         <Text className="text-white text-base">Số tiền:    {formatPrice(item.Amount)}</Text>
                     </View> : <></>}
-            {item.Status?
+            {item.Status && !item.isCancel?
             <View className="flex-row justify-end mt-2">
                 <Text className="text-white text-right text-base">Trạng thái: </Text>
                 <Text className="text-[#1273FE] text-right text-base font-medium">
-                    {item.Result == 0 ? "Chấp nhận" : "Từ chối"}
+                    {item.Result == 1 ? "Chấp nhận" : "Từ chối"}
                 </Text>
             </View>:
             <View>

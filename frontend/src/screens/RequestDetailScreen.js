@@ -101,7 +101,7 @@ export default function RequestDetailScreen({ route }) {
                     <View className="flex-row mt-2">
                         <Text className="text-white text-right text-base">Trạng thái: </Text>
                         <Text className="text-[#1273FE] text-right text-base font-medium">
-                            {request.Result == 0 ? "Chấp nhận" : "Từ chối"}
+                            {request.Result == 1 ? "Chấp nhận" : "Từ chối"}
                         </Text>
                     </View> :
                     <View>

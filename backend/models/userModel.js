@@ -64,6 +64,15 @@ const userSchema = mongoose.Schema(
       trim: true,
       default:0,
     },
+    HistoryMCA: [
+      {
+        Date: { type: Date, default: Date.now },
+        Amount: { type: Number, default: 0 },
+        AmountAfter: { type: Number, default: 0 },
+        Description: { type: String, default: '' },
+        IsAdd: { type: Boolean}
+      }
+    ]
 
   },
   {
