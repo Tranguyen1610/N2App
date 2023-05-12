@@ -89,13 +89,15 @@ const denyRequest = async(id)=>{
               setVisible(true);
               setDataIdRequest(item?._id);
               setDataIdCancel(item?.IsCancel);
-              console.log("dataIsCancel",item?.IsCancel);
+              console.log("dataIsCancel",item);
             }}
           >
             Chi tiết
           </Button>
-          :item?.Content?.Key=="withdrawmoney"&&item?.Status==true?(
+          :item?.Content?.Key=="withdrawmoney"?(
             <div style={{display:"flex"}}>
+            {item?.Status==false?(
+              <>
           <Button
             block
             ghost
@@ -116,7 +118,7 @@ const denyRequest = async(id)=>{
             }}
           >
             Từ chối
-          </Button>
+          </Button></>):null}
           <Button
             block
             ghost

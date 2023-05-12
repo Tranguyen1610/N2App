@@ -3,6 +3,7 @@ import { Card, Space, Statistic, Typography } from 'antd'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
+import { Url } from '../../contexts/constants'
 
 function DashBoardScreen() {
   const [totalCourse,setTotalCourse]=useState()
@@ -34,7 +35,7 @@ function DashBoardScreen() {
   }
   const getAllUser = async () => {
     try {
-      const res = await axios.get(`/api/user/getAll`);
+      const res = await axios.get(`${Url}/api/user/getAll`);
       getTotalStudent(res.data)
       getTotalTeacher(res.data)
       setDataUser(res.data)
@@ -54,7 +55,7 @@ function DashBoardScreen() {
   }
   const getAllVideo = async () => {
     try {
-      const res = await axios.get(`/api/video/`);
+      const res = await axios.get(`${Url}/api/video/`);
       console.log("totalVideo",res.data.length);
       setTotalVideo(res.data.length)
     } catch (err) {
@@ -63,7 +64,7 @@ function DashBoardScreen() {
   }
   const getCourse = async () => {
     try {
-      const res = await axios.get(`/api/course/`);
+      const res = await axios.get(`${Url}/api/course/`);
       // console.log(res.data);
       // setListCourse(res.data);
       console.log("totalCourse",res.data.length);
@@ -74,7 +75,7 @@ function DashBoardScreen() {
   }
   const getAllOrder = async () => {
     try {
-      const res = await axios.get(`/api/order`);
+      const res = await axios.get(`${Url}/api/order`);
       // console.log(res.data);
       // setListCourse(res.data);
       console.log("totalOrder",res.data.length);

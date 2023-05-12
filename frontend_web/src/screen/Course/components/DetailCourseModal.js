@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { VideoModal } from "./VideoModal";
 import Link from "antd/es/typography/Link";
 import axios from "axios";
+import { Url } from "../../../contexts/constants";
 
 const {Column}=Table;
 
@@ -24,7 +25,7 @@ export const DetailCourseModal = (
         
     const acceptRequest = async(id)=>{
         try {
-            const res = await axios.put(`/api/request/acceptRequest/${id}`)
+            const res = await axios.put(`${Url}/api/request/acceptRequest/${id}`)
             if (res)
             setIsHidden(false)
             window.location.reload(false);

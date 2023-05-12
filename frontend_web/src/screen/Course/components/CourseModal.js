@@ -6,6 +6,7 @@ import {
   InputNumber,
   InputNumber as InputNumber2,
 } from "../../../components/Input/InputNumber";
+import { Url } from "../../../contexts/constants";
 export const CourseModal = ({
   selectedOrder,
   visible,
@@ -19,7 +20,7 @@ export const CourseModal = ({
   }, [visible]);
   const getAllType = async () => {
     try {
-      const res = await axios(`/api/type`);
+      const res = await axios(`${Url}/api/type`);
       setDataType(res.data);
       console.log("type", res.data);
     } catch (err) {

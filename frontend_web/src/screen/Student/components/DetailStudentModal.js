@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import Link from "antd/es/typography/Link";
 import { DetailCourseModal } from "../../Course/components/DetailCourseModal";
 import axios from "axios";
+import { Url } from "../../../contexts/constants";
 
 const { Column } = Table;
 
@@ -30,7 +31,7 @@ export const DetailStudentModal = ({
   });
   const getCourseById = async (id) => {
     try {
-      const res = await axios.get(`/api/course/getInfoCourse/${id}`);
+      const res = await axios.get(`${Url}/api/course/getInfoCourse/${id}`);
       console.log("getCourseById", res.data);
       // setListCourse(res.data);
       setDateSource(res.data);

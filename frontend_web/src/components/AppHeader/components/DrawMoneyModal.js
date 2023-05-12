@@ -1,4 +1,4 @@
-import { Col, Descriptions, Modal, Space } from "antd"
+import { Button, Col, Descriptions, Modal, Space } from "antd"
 import { useEffect } from "react"
 
 
@@ -15,6 +15,10 @@ export const DrawMoneyModal = (
     return(
         <div>
             <Modal
+            okButtonProps={
+                {hidden:true}
+            }
+            cancelButtonProps={{hidden:true}}
             open={DrawVisible}
             onCancel={onClose}
             cancelText="Thoát"
@@ -28,11 +32,34 @@ export const DrawMoneyModal = (
                 <Descriptions.Item label="Email">{selectedDraw?.Sender?.Email}</Descriptions.Item>
             </Descriptions>
             <Descriptions column={1}>
-                <Descriptions.Item label="Số tiền rút">{selectedDraw?.Amount} đ</Descriptions.Item>
-                <Descriptions.Item label="Số tiền trước khi rút">{selectedDraw?.Sender?.Balance} đ</Descriptions.Item>
-                <Descriptions.Item label="Số tiền sau khi rút">{selectedDraw?.Sender?.Balance-selectedDraw?.Amount} đ</Descriptions.Item>
+                <Descriptions.Item label="Số tiền rút">{selectedDraw?.Amount} vnd</Descriptions.Item>
+                <Descriptions.Item label="Số tiền trước khi rút">{selectedDraw?.Sender?.Balance} vnd</Descriptions.Item>
+                <Descriptions.Item label="Số tiền sau khi rút">{selectedDraw?.Sender?.Balance-selectedDraw?.Amount} vnd</Descriptions.Item>
             </Descriptions>
             </div>
+            <div style={{display:"flex",justifyContent:"flex-end"}}>
+            <Button
+            disabled={selectedDraw?.Status==true?true:false}
+            ghost
+            style={{marginRight:5,backgroundColor:"#1677ff",color:"#FFF"}}
+            onClick={() => {
+            //   acceptRequest(item?._id)
+            }}
+          >
+            Duyệt
+          </Button>
+          <Button
+             disabled={selectedDraw?.Status==true?true:false}
+            style={{paddingLeft:5,paddingRight:5}}
+            ghost
+            type="primary"
+            onClick={() => {
+            //   denyRequest(item?._id)
+            }}
+          >
+            Từ chối
+          </Button>
+          </div>
             </Space>
             </Modal>
         </div>

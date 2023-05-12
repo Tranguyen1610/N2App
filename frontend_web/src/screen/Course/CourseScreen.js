@@ -22,7 +22,7 @@ function CourseScreen() {
   },[])
   const getCourse = async () => {
     try {
-      const res = await axios.get(`/api/course/`);
+      const res = await axios.get(`${Url}/api/course/`);
       // console.log(res.data);
       // setListCourse(res.data);
       setDateSource(res.data)

@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { VideoModal } from '../Course/components/VideoModal'
 import { PlusOutlined } from '@ant-design/icons'
+import { Url } from '../../contexts/constants'
 
 const {Column}= Table
 const VideoScreen = () => {
@@ -18,7 +19,7 @@ const VideoScreen = () => {
   },[])
   const getAllVideo = async () => {
     try {
-      const res = await axios.get(`/api/video/`);
+      const res = await axios.get(`${Url}/api/video/`);
       console.log("video data",res.data);
       // setListCourse(res.data);
       setDateSource(res.data)
