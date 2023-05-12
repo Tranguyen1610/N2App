@@ -1,5 +1,5 @@
-import { ActivityIndicator, Dimensions, Image, Modal, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { ActivityIndicator, Dimensions, Image, Modal, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle';
 import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,6 +23,7 @@ export default function CoursesDetailTeacher({ route }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isSale, setIsSale] = useState(false);
     const nav = useNavigation();
+    const [refreshing, setRefreshing] = React.useState(false);
 
     const formatNumStart = (num) => {
         if (num != 0)
@@ -85,6 +86,17 @@ export default function CoursesDetailTeacher({ route }) {
         getVideos();
         checkIsSale();
     }, [])
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            getComments();
+            getVideos();
+            checkIsSale();
+            setRefreshing(false);
+        }, 1000);
+    }, []);
+
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1">
             <StatusBar backgroundColor={"#0A0909"} />
@@ -96,6 +108,9 @@ export default function CoursesDetailTeacher({ route }) {
                 <View className="flex-1">
                     <ScrollView className="mx-5"
                         showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
                         style={{ marginBottom: !isSale ? 70 : 20 }}>
                         <TouchableOpacity
                             onPress={() =>
@@ -157,7 +172,7 @@ export default function CoursesDetailTeacher({ route }) {
                                 <Text className="text-white font-semibold text-xl ml-3">Chỉnh sửa</Text>
                             </TouchableOpacity>
                             <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12 flex-row"
-                                onPress={() => nav.navigate('CreateRequest', { type: "buycourse",course:course._id })}
+                                onPress={() => nav.navigate('CreateRequest', { type: "buycourse", course: course._id })}
                             >
                                 <MaterialCommunityIcons name="briefcase-upload-outline" size={24} color="white" />
                                 <Text className="text-white font-semibold text-xl ml-3">Đăng bán</Text>

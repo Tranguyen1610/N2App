@@ -1,5 +1,5 @@
-import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity, StatusBar, ActivityIndicator, RefreshControl } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../contexts/AuthContext'
 import CoursesPropose from '../components/CoursesPropose'
@@ -58,19 +58,34 @@ export default function FeaturedScreen({ navigation }) {
     getCourse();
     getFavoriteType();
   }, [userInfo])
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      getType();
+      getCourse();
+      getFavoriteType();
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   if (isLoading)
     return (
       <SafeAreaView className="bg-[#0A0909] flex-1 justify-center items-center">
-        <StatusBar backgroundColor={"#0A0909"}/>
+        <StatusBar backgroundColor={"#0A0909"} />
         <ActivityIndicator size={'large'} color={'#1273FE'} />
       </SafeAreaView>
     )
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 p-5">
-      <StatusBar backgroundColor={"#0A0909"}/>
+      <StatusBar backgroundColor={"#0A0909"} />
       <HeaderTitle name='FeaturedScreen' title='' isBack={false} />
       <ScrollView className=""
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View className="flex-row items-center">
           <Image source={require("../image/user_logo.png")}
             className="w-10 h-10" />

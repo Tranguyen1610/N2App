@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, FlatList, ScrollView, Image, ActivityIndicator, StatusBar } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, FlatList, ScrollView, Image, ActivityIndicator, StatusBar, RefreshControl } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Courses } from '../contexts/Data'
 import CoursesPropose from '../components/CoursesPropose'
@@ -10,11 +10,12 @@ import { Url } from '../contexts/constants'
 
 export default function CoursesTeacherScreen() {
   const nav = useNavigation()
-  const { userInfo, coursesTC, setCoursesTC, coursesTCUF, setCoursesTCUF,coursesTCNS,setCoursesTCNS } = useContext(AuthContext);
+  const { userInfo, coursesTC, setCoursesTC, coursesTCUF, setCoursesTCUF, coursesTCNS, setCoursesTCNS } = useContext(AuthContext);
   const [topFiveCourseTC, setTopFiveCourseTC] = useState([]);
   const [topFiveCourseTCUF, setTopFiveCourseTCUF] = useState([]);
   const [topFiveCourseTCNS, setTopFiveCourseTCNS] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const getCourseTC = async () => {
     let list = [];
@@ -70,6 +71,15 @@ export default function CoursesTeacherScreen() {
     getCourseTCUF();
     getCourseTCNS();
   }, [])
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      getCourseTC();
+      getCourseTCUF();
+      getCourseTCNS();
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   if (isLoading)
     return (
@@ -84,7 +94,10 @@ export default function CoursesTeacherScreen() {
     <SafeAreaView className="flex-1 bg-[#0A0909] p-5">
       <StatusBar backgroundColor={"#0A0909"} />
       <ScrollView className=""
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View className="flex-row items-center mt-10">
           <Image source={require("../image/user_logo.png")}
             className="w-10 h-10" />
@@ -97,7 +110,7 @@ export default function CoursesTeacherScreen() {
             <Text className="text-white p-2 text-base font-semibold text-center">Thêm khóa học</Text>
           </TouchableOpacity>
           <TouchableOpacity className="mr-3 mb-3 rounded-xl bg-[#1273FE] w-[45%]"
-            onPress={()=>{
+            onPress={() => {
               nav.navigate('CreateRequest')
             }}>
             <Text className="text-white p-2 text-base font-semibold text-center">Tạo yêu cầu</Text>

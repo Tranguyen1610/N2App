@@ -75,7 +75,7 @@ export default function AddVideoScreen({ route }) {
       setIsLoadingVideo(false);
     } catch (error) {
       console.log(error);
-      setAlertValue(error)
+      // setAlertValue(strign(error))
       setTimeout(() => setAlertValue(''), 3000)
       setVideo(null);
       setIsLoadingVideo(false);

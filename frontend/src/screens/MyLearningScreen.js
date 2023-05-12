@@ -1,5 +1,5 @@
-import { View, Text, FlatList, ActivityIndicator, StatusBar } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, FlatList, ActivityIndicator, StatusBar, RefreshControl } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import HeaderTitle from '../components/HeaderTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CourseLearning from '../components/CourseLearning'
@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Url } from '../contexts/constants'
 
 export default function MyLearningScreen({ navigation }) {
-  const { userInfo,coursePurchaseds, setCoursePurchaseds } = useContext(AuthContext);
+  const { userInfo, coursePurchaseds, setCoursePurchaseds } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
 
   const getCoursePurchased = async () => {
@@ -27,9 +27,19 @@ export default function MyLearningScreen({ navigation }) {
     setTimeout(() => setIsLoading(false), 500);
     getCoursePurchased();
   }, [])
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      getCoursePurchased();
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">
-      <StatusBar backgroundColor={"#0A0909"}/>
+      <StatusBar backgroundColor={"#0A0909"} />
       <HeaderTitle name={MyLearningScreen} title={'Học tập'} isBack={false} />
       {isLoading ?
         <View className="bg-[#0A0909] flex-1 justify-center items-center">
@@ -40,6 +50,9 @@ export default function MyLearningScreen({ navigation }) {
             <Text className="text-gray-300 text-xl text-center mt-20">
               Chưa có khóa học</Text> : <></>}
           <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             data={coursePurchaseds}

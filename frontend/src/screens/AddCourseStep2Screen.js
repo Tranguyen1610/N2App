@@ -136,7 +136,7 @@ export default function AddCourseStep2Screen({ route }) {
             setIsLoadingVideo(false);
         } catch (error) {
             console.log(error);
-            setAlertValue(error)
+            // setAlertValue(error)
             setTimeout(() => setAlertValue(''), 3000)
             setVideo(null);
             setIsLoadingVideo(false);
