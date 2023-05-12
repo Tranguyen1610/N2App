@@ -87,9 +87,7 @@ const denyRequest = async(id)=>{
             ghost
             type="primary"
             onClick={() => {
-              setSelectedCourse(getCourseById(item?.Course?._id));
-              setVisible(true);
-              setDataIdRequest(item?._id);
+              acceptRequest(item?._id)
             }}
           >
             Duyệt
@@ -110,7 +108,7 @@ const denyRequest = async(id)=>{
             ghost
             type="primary"
             onClick={() => {
-              acceptRequest(item?._id)
+              setDrawVisible(true)
             }}
           >
             Chi tiết

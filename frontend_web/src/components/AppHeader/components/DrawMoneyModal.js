@@ -1,4 +1,5 @@
 import { Modal } from "antd"
+import { useEffect } from "react"
 
 
 export const DrawMoneyModal = (
@@ -8,6 +9,9 @@ export const DrawMoneyModal = (
     selectedDraw,
     }
 )=>{
+    useEffect(()=>{
+        console.log(selectedDraw);
+    })
     return(
         <div>
             <Modal
