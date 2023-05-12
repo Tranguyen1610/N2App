@@ -36,7 +36,7 @@ function CourseScreen() {
   }
   const getStartOfCourse =async(id)=>{
     try{
-      const res = await axios.get(`/api/comment/${id}`)
+      const res = await axios.get(`${Url}/api/comment/${id}`)
       console.log("star",res.data);
       setStar(res.data)
       return res.data;

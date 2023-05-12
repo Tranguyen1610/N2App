@@ -35,7 +35,7 @@ export const DetailCourseModal = (
     }
     const denyRequest = async(id)=>{
         try {
-            const res = await axios.put(`/api/request/denyRequest/${id}`)
+            const res = await axios.put(`${Url}/api/request/denyRequest/${id}`)
             if (res)
             setIsHidden(false)
             window.location.reload(false);
