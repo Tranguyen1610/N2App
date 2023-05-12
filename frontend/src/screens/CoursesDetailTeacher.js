@@ -139,7 +139,7 @@ export default function CoursesDetailTeacher({ route }) {
                                 startingValue={numStarAVG}
                             />
                         </View>
-                        <Text className="text-gray-400 text-sm">({numCmt} xếp hạng) {course.numRating} học viên </Text>
+                        <Text className="text-gray-400 text-sm">({numCmt} xếp hạng)</Text>
                         <View className="flex-row mt-2">
                             <Text className="text-gray-400 text-base"> Tác giả</Text>
                             <Text className="text-[#1273FE] text-base ml-3">{course.Teacher.Name}</Text>
