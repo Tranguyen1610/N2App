@@ -8,6 +8,7 @@ const {Column}=Table;
 
 export const DetailCourseModal = (
     {
+        isCancel,
         idRequest, 
     selectedOrder,
     visible,
@@ -155,23 +156,26 @@ export const DetailCourseModal = (
             justifyContent:"flex-end",
             padding:10
          }}>
+            {idRequest?
             <Button
             style={{marginRight:5,backgroundColor:"#1677ff",color:"#FFF"}}
             ghost
+            disabled={isCancel==true?true:false}
             hidden={selectedOrder?.OnSale==true?true:false}
             onClick={() => acceptRequest(idRequest)}
           >
             Duyệt khóa học
-          </Button>
+          </Button>:null}
+          {idRequest?
           <Button
                         hidden={selectedOrder?.OnSale==true?true:false}
-
+            disabled={isCancel==true?true:false}
             ghost
             type="primary"
             onClick={() =>denyRequest(idRequest)}
           >
             Từ chối
-          </Button>
+          </Button>:null}
             </div>  
             </Col>
         

@@ -33,7 +33,7 @@ function AppHeader() {
     }
   }
   const TotalRequestNoProgress = async(data)=>{
-    const temp  = data.filter((item)=>item?.Status==false)
+    const temp  = data.filter((item)=>item?.Status==false&&item?.IsCancel==false)
     console.log("requet lenght",temp.length);
     setTotalRequestNoProgress(temp.length)
   }
