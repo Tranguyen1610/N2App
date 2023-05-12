@@ -19,6 +19,7 @@ const {
   changePassword,
   authUserGoogle,
   getAmount,
+  getHistoryMCA,
 } = require("../controllers/userControllers");
 const User = require('../models/userModel.js');
 const router = express.Router();
@@ -44,5 +45,6 @@ router.route("/getFavoriteType").get(protect,getFavoriteType);
 router.route("/updateFavoriteType").put(protect,updateFavoriteType);
 router.route("/changePassword").put(protect,changePassword);
 router.route("/amount").get(protect,getAmount);
+router.route("/historyMCA").get(protect,getHistoryMCA);
 
 module.exports = router;

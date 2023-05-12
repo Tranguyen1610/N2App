@@ -18,7 +18,7 @@ export default function AddVideoScreen({ route }) {
   const videoRef = useRef();
   const [alertValue, setAlertValue] = useState("");
   const [key, setKey] = useState(Date.now());
-  const [numVideo,setNumVideo]= useState(0);
+  const [numVideo, setNumVideo] = useState(0);
   const showVideoPicker = async () => {
     // Ask the user for the permission to access the media library 
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -50,7 +50,7 @@ export default function AddVideoScreen({ route }) {
     if (!result.cancelled) {
       // console.log(result);
       handleUploadVideo(result)
-  }
+    }
   }
 
   const handleUploadVideo = async (e) => {
@@ -107,11 +107,11 @@ export default function AddVideoScreen({ route }) {
     };
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     getNumVideoOfCourse()
-  },[])
+  }, [])
 
-  const check = async () => {
+  const check = async (yes) => {
     if (name !== "" && des !== "" && linkVideo !== "") {
       const dataVideo = {
         Name: name,
@@ -139,7 +139,10 @@ export default function AddVideoScreen({ route }) {
               position: Toast.positions.CENTER,
               animation: true,
             })
-          reset();
+          if (yes)
+            reset();
+          else
+            nav.navigate('TeacherNavigator')
         } catch (error) {
           console.log(error);
         }
@@ -155,27 +158,27 @@ export default function AddVideoScreen({ route }) {
   }
 
   const reset = () => {
-    setNumVideo(numVideo+1)
-    setName(`Bài học ${numVideo+2}`)
+    setNumVideo(numVideo + 1)
+    setName(`Bài học ${numVideo + 2}`)
     setDes("")
     setLinkVideo("")
     setVideo(null)
     setKey(Date.now());
   }
-  
-  const getNumVideoOfCourse=async()=>{
+
+  const getNumVideoOfCourse = async () => {
     try {
       const response = await axios.get(`${Url}/course/getVideoOfCourse/${data}`);
       setNumVideo(response.data.ListVideo.length);
-      setName(`Bài học ${response.data.ListVideo.length+1}`)
+      setName(`Bài học ${response.data.ListVideo.length + 1}`)
     }
-    catch (err){
+    catch (err) {
       console.log(err);
     }
   }
   return (
     <View className="flex-1 bg-[#0A0909] p-5">
-      <StatusBar backgroundColor={"#0A0909"}/>
+      <StatusBar backgroundColor={"#0A0909"} />
       <TextInput
         placeholder='Tên'
         placeholderTextColor={'#7F889A'}
@@ -219,15 +222,14 @@ export default function AddVideoScreen({ route }) {
             <TouchableOpacity
               className="justify-center items-center mt-2"
               onPress={() => {
-                check()
-                nav.navigate('TeacherNavigator')
-                }}>
+                check(false)
+              }}>
               <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Hoàn thành</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className="justify-center items-center mt-2"
               onPress={() => {
-                check()
+                check(true)
               }}>
               <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl ml-5">Tiếp tục thêm mới</Text>
             </TouchableOpacity>

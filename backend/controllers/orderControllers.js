@@ -72,7 +72,17 @@ const paymentSuccessOrder = asyncHandler(async (req, res) => {
         const user = await User.findById(d.Teacher);
         const amount = d.Price - (d.Price * 10) / 100;
         const afterBalance = Number(user.Balance) + Number(amount);
-        await User.findByIdAndUpdate(d.Teacher, { $set: { Balance: afterBalance } });
+        await User.findByIdAndUpdate(d.Teacher, {
+          $set: { Balance: afterBalance },
+          $addToSet: {
+            HistoryMCA: {
+              Amount: user.Balance,
+              AmountAfter: afterBalance,
+              Description: `Cộng tiền bán khóa học: ${d.Name}`,
+              IsAdd: true,
+            }
+          },
+        });
       }
       res.status(200).json(order);
     }
@@ -99,24 +109,24 @@ const getAllOrder = asyncHandler(async (req, res) => {
 
 const getAllOrderSuccess = asyncHandler(async (req, res) => {
   await Order.find({ IsPayment: { $eq: true } })
-  .populate("Detail")
-  .sort({ createdAt: 'desc' })
-  .select('Detail updatedAt -_id')
-  .then((data) => {
-    let list=[];
-    var result = data;
-    data.forEach((order)=>{
-      const time = order.updatedAt;
-      order.Detail.forEach(detail=>{
-        list.push({course:detail, date:time})
-      })
-    }
-    )
-    res.json(list);
-  })
-  .catch((error) => {
-    res.status(400).send(error.message || error);
-  });
+    .populate("Detail")
+    .sort({ createdAt: 'desc' })
+    .select('Detail updatedAt -_id')
+    .then((data) => {
+      let list = [];
+      var result = data;
+      data.forEach((order) => {
+        const time = order.updatedAt;
+        order.Detail.forEach(detail => {
+          list.push({ course: detail, date: time })
+        })
+      }
+      )
+      res.json(list);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message || error);
+    });
 });
 
 const getOrderSuccess = asyncHandler(async (req, res) => {
@@ -124,7 +134,7 @@ const getOrderSuccess = asyncHandler(async (req, res) => {
     .populate('Detail')
     .populate('BuyerId')
     .populate('PayMentType')
-    .sort({ createdAt: 'desc' })
+    .sort({ updatedAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);
@@ -154,7 +164,7 @@ const getOrderCancel = asyncHandler(async (req, res) => {
     .populate('BuyerId')
     .populate('Detail')
     .populate('PayMentType')
-    .sort({ createdAt: 'desc' })
+    .sort({ updatedAt: 'desc' })
     .then((data) => {
       var result = data;
       res.json(result);

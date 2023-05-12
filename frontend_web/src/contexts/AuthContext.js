@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 	//Login
 	const login = async userForm => {
 		try {
-			let response = await axios.post(`/api/user/login`, userForm)
+			let response = await axios.post(`https://n2app.onrender.com/api/user/login`, userForm)
 			if (response.data.success) {
 				if (response.data.Role === "admin") {
 					console.log(response.data);
@@ -58,7 +58,7 @@ export const AuthContextProvider = ({ children }) => {
 			console.log('UserToken:', await localStorage.getItem('userToken'));
 		}
 		try {
-			const response = await axios.get(`/api/user`)
+			const response = await axios.get(`https://n2app.onrender.com/api/user`)
 			if (response.data.success) {
 				setUserInfo(response.data.user)
 			}
