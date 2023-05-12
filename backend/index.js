@@ -38,7 +38,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const cors = require("cors");
 
 app.use("/stripe", express.raw({ type: "*/*" }));
-app.use(cors());
+// app.use(cors());
 app.post("/api/payment", async (req, res) => {
     try {
         // Getting data from client
