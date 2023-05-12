@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { VideoModal } from "./VideoModal";
 import Link from "antd/es/typography/Link";
 import axios from "axios";
+import { Url } from "../../../contexts/constants";
 
 const {Column}=Table;
 
 export const DetailCourseModal = (
     {
+        isCancel,
         idRequest, 
     selectedOrder,
     visible,
@@ -23,7 +25,7 @@ export const DetailCourseModal = (
         
     const acceptRequest = async(id)=>{
         try {
-            const res = await axios.put(`/api/request/acceptRequest/${id}`)
+            const res = await axios.put(`${Url}/api/request/acceptRequest/${id}`)
             if (res)
             setIsHidden(false)
             window.location.reload(false);
@@ -155,23 +157,26 @@ export const DetailCourseModal = (
             justifyContent:"flex-end",
             padding:10
          }}>
+            {idRequest?
             <Button
             style={{marginRight:5,backgroundColor:"#1677ff",color:"#FFF"}}
             ghost
+            disabled={isCancel==true?true:false}
             hidden={selectedOrder?.OnSale==true?true:false}
             onClick={() => acceptRequest(idRequest)}
           >
             Duyệt khóa học
-          </Button>
+          </Button>:null}
+          {idRequest?
           <Button
                         hidden={selectedOrder?.OnSale==true?true:false}
-
+            disabled={isCancel==true?true:false}
             ghost
             type="primary"
             onClick={() =>denyRequest(idRequest)}
           >
             Từ chối
-          </Button>
+          </Button>:null}
             </div>  
             </Col>
         

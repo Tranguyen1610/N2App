@@ -2,6 +2,7 @@ import { Avatar, Button, Space, Spin, Table, Typography } from 'antd'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { DetailStudentModal } from './components/DetailStudentModal'
+import { Url } from '../../contexts/constants'
 
 const {Column}=Table
 const StudentScreen = () => {
@@ -15,7 +16,7 @@ const StudentScreen = () => {
   },[])
   const getAllUser = async () => {
     try {
-      const res = await axios.get(`/api/user/getAll`);
+      const res = await axios.get(`${Url}/api/user/getAll`);
       console.log("user data",res.data);
       // setListCourse(res.data);
       setDateSource(res.data)

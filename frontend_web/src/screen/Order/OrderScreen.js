@@ -2,6 +2,7 @@ import { Button, Space, Spin, Table, Typography } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { OrderModal } from './components/OrderModal';
+import { Url } from '../../contexts/constants';
 const {Column}=Table;
 
 const OrderScreen = () => {
@@ -15,7 +16,7 @@ const OrderScreen = () => {
   },[])
   const getAllOrder = async () => {
     try {
-      const res = await axios.get(`/api/order`);
+      const res = await axios.get(`${Url}/api/order`);
       // console.log(res.data);
       // setListCourse(res.data);
       setDateSource(res.data)

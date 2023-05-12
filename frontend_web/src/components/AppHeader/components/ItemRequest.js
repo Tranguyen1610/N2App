@@ -8,8 +8,11 @@ export function ItemRequest(item) {
   const [visible, setVisible] = useState(false);
   const [DrawVisible, setDrawVisible] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState();
+  const [selectedDraw, setSelectedDraw] = useState();
   const [dataSource, setDateSource] = useState([]);
   const [dataIdRequest, setDataIdRequest] = useState();
+  const [dataIdCancel, setDataIdCancel] = useState();
+
   const getCourseById = async (id) => {
     try {
       const res = await axios.get(`/api/course/getInfoCourse/${id}`);
@@ -41,6 +44,7 @@ const denyRequest = async(id)=>{
 }
   return (
     <div style={{
+      backgroundColor:{},
       marginBottom:10
     }}>
       <List.Item className="ItemRequest">
@@ -55,10 +59,18 @@ const denyRequest = async(id)=>{
               </Descriptions.Item>
             
               <Descriptions.Item label={"Trạng thái"}>
-                <Typography style={item?.Status==true?{fontWeight:"bold",color:"green"}:{fontWeight:"bold",color:"red"}}>{item?.Status==true?"Đã xử lý":"Chưa xử lý"}</Typography>
+                {item?.IsCancel==false?
+                <Typography style={item?.Status==true?{fontWeight:"bold",color:"green"}:{fontWeight:"bold",color:"red"}}>
+                  {item?.Status==true?"Đã xử lý":"Chưa xử lý"}
+                </Typography>:
+                <Typography style={item?.IsCancel==true?{fontWeight:"bold",color:"red"}:null}>{item?.IsCancel==true?"Đã hủy":null}</Typography>
+                }
               </Descriptions.Item>
               <Descriptions.Item label={"Kết quả"}>
-                <Typography style={item?.Result==1?{fontWeight:"bold",color:"green"}:item?.Result==0?{fontWeight:"bold",color:"red"}:{fontWeight:"bold",color:"gray"}}>{item?.Result==1?"Được phê duyệt":item?.Result==0?"Từ chối":"Chờ phê duyệt"}</Typography>
+                {item?.IsCancel==false?
+                <Typography style={item?.Result==1?{fontWeight:"bold",color:"green"}:item?.Result==0?{fontWeight:"bold",color:"red"}:{fontWeight:"bold",color:"gray"}}>
+                  {item?.Result==1?"Được phê duyệt":item?.Result==0?"Từ chối":"Chờ phê duyệt"}
+                  </Typography>:null}
               </Descriptions.Item>
             <Descriptions.Item label={"Người gửi"}>
               <Typography>{item?.Sender?.Name}</Typography>
@@ -76,12 +88,16 @@ const denyRequest = async(id)=>{
               setSelectedCourse(getCourseById(item?.Course?._id));
               setVisible(true);
               setDataIdRequest(item?._id);
+              setDataIdCancel(item?.IsCancel);
+              console.log("dataIsCancel",item);
             }}
           >
             Chi tiết
           </Button>
-          :item?.Content?.Key=="withdrawmoney"&&item?.Status==false?(
+          :item?.Content?.Key=="withdrawmoney"?(
             <div style={{display:"flex"}}>
+            {item?.Status==false?(
+              <>
           <Button
             block
             ghost
@@ -102,13 +118,15 @@ const denyRequest = async(id)=>{
             }}
           >
             Từ chối
-          </Button>
+          </Button></>):null}
           <Button
             block
             ghost
             type="primary"
             onClick={() => {
               setDrawVisible(true)
+              setSelectedDraw(item)
+              console.log("dataDraw",item);
             }}
           >
             Chi tiết
@@ -125,9 +143,11 @@ const denyRequest = async(id)=>{
         }}
         selectedOrder={dataSource}
         idRequest={dataIdRequest}
+        isCancel={dataIdCancel}
       />
       <DrawMoneyModal
       DrawVisible={DrawVisible}
+      selectedDraw={selectedDraw}
       onClose={()=>{
         setDrawVisible(false)
       }}
