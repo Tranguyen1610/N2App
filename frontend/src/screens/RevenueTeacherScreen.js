@@ -127,31 +127,34 @@ export default function RevenueTeacherScreen() {
             <View className="justify-center items-center bg-gray-900 m-5 p-3">
               <Text className="text-gray-500 text-sm p-2">{now.toLocaleDateString()}</Text>
               <View
-                className="flex-row"
+                className="flex-row items-center"
                 style={{
                   alignItems: !isOpen ? 'center' : 'flex-start'
                 }}>
-                <Text className="text-white text-lg w-[40%]">Doanh thu theo</Text>
-                <View className="w-[50%]">
-                  <DropDownPicker
-                    style={{
-                      marginBottom: isOpen ? 200 : 0,
-                    }}
-                    items={types}
-                    open={isOpen}
-                    setOpen={setIsOpen}
-                    value={type}
-                    setValue={setType}
-                    maxHeight={200}
-                    scrollViewProps
-                    autoScroll
-                    placeholder='Chọn thể loại'
-                    dropDownDirection='BOTTOM'
-                    theme='DARK'
-                    textStyle={{
-                      color: "#fff"
-                    }}
-                  />
+                <Text className="text-white text-lg mr-2">Doanh thu theo</Text>
+                <View className="">
+                  <ScrollView
+                    horizontal={true} 
+                    showsVerticalScrollIndicator={false} 
+                    showsHorizontalScrollIndicator={false}>
+                    <DropDownPicker
+                      style={{
+                        marginBottom: isOpen ? 200 : 0,
+                      }}
+                      items={types}
+                      open={isOpen}
+                      setOpen={setIsOpen}
+                      value={type}
+                      setValue={setType}
+                      maxHeight={200}
+                      placeholder='Chọn thể loại'
+                      dropDownDirection='BOTTOM'
+                      theme='DARK'
+                      textStyle={{
+                        color: "#fff"
+                      }}
+                    />
+                  </ScrollView>
                 </View>
               </View>
               <View className="flex-row items-center w-full mt-3">
