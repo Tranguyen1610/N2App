@@ -99,7 +99,7 @@ const denyRequest = async(id)=>{
           </Button>
           :item?.Content?.Key=="withdrawmoney"?(
             <div style={{display:"flex"}}>
-            {item?.Status==false?(
+            {/* {item?.Status==false&&item?.IsCancel==false?(
               <>
           <Button
             block
@@ -121,7 +121,7 @@ const denyRequest = async(id)=>{
             }}
           >
             Từ chối
-          </Button></>):null}
+          </Button></>):null} */}
           <Button
             block
             ghost
@@ -150,6 +150,8 @@ const denyRequest = async(id)=>{
         isCancel={dataIdCancel}
       />
       <DrawMoneyModal
+      accept={acceptRequest}
+      deny={denyRequest}
       DrawVisible={DrawVisible}
       selectedDraw={selectedDraw}
       onClose={()=>{

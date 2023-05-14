@@ -4,6 +4,8 @@ import { useEffect } from "react"
 
 export const DrawMoneyModal = (
     {
+        accept,
+        deny,
     DrawVisible,
     onClose,
     selectedDraw,
@@ -39,22 +41,26 @@ export const DrawMoneyModal = (
             </div>
             <div style={{display:"flex",justifyContent:"flex-end"}}>
             <Button
+            hidden={selectedDraw?.IsCancel==true?true:false}
             disabled={selectedDraw?.Status==true?true:false}
             ghost
             style={{marginRight:5,backgroundColor:"#1677ff",color:"#FFF"}}
             onClick={() => {
             //   acceptRequest(item?._id)
+            accept(selectedDraw?._id)
             }}
           >
             Duyệt
           </Button>
           <Button
+          hidden={selectedDraw?.IsCancel==true?true:false}
              disabled={selectedDraw?.Status==true?true:false}
             style={{paddingLeft:5,paddingRight:5}}
             ghost
             type="primary"
             onClick={() => {
             //   denyRequest(item?._id)
+            deny(selectedDraw?._id)
             }}
           >
             Từ chối

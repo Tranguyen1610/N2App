@@ -28,7 +28,6 @@ const OrderScreen = () => {
   }
   return (
     <div>
-       <Typography.Title level={4} >Order</Typography.Title>
       <Spin spinning={loading}>
         <Table
           dataSource={dataSource}

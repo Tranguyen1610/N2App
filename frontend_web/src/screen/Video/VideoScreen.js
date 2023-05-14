@@ -60,8 +60,7 @@ const VideoScreen = () => {
 
   return (
     <div>
-       <Typography.Title level={4} >Video</Typography.Title>
-       <Space>
+       <Space style={{marginBottom:10}}>
        <div style={{ display: "flex" }}>
           <Button
             onClick={() => {
@@ -86,6 +85,9 @@ const VideoScreen = () => {
         <Table
         dataSource={dataSource}
         loading={loading}
+        pagination={{
+          pageSize:5
+        }}
         >
           <Column
           title="Tên Khóa học"
@@ -130,7 +132,7 @@ const VideoScreen = () => {
             )
           }}
           ></Column>
-          <Column
+          {/* <Column
           title="Đánh giá"
           dataIndex=""
           ></Column>
@@ -141,7 +143,7 @@ const VideoScreen = () => {
           <Column
           title="Trạng thái"
           dataIndex="isActive"
-          ></Column>
+          ></Column> */}
         </Table>
       </Spin>
       <VideoModal

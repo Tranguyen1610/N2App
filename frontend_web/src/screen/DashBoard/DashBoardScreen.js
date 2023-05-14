@@ -1,4 +1,4 @@
-import { ShoppingCartOutlined } from '@ant-design/icons'
+import { BookOutlined, ShoppingCartOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
 import { Card, Space, Statistic, Typography } from 'antd'
 import axios from 'axios'
 import React, { useState } from 'react'
@@ -43,7 +43,7 @@ function DashBoardScreen() {
       console.log(err);
     }
   }
-  const getTotalStudent = (data) => {
+  const getTotalStudent =(data) => {
     const temp = dataUser.filter((item) => item?.IsTeacher === "STUDENT")
     console.log("totalStudent", temp.length);
     setTotalStudent(temp.length)
@@ -85,11 +85,11 @@ function DashBoardScreen() {
     }
   }
   return (
-    <div>
-      <Typography.Title level={4}>DashBoard</Typography.Title>
-      <Space direction='horizontal'>
+    <div style={{}} >
+      <Space direction='vertical' style={{width:"80vw",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{display:"flex"}}>
         <DashBoardCard
-          icon={<ShoppingCartOutlined
+          icon={<BookOutlined 
             style={{
               color: "green",
               backgroundColor: "rgb(0,255,0,0.5)",
@@ -109,7 +109,7 @@ function DashBoardScreen() {
             }}
           />} title={"Đơn hàng"} value={totalOrder} />
         <DashBoardCard
-          icon={<ShoppingCartOutlined
+          icon={<VideoCameraOutlined
             style={{
               color: "green",
               backgroundColor: "rgb(0,255,0,0.5)",
@@ -120,7 +120,7 @@ function DashBoardScreen() {
           />} title={"Video"} value={totalVideo} />
 
         <DashBoardCard
-          icon={<ShoppingCartOutlined
+          icon={<UserOutlined 
             style={{
               color: "green",
               backgroundColor: "rgb(0,255,0,0.5)",
@@ -129,7 +129,7 @@ function DashBoardScreen() {
               padding: 8
             }}
           />} title={"Học viên"} value={totalStudent} />
-        <DashBoardCard
+        {/* <DashBoardCard
           icon={<ShoppingCartOutlined
             style={{
               color: "green",
@@ -138,14 +138,15 @@ function DashBoardScreen() {
               fontSize: 24,
               padding: 8
             }}
-          />} title={"Giảng viên"} value={totalTeacher} />
+          />} title={"Giảng viên"} value={totalTeacher} /> */}
+          </div>
       </Space>
     </div>
   )
 }
 const DashBoardCard = ({ title, value, icon }) => {
   return (
-    <Card>
+    <Card style={{marginLeft:15,marginRight:15}}>
       <Space direction='horizontal'>
         {icon}
         <Statistic title={title} value={value} />

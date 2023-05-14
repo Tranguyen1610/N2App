@@ -13,7 +13,8 @@ export default function LayoutCustom({name}) {
     return (
         <div className='Main'>
             <AppHeader />
-            <Space className='SideMenuAndPageContent'>
+            <Space style={{width:"100%"}} className='SideMenuAndPageContent'>
+                {/* phải verhical mới width 100% */}
                 <SideMenu/>
                 <div className='PageContent'>
                     {name==="Course"? <CourseScreen/>:

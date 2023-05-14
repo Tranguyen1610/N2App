@@ -50,15 +50,18 @@ function AppHeader() {
       {/* <Typography.Title>N2App's Admin</Typography.Title> */}
       <div className="title">N2App's Admin</div>
       <Space>
-       
+       <div style={{marginRight:15}}>
         <Badge count={totalRequestNoProgress!=0?totalRequestNoProgress:null} >
-          <MailFilled style={{ fontSize: 24 }} onClick={()=>{setRequestOpen(true)}}/>
+          <MailFilled style={{ fontSize: 24,color:"#FFF" }} onClick={()=>{setRequestOpen(true)}}/>
         </Badge>
-        <Badge dot={totalRequestNoProgress!=0?true:false}>
-          <BellFilled style={{ fontSize: 24 }} onClick={()=>{setNotificationOpen(true)}} />
+        </div>
+        <Badge>
+          <BellFilled style={{ fontSize: 24,color:"#FFF" }} onClick={()=>{setNotificationOpen(true)}} />
         </Badge>
-        <Drawer 
+        <Drawer
+        headerStyle={{backgroundColor:"#006699"}}
         title="Yêu cầu"
+        style={{color:"#FFFF"}}
          open={requestOpen}
          onClose={()=>{setRequestOpen(false)}}
          maskClosable
@@ -70,7 +73,10 @@ function AppHeader() {
         </Drawer>
         <Button
           style={{
-            marginLeft:10
+            color:"#FFF",
+            marginLeft:10,
+            fontWeight:"500",
+            backgroundColor:"rgb(4 59 106) "
           }}
           onClick={handlelogout}>
             Đăng xuất</Button>
