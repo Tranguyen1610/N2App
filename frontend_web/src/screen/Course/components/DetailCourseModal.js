@@ -184,7 +184,9 @@ export const DetailCourseModal = (
         </Modal>
         <VideoModal
       visible={visibleVideo}
-      onClose={()=>{setVisibleVideo(false)}}
+      onClose={()=>{setVisibleVideo(false)
+        window.location.reload(false);
+    }}
       selectedOrder={selectedCourse}
       />
         </div>
