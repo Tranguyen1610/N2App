@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema(
     Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true },
     Name: { type: String, required: true },
-    IsTeacher: { type: String,default:"STUDENT",trim:true },
+    IsTeacher: { type: String, default: "STUDENT", trim: true },
     pic: {
       type: String,
       default:
@@ -17,13 +17,13 @@ const userSchema = mongoose.Schema(
     Cart: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"Course"
+        ref: "Course"
       },
     ],
     WishList: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"Course"
+        ref: "Course"
       },
     ],
     CoursePurchased: [
@@ -38,31 +38,31 @@ const userSchema = mongoose.Schema(
         ref: "Course",
       },
     ],
-    Comment:[
+    Comment: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment",
       }
     ],
-    FavoriteType:[
+    FavoriteType: [
       {
-      type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Type",
       }
     ],
-    IsVerified:{
+    IsVerified: {
       type: Boolean,
       default: false,
     },
-    Role:{
+    Role: {
       type: String,
-      default:"user",
+      default: "user",
     },
 
-    Balance: { 
-      type: Number, 
+    Balance: {
+      type: Number,
       trim: true,
-      default:0,
+      default: 0,
     },
     HistoryMCA: [
       {
@@ -70,10 +70,13 @@ const userSchema = mongoose.Schema(
         Amount: { type: Number, default: 0 },
         AmountAfter: { type: Number, default: 0 },
         Description: { type: String, default: '' },
-        IsAdd: { type: Boolean}
+        IsAdd: { type: Boolean }
       }
-    ]
-
+    ],
+    BankAccount:{
+        BankName: String,
+        BankNumber: String,
+    },
   },
   {
     timestamp: true,

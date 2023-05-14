@@ -350,6 +350,44 @@ const getHistoryMCA = asyncHandler(async (req, res) => {
   }
 })
 
+const getBankAccount = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .select('BankAccount -_id')
+    const BankAccount = user.BankAccount
+    if (!user)
+      return res.status(400).json({ success: false, message: 'User not found' })
+    res.json({ BankAccount })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: 'Internal server error' })
+  }
+})
+
+const updateBankAccount = asyncHandler(async (req, res) => {
+  const bankAccount = {
+    BankName: req.body.BankName,
+    BankNumber: req.body.BankNumber
+  }
+  const user = await User.findByIdAndUpdate(
+    req.userId,
+    { BankAccount: bankAccount },
+    { new: true }
+  );
+  // console.log(user);
+  if (user) {
+    res.json({
+      _id: user._id,
+      Name: user.Name,
+      Email: user.Email,
+      BankAccount: user.BankAccount,
+    });
+  } else {
+    res.status(400);
+    throw new Error("User not found");
+  }
+})
+
 module.exports = {
   registerUser,
   authUser,
@@ -372,4 +410,6 @@ module.exports = {
   changePassword,
   getAmount,
   getHistoryMCA,
+  getBankAccount,
+  updateBankAccount,
 };
