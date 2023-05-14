@@ -25,15 +25,7 @@ export default function CoursesCart({ item, carts, setCCarts, setTotal, setIsAll
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
         return ""
     }
-    const names = (m) => {
-        if (m != null) {
-            if (m.length <= 40)
-                return m
-            else
-                return m.slice(0, 36) + '...'
-        }
-        return ""
-    }
+    
     useEffect(() => {
         // console.log(item);
     }, [])
@@ -111,7 +103,7 @@ return (
         </View>
         <View className="w-4/6 ml-2 ">
             <TouchableOpacity>
-                <Text className="text-white text-lg font-semibold">{names(item.Name)}</Text>
+                <Text className="text-white text-lg font-semibold" numberOfLines={2}>{item.Name}</Text>
             </TouchableOpacity>
             <Text className="text-gray-400 text-base">hfhf</Text>
             <Text className='text-white font-semibold text-base'>{formatPrice(item.Price)}</Text>

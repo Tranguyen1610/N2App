@@ -171,12 +171,17 @@ export default function CoursesDetailTeacher({ route }) {
                                 <AntDesign name="edit" size={24} color="white" />
                                 <Text className="text-white font-semibold text-xl ml-3">Chỉnh sửa</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12 flex-row"
-                                onPress={() => nav.navigate('CreateRequest', { type: "buycourse", course: course._id })}
-                            >
-                                <MaterialCommunityIcons name="briefcase-upload-outline" size={24} color="white" />
-                                <Text className="text-white font-semibold text-xl ml-3">Đăng bán</Text>
-                            </TouchableOpacity>
+                            {videos.length > 0 ?
+                                <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12 flex-row"
+                                    onPress={() => nav.navigate('CreateRequest', { type: "buycourse", course: course._id })}
+                                >
+                                    <MaterialCommunityIcons name="briefcase-upload-outline" size={24} color="white" />
+                                    <Text className="text-white font-semibold text-xl ml-3">Đăng bán</Text>
+                                </TouchableOpacity> :
+                                <View className="bg-[#1273FE] items-center justify-center w-6/12 flex-row">
+                                    <Text className="text-white font-semibold text-base ml-3">Vui lòng thêm Video</Text>
+                                </View>
+                            }
                         </View> : <></>}
                 </View>}
         </SafeAreaView>

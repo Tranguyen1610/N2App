@@ -4,11 +4,13 @@ import { Rating } from 'react-native-ratings';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { Url } from '../contexts/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CoursesList({ item }) {
     const nav = useNavigation();
     const [numStarAVG, setNumStarAVG] = useState(0);
     const [numCmt, setNumCmt] = useState(0);
+    const [mode, setMode] = useState("");
 
     const formatNumStart = (num) => {
         if (num != 0)
@@ -16,18 +18,8 @@ export default function CoursesList({ item }) {
         else return "0";
     }
     const formatPrice = (num) => {
-        if (num!=null)
+        if (num != null)
             return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " đ"
-        return ""
-    }
-
-    const names = (m) => {
-        if (m != null) {
-            if (m.length <= 40)
-                return m
-            else
-                return m.slice(0, 36) + '...'
-        }
         return ""
     }
 
@@ -49,13 +41,18 @@ export default function CoursesList({ item }) {
         }
     }
 
+    const getMode = async()=>{
+        setMode(await AsyncStorage.getItem('mode'));
+    }
+
     useEffect(() => {
         getComments();
+        getMode();
     }, [])
 
     return (
         <TouchableOpacity className="w-screen flex-row border-b border-gray-700 p-5"
-            onPress={() => nav.navigate("CoursesDetail", { course: item })}
+            onPress={() => nav.navigate(mode === "Teacher" ? "CoursesDetailTeacher" : "CoursesDetail", { course: item })}
         >
             <View className="w-1/4">
                 <Image
@@ -63,7 +60,7 @@ export default function CoursesList({ item }) {
                     className="w-20 h-20" />
             </View>
             <View className="w-3/4 ml-2">
-                <Text className="text-white text-lg font-semibold">{names(item.Name)}</Text>
+                <Text className="text-white text-lg font-semibold" numberOfLines={2}>{item.Name}</Text>
                 <Text className="text-gray-400 text-base"></Text>
                 <View
                     className="flex-row">

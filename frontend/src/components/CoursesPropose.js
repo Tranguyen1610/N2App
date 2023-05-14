@@ -18,15 +18,6 @@ export default function CoursesPropose({ item }) {
         else return "0";
     }
 
-    const names = (m) => {
-        if (m != null) {
-            if (m.length <= 40)
-                return m
-            else
-                return m.slice(0, 36) + '...'
-        }
-        return ""
-    }
     const getComments = async () => {
         try {
             const res = await axios.get(`${Url}/comment/` + item._id);
@@ -66,7 +57,7 @@ export default function CoursesPropose({ item }) {
             <Image
                 source={{ uri: item.Image }}
                 className="w-max h-28" />
-            <Text className="text-white text-lg font-semibold h-14">{names(item.Name)}</Text>
+            <Text className="text-white text-lg font-semibold h-14" numberOfLines={2}>{item.Name}</Text>
             <Text className="text-gray-400 text-base">{item.Teacher.Name}</Text>
             <View
                 className="flex-row">

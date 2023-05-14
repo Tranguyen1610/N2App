@@ -19,6 +19,10 @@ export default function AllCourseTeacherNS({ navigation }) {
         <View className="bg-[#0A0909] flex-1 justify-center items-center">
           <ActivityIndicator size={'large'} color={'#1273FE'} />
         </View> :
+        <View>
+        {coursesTCNS.length == 0 ?
+          <Text className="text-gray-300 text-xl text-center mt-20">
+            Hiện tại chưa có khóa học</Text> : <></>}
         <FlatList
           className="mt-5"
           showsHorizontalScrollIndicator={false}
@@ -28,6 +32,7 @@ export default function AllCourseTeacherNS({ navigation }) {
               item={item} />
           }
         />
+        </View>
       }
     </SafeAreaView>
   )

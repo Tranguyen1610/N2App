@@ -21,16 +21,6 @@ export default function CourseLearning({ item }) {
         return ""
     }
 
-    const names = (m) => {
-        if (m != null) {
-            if (m.length <= 40)
-                return m
-            else
-                return m.slice(0, 36) + '...'
-        }
-        return ""
-    }
-
     const getComments = async () => {
         try {
             const res = await axios.get(`${Url}/comment/` + item._id);
@@ -63,7 +53,7 @@ export default function CourseLearning({ item }) {
                     className="w-20 h-20" />
             </View>
             <View className="w-3/4 ml-2">
-                <Text className="text-white text-lg font-semibold">{names(item.Name)}</Text>
+                <Text className="text-white text-lg font-semibold" numberOfLines={2}>{item.Name}</Text>
                 <Text className="text-gray-400 text-base">{item.Teacher.Name}</Text>
                 <View
                     className="flex-row">

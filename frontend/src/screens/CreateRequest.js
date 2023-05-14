@@ -18,7 +18,19 @@ export default function CreateRequest({ route }) {
     const [amount, setAmount] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-    const [mca, setmca] = useState(0)
+    const [mca, setmca] = useState(0);
+    const [bankAccount, setBankAccount] = useState({});
+
+    const getBankAccount = async () => {
+        try {
+            const res = await axios.get(`${Url}/user/bankAccount/${userInfo._id}`);
+            if (res.data.BankAccount) {
+                setBankAccount(res.data.BankAccount);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     const withdrawmoney = () => {
         if (route.params)
@@ -200,7 +212,18 @@ export default function CreateRequest({ route }) {
                                             position: Toast.positions.CENTER,
                                             animation: true,
                                         })
-                                else CreateRequest();
+                                else
+                                    if (Object.keys(bankAccount).length===0)
+                                        Toast.show('Vui lòng cập nhật tài khoản ngân hàng',
+                                            {
+                                                backgroundColor: '#3B404F',
+                                                textColor: '#ffffff',
+                                                opacity: 1,
+                                                duration: Toast.durations.SHORT,
+                                                position: Toast.positions.CENTER,
+                                                animation: true,
+                                            })
+                                    else CreateRequest();
         }
         else {
             Toast.show('Yêu cầu đã tồn tại',
@@ -235,6 +258,7 @@ export default function CreateRequest({ route }) {
         getAmount();
         withdrawmoney();
         getRequset();
+        getBankAccount();
     }, [])
 
     useEffect(() => {
