@@ -20,6 +20,10 @@ const { notFound, errorHandler } = require("./middlewares/middleware");
 const app = express();
 dotenv.config();
 connectDB();
+
+const cors = require("cors");
+app.use(cors());
+
 app.use(express.json());
 app.use("/api/user", userRouters);
 app.use("/api/video", videoRouters);
@@ -35,10 +39,8 @@ app.use("/api/request", requestRoutes);
 
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const cors = require("cors");
 
 app.use("/stripe", express.raw({ type: "*/*" }));
-// app.use(cors());
 app.post("/api/payment", async (req, res) => {
     try {
         // Getting data from client

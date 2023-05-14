@@ -1,5 +1,5 @@
-import { ActivityIndicator, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -15,7 +15,7 @@ import Toast from 'react-native-root-toast';
 
 export default function CoursesDetail({ route }) {
     const course = route.params.course;
-    const { userInfo, wishlists, setWishLists, carts, setCarts, coursePurchaseds, setCoursePurchaseds} = useContext(AuthContext);
+    const { userInfo, wishlists, setWishLists, carts, setCarts, coursePurchaseds, setCoursePurchaseds } = useContext(AuthContext);
     const [comments, setComments] = useState([])
     const [videos, setVideos] = useState([])
     const [numStarAVG, setNumStarAVG] = useState(0);
@@ -82,7 +82,7 @@ export default function CoursesDetail({ route }) {
     }
     const checkIsCoursePurchased = () => {
         let result = false;
-        for (let index = 0; index <coursePurchaseds.length; index++) {
+        for (let index = 0; index < coursePurchaseds.length; index++) {
             const e = coursePurchaseds[index];
             if (e._id === course._id) {
                 result = true;
@@ -316,14 +316,14 @@ export default function CoursesDetail({ route }) {
 
     const handleOrder = () => {
         const coursePayments = [];
-            coursePayments.push(course);
+        coursePayments.push(course);
         nav.navigate("PaymentScreen", { payments: coursePayments, total: course.Price })
     }
 
     useEffect(() => {
-        if (wishlists.length == 0) getWishList();
-        if (coursePurchaseds.length == 0) getCoursePurchased();
         setTimeout(() => setIsLoading(false), 500)
+        getWishList();
+        getCoursePurchased();
         getComments();
         getVideos();
         checkIsCoursePurchased();
@@ -335,9 +335,24 @@ export default function CoursesDetail({ route }) {
     useEffect(() => {
         checkIsCourseOfCart();
     }, [carts])
+
+    const [refreshing, setRefreshing] = React.useState(false);
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            getWishList();
+            getCoursePurchased();
+            getComments();
+            getVideos();
+            checkIsCoursePurchased();
+            checkIsCourseOfCart();
+            checkIsInWishList();
+            setRefreshing(false);
+        }, 1000);
+    }, []);
     return (
         <SafeAreaView className="bg-[#0A0909] flex-1">
-            <StatusBar backgroundColor={"#0A0909"}/>
+            <StatusBar backgroundColor={"#0A0909"} />
             <HeaderTitle name='CoursesDetail' title='' isBack={true} />
             {isLoading ?
                 <View className="bg-[#0A0909] flex-1 justify-center items-center">
@@ -345,6 +360,9 @@ export default function CoursesDetail({ route }) {
                 </View> :
                 <View className="flex-1">
                     <ScrollView className="mx-5"
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
                         showsVerticalScrollIndicator={false}
                         style={{ marginBottom: isCoursePurchased ? 20 : 70 }}>
                         <TouchableOpacity
@@ -374,7 +392,7 @@ export default function CoursesDetail({ route }) {
                                 startingValue={numStarAVG}
                             />
                         </View>
-                        <Text className="text-gray-400 text-sm">({numCmt} xếp hạng) {course.numRating} học viên </Text>
+                        <Text className="text-gray-400 text-sm">({numCmt} xếp hạng) </Text>
                         <View className="flex-row mt-2">
                             <Text className="text-gray-400 text-base"> Tác giả</Text>
                             <Text className="text-[#1273FE] text-base ml-3">{course.Teacher.Name}</Text>
@@ -436,7 +454,7 @@ export default function CoursesDetail({ route }) {
                                 <MaterialCommunityIcons name="cart-plus" size={35} color="#1273FE" />
                             </TouchableOpacity>
                             <TouchableOpacity className="bg-[#1273FE] items-center justify-center w-6/12"
-                                onPress={()=>handleOrder()}>
+                                onPress={() => handleOrder()}>
                                 <Text className="text-white font-semibold text-xl">Mua ngay</Text>
                             </TouchableOpacity>
                         </View>

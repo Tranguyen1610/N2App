@@ -1,5 +1,5 @@
-import { View, Text, FlatList, ActivityIndicator, StatusBar } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, FlatList, ActivityIndicator, StatusBar, RefreshControl } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle'
 import { CoursesWL } from '../contexts/Data'
@@ -27,9 +27,19 @@ export default function WishlistScreen() {
     setTimeout(() => setIsLoading(false), 500);
     getWishList();
   }, [])
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      getWishList();
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1 ">
-      <StatusBar backgroundColor={"#0A0909"}/>
+      <StatusBar backgroundColor={"#0A0909"} />
       <HeaderTitle name={WishlistScreen} title='Wishlist' isBack={false} />
       {isLoading ?
         <View className="bg-[#0A0909] flex-1 justify-center items-center">
@@ -40,6 +50,9 @@ export default function WishlistScreen() {
             <Text className="text-gray-300 text-xl text-center mt-20">
               Chưa có khóa học</Text> : <></>}
           <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             className="mt-5"
             showsHorizontalScrollIndicator={false}
             data={wishlists}

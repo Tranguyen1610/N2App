@@ -304,7 +304,7 @@ export default function CreateRequest({ route }) {
                                 setOpen={setIsOpenCourse}
                                 value={course}
                                 setValue={setCourse}
-                                maxHeight={140}
+                                maxHeight={300}
                                 scrollViewProps
                                 autoScroll
                                 placeholder='Chọn khóa học'

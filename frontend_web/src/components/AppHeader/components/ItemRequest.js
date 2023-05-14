@@ -3,6 +3,7 @@ import { DetailCourseModal } from "../../../screen/Course/components/DetailCours
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DrawMoneyModal } from "./DrawMoneyModal";
+import { Url } from "../../../contexts/constants";
 
 export function ItemRequest(item) {
   const [visible, setVisible] = useState(false);
@@ -16,7 +17,7 @@ export function ItemRequest(item) {
 
   const getCourseById = async (id) => {
     try {
-      const res = await axios.get(`/api/course/getInfoCourse/${id}`);
+      const res = await axios.get(`${Url}/api/course/getInfoCourse/${id}`);
       console.log("getCourseByIdInRequest", res.data);
       // setListCourse(res.data);
       setDateSource(res.data);
@@ -27,7 +28,7 @@ export function ItemRequest(item) {
   };
   const acceptRequest = async(id)=>{
     try {
-        const res = await axios.put(`/api/request/acceptRequest/${id}`)
+        const res = await axios.put(`${Url}/api/request/acceptRequest/${id}`)
         if (res)
         window.location.reload(false);
     } catch (err) {
@@ -36,7 +37,7 @@ export function ItemRequest(item) {
 }
 const denyRequest = async(id)=>{
     try {
-        const res = await axios.put(`/api/request/denyRequest/${id}`)
+        const res = await axios.put(`${Url}/api/request/denyRequest/${id}`)
         if (res)
         window.location.reload(false);
     } catch (err) {

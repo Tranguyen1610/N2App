@@ -7,6 +7,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import axios from 'axios';
 import { ItemRequest } from './components/ItemRequest';
 import icon from "../../image/icon.png"
+import { Url } from '../../contexts/constants';
 import { ModalNotification } from './components/ModalNotification';
 
 function AppHeader() {
@@ -25,7 +26,7 @@ function AppHeader() {
   },[totalRequestNoProgress])
   const getAllRequest = async()=>{
     try{
-      const res = await axios.get(`/api/request`)
+      const res = await axios.get(`${Url}/api/request`)
       console.log("request:",res.data);
       TotalRequestNoProgress(res.data)
       setDataRequest(res.data)
