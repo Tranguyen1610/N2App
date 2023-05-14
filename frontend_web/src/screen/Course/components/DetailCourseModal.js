@@ -9,6 +9,7 @@ const {Column}=Table;
 
 export const DetailCourseModal = (
     {
+        dataRequest,
         isCancel,
         idRequest, 
     selectedOrder,
@@ -162,14 +163,14 @@ export const DetailCourseModal = (
             style={{marginRight:5,backgroundColor:"#1677ff",color:"#FFF"}}
             ghost
             disabled={isCancel==true?true:false}
-            hidden={selectedOrder?.OnSale==true?true:false}
+            hidden={dataRequest?.Status==true?true:false}
             onClick={() => acceptRequest(idRequest)}
           >
             Duyệt khóa học
           </Button>:null}
           {idRequest?
           <Button
-                        hidden={selectedOrder?.OnSale==true?true:false}
+            hidden={dataRequest?.Status==true?true:false}
             disabled={isCancel==true?true:false}
             ghost
             type="primary"
