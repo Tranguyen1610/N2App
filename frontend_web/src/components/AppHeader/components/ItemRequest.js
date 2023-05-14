@@ -13,6 +13,7 @@ export function ItemRequest(item) {
   const [dataSource, setDateSource] = useState([]);
   const [dataIdRequest, setDataIdRequest] = useState();
   const [dataIdCancel, setDataIdCancel] = useState();
+  const [dataRequest,setDataRequest]=useState();
 
   const getCourseById = async (id) => {
     try {
@@ -89,6 +90,7 @@ const denyRequest = async(id)=>{
               setSelectedCourse(getCourseById(item?.Course?._id));
               setVisible(true);
               setDataIdRequest(item?._id);
+              setDataRequest(item)
               setDataIdCancel(item?.IsCancel);
               console.log("dataIsCancel",item);
             }}
@@ -138,6 +140,7 @@ const denyRequest = async(id)=>{
         </Col>
       </List.Item>
       <DetailCourseModal
+      dataRequest={dataRequest}
         visible={visible}
         onClose={() => {
           setVisible(false);

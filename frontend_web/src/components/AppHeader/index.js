@@ -8,6 +8,7 @@ import axios from 'axios';
 import { ItemRequest } from './components/ItemRequest';
 import icon from "../../image/icon.png"
 import { Url } from '../../contexts/constants';
+import { ModalNotification } from './components/ModalNotification';
 
 function AppHeader() {
   const {logout} = useContext(AuthContext);
@@ -54,7 +55,7 @@ function AppHeader() {
           <MailFilled style={{ fontSize: 24 }} onClick={()=>{setRequestOpen(true)}}/>
         </Badge>
         <Badge dot={totalRequestNoProgress!=0?true:false}>
-          <BellFilled style={{ fontSize: 24 }} />
+          <BellFilled style={{ fontSize: 24 }} onClick={()=>{setNotificationOpen(true)}} />
         </Badge>
         <Drawer 
         title="Yêu cầu"
@@ -74,6 +75,10 @@ function AppHeader() {
           onClick={handlelogout}>
             Đăng xuất</Button>
       </Space>
+      <ModalNotification
+      visible={notificationOpen}
+      onClose={()=>{setNotificationOpen(false)}}
+      />
     </div>
   )
 }

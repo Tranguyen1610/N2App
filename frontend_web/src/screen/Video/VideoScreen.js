@@ -1,10 +1,10 @@
-import { Button, Space, Spin, Table, Typography } from 'antd'
+import { Button, Input, Space, Spin, Table, Typography } from 'antd'
 import Link from 'antd/es/typography/Link'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { VideoModal } from '../Course/components/VideoModal'
-import { PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { Url } from '../../contexts/constants'
 
 const {Column}= Table
@@ -13,6 +13,12 @@ const VideoScreen = () => {
   const [loading,setLoading]=useState(false);
   const [selectedCourse, setSelectedCourse] = useState();
   const [visible, setVisible] = useState(false);
+  const [textSearch, setTextSearch] = useState("");
+
+  const convert = (string) => {
+    if (string != null) return string.toString().toLowerCase();
+    else return "";
+  };
   useEffect(()=>{
     setLoading(true)
     getAllVideo()
@@ -28,20 +34,53 @@ const VideoScreen = () => {
       console.log(err);
     }
   }
+  const handleSearch = async (text) => {
+    let list = []
+   // if (text) {
+    
+   // }
+   // else getCourse()
+   try {
+     if (text) {
+       dataSource.forEach((u) => {
+         if (convert(u?.Name).includes(textSearch.toLocaleLowerCase())) {
+           // if
+           list.push(u)
+         }
+       });
+       setDateSource(list)
+     } else {
+      getAllVideo()
+       console.log("abc");
+     }
+   } catch (err) {
+     console.log(err);
+   }
+ };
 
   return (
     <div>
        <Typography.Title level={4} >Video</Typography.Title>
        <Space>
-      <Button
-                onClick={() => {
-                  setVisible(true)
-                }}
-                type="primary"
-                icon={<PlusOutlined />}
-              >
-                Thêm mới
-              </Button>
+       <div style={{ display: "flex" }}>
+          <Button
+            onClick={() => {
+              handleSearch(textSearch);
+              console.log("12456",textSearch);
+            }}
+            type="primary"
+            icon={<SearchOutlined />}
+          >
+            Tìm kiếm
+          </Button>
+          <Input
+            style={{marginLeft:5}}
+            placeholder="Nhập tên khóa học"
+            name="searchCourse"
+            onChange={e => {setTextSearch(e.target.value);
+            }}
+          ></Input>
+        </div>
       </Space>
       <Spin spinning={loading}>
         <Table
@@ -107,7 +146,10 @@ const VideoScreen = () => {
       </Spin>
       <VideoModal
       visible={visible}
-      onClose={()=>{setVisible(false)}}
+      onClose={()=>{
+        setVisible(false)
+        window.location.reload(false);
+      }}
       selectedOrder={selectedCourse}
       />
     </div>
