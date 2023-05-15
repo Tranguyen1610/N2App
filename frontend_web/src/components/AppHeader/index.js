@@ -60,7 +60,7 @@ function AppHeader() {
         </Badge>
         <Drawer
         headerStyle={{backgroundColor:"#006699"}}
-        title="Yêu cầu"
+        title={<span style={{ color: "#FFFFFF",fontSize:20 }}>Yêu cầu</span>}
         style={{color:"#FFFF"}}
          open={requestOpen}
          onClose={()=>{setRequestOpen(false)}}
