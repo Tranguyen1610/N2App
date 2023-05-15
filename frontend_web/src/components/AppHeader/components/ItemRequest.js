@@ -14,6 +14,12 @@ export function ItemRequest(item) {
   const [dataIdRequest, setDataIdRequest] = useState();
   const [dataIdCancel, setDataIdCancel] = useState();
   const [dataRequest,setDataRequest]=useState();
+  const [databankAccount,setBankAccount]=useState();
+
+useEffect(()=>{
+  console.log("id",item);
+  getBank(item?.Sender?._id)
+},[])
 
   const getCourseById = async (id) => {
     try {
@@ -26,6 +32,15 @@ export function ItemRequest(item) {
       console.log(err);
     }
   };
+  const getBank = async(id)=>{
+    try{
+      const res=  await axios.get(`${Url}/api/user/bankAccount/${id}`)
+      console.log("bank",res.data);
+      setBankAccount(res.data.BankAccount);
+    }catch(err){
+      console.log(err);
+    }
+  }
   const acceptRequest = async(id)=>{
     try {
         const res = await axios.put(`${Url}/api/request/acceptRequest/${id}`)
@@ -99,7 +114,7 @@ const denyRequest = async(id)=>{
           </Button>
           :item?.Content?.Key=="withdrawmoney"?(
             <div style={{display:"flex"}}>
-            {item?.Status==false?(
+            {/* {item?.Status==false&&item?.IsCancel==false?(
               <>
           <Button
             block
@@ -121,7 +136,7 @@ const denyRequest = async(id)=>{
             }}
           >
             Từ chối
-          </Button></>):null}
+          </Button></>):null} */}
           <Button
             block
             ghost
@@ -150,6 +165,9 @@ const denyRequest = async(id)=>{
         isCancel={dataIdCancel}
       />
       <DrawMoneyModal
+      bankAccount={databankAccount}
+      accept={acceptRequest}
+      deny={denyRequest}
       DrawVisible={DrawVisible}
       selectedDraw={selectedDraw}
       onClose={()=>{

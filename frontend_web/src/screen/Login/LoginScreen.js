@@ -43,8 +43,14 @@ const LoginScreen = () => {
       className="login-page"
     >
       <Form className="loginForm" form={form} onFinish={Login}>
-        <Typography.Title>N2App</Typography.Title>
+        <Typography.Title style={{textAlign:"center",fontWeight:"bold",color:"#4f4ae0", fontFamily:"sans-serif"}}>N2App</Typography.Title>
         <Form.Item
+        style={{
+          height:60,
+          padding:10,
+         
+          
+        }}
           rules={[
             {
               required: true,
@@ -52,19 +58,25 @@ const LoginScreen = () => {
               message: "Please enter valid email",
             },
           ]}
-          label="Email" name={"email"}>
-          <Input placeholder="Enter your email" />
+          label={<span style={{fontWeight:"500",}}>Email</span>} name={"email"}>
+          <Input style={{height:40}} placeholder="Nhập địa chỉ email" />
         </Form.Item>
         <Form.Item
+         style={{
+          height:60,
+          padding:10,
+          
+        }}
           rules={[
             {
               required: true,
               message: "Please enter valid password",
             },
           ]}
-          label="Password" name={"password"}>
+          label={<span style={{fontWeight:"500",}}>Mật khẩu</span>} name={"password"}>
           <Input.Password
-            placeholder="Enter your passwrod" />
+          style={{height:40}}
+            placeholder="Nhập mật khẩu" />
         </Form.Item>
         <div
           style={{
@@ -72,7 +84,7 @@ const LoginScreen = () => {
             padding:5,
             color:'red'
           }}>{err}</div>
-        <Button block type="primary" htmlType="submit">Login</Button>
+        <Button block style={{height:40,fontWeight:"bold"}} type="primary" htmlType="submit">Login</Button>
       </Form>
     </div>
   );

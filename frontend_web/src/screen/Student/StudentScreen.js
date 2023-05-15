@@ -28,7 +28,6 @@ const StudentScreen = () => {
 
   return (
     <div>
-       <Typography.Title level={4} >Học viên</Typography.Title>
       <Spin spinning={loading}>
         <Table
         dataSource={dataSource}
