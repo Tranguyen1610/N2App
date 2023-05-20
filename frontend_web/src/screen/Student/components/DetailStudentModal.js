@@ -80,8 +80,48 @@ export const DetailStudentModal = ({
             </Descriptions>
           </Col>
         </div>
-       
-        
+
+        <Space direction="vertical">
+          <Typography.Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+            }}
+          >
+            Danh sách khóa học đã mua
+          </Typography.Text>
+        </Space>
+        <Spin spinning={false}>
+          <Table
+            pagination={{
+              pageSize: 5,
+            }}
+            dataSource={selectedUser?.CoursePurchased}
+            // loading={loading}
+          >
+            <Column
+              title="Tên khóa học"
+              dataIndex="Name"
+              key={"course.name"}
+              render={(text, record) => {
+                return (
+                  <Link
+                    onClick={() => {
+                      setVisibleCourse(true);
+                      setSelectedCourse(getCourseById(record._id));
+                    }}
+                  >
+                    {`${text}`}
+                  </Link>
+                );
+              }}
+            ></Column>
+            <Column title="Giá" dataIndex="Price"></Column>
+            <Column title="Mô tả" dataIndex="Description"></Column>
+          </Table>
+        </Spin>
+
+        <Col>
           <Space direction="vertical">
             <Typography.Text
               style={{
@@ -89,13 +129,13 @@ export const DetailStudentModal = ({
                 fontWeight: "bold",
               }}
             >
-              Danh sách khóa học đã mua
+              Danh sách khóa học đã tạo
             </Typography.Text>
           </Space>
           <Spin spinning={false}>
             <Table
-              pagination={false}
-              dataSource={selectedUser?.CoursePurchased}
+              pagination={{ pageSize: 5 }}
+              dataSource={selectedUser?.CoursePosted}
               // loading={loading}
             >
               <Column
@@ -119,86 +159,46 @@ export const DetailStudentModal = ({
               <Column title="Mô tả" dataIndex="Description"></Column>
             </Table>
           </Spin>
-       
-          <Col>
-            <Space direction="vertical">
-              <Typography.Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
+        </Col>
+        <Col>
+          <Space direction="vertical">
+            <Typography.Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              Danh sách khóa học mong ước
+            </Typography.Text>
+          </Space>
+          <Spin spinning={false}>
+            <Table
+              pagination={{ pageSize: 5 }}
+              dataSource={selectedUser?.WishList}
+              // loading={loading}
+            >
+              <Column
+                title="Tên khóa học"
+                dataIndex="Name"
+                key={"course.name"}
+                render={(text, record) => {
+                  return (
+                    <Link
+                      onClick={() => {
+                        setVisibleCourse(true);
+                        setSelectedCourse(getCourseById(record._id));
+                      }}
+                    >
+                      {`${text}`}
+                    </Link>
+                  );
                 }}
-              >
-                Danh sách khóa học đã tạo
-              </Typography.Text>
-            </Space>
-            <Spin spinning={false}>
-              <Table
-                pagination={false}
-                dataSource={selectedUser?.CoursePosted}
-                // loading={loading}
-              >
-                <Column
-                  title="Tên khóa học"
-                  dataIndex="Name"
-                  key={"course.name"}
-                  render={(text, record) => {
-                    return (
-                      <Link
-                        onClick={() => {
-                          setVisibleCourse(true);
-                          setSelectedCourse(getCourseById(record._id));
-                        }}
-                      >
-                        {`${text}`}
-                      </Link>
-                    );
-                  }}
-                ></Column>
-                <Column title="Giá" dataIndex="Price"></Column>
-                <Column title="Mô tả" dataIndex="Description"></Column>
-              </Table>
-            </Spin>
-          </Col>
-          <Col>
-            <Space direction="vertical">
-              <Typography.Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                }}
-              >
-                Danh sách khóa học mong ước
-              </Typography.Text>
-            </Space>
-            <Spin spinning={false}>
-              <Table
-                pagination={false}
-                dataSource={selectedUser?.WishList}
-                // loading={loading}
-              >
-                <Column
-                  title="Tên khóa học"
-                  dataIndex="Name"
-                  key={"course.name"}
-                  render={(text, record) => {
-                    return (
-                      <Link
-                        onClick={() => {
-                          setVisibleCourse(true);
-                          setSelectedCourse(getCourseById(record._id));
-                        }}
-                      >
-                        {`${text}`}
-                      </Link>
-                    );
-                  }}
-                ></Column>
-                <Column title="Giá" dataIndex="Price"></Column>
-                <Column title="Mô tả" dataIndex="Description"></Column>
-              </Table>
-            </Spin>
-          </Col>
-       
+              ></Column>
+              <Column title="Giá" dataIndex="Price"></Column>
+              <Column title="Mô tả" dataIndex="Description"></Column>
+            </Table>
+          </Spin>
+        </Col>
       </Modal>
       <DetailCourseModal
         visible={visibleCourse}
