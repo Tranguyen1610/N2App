@@ -26,6 +26,7 @@ import CreateRequest from '../screens/CreateRequest';
 import RequestDetailScreen from '../screens/RequestDetailScreen';
 import TransactionHistoryScreen from '../screens/TransactionHistoryScreen';
 import TeacherNavigator from './TeacherNavigator';
+import AuthNavigator from './AuthNavigator';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -38,7 +39,7 @@ const RootNavigator = () => {
       })}
     >
       <Stack.Screen name="SwitchNavigator" component={SwitchNavigator} />
-      <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+      <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
       <Stack.Screen name="TeacherNavigator" component={TeacherNavigator} />
       <Stack.Screen name="SwitchStudent" component={SwitchStudent} />
       <Stack.Screen name="SwitchTeacher" component={SwitchTeacher} />

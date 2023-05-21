@@ -8,7 +8,7 @@ import AuthNavigator from './AuthNavigator';
 import RootNavigator from './RootNavigator';
 
 export default function AppNavigator() {
-  const { userToken, isLoading } = useContext(AuthContext)
+  const { userToken, isLoading, userHide } = useContext(AuthContext)
   const [isLoad, setIsLoad] = useState(true);
   useEffect(() => {
     setTimeout(() => {
@@ -20,7 +20,7 @@ export default function AppNavigator() {
       <StartScreen />
     )
   }
-  if (userToken !== null)
+  if (userToken !== null || userHide )
     return (
       <NavigationContainer>
         {/* {userToken !== null ? <RootNavigator /> : <AuthNavigator />} */}

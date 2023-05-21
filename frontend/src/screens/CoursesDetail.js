@@ -81,186 +81,96 @@ export default function CoursesDetail({ route }) {
         }
     }
     const checkIsCoursePurchased = () => {
-        let result = false;
-        for (let index = 0; index < coursePurchaseds.length; index++) {
-            const e = coursePurchaseds[index];
-            if (e._id === course._id) {
-                result = true;
-                break;
+        if (Object.keys(userInfo).length !== 0) {
+            let result = false;
+            for (let index = 0; index < coursePurchaseds.length; index++) {
+                const e = coursePurchaseds[index];
+                if (e._id === course._id) {
+                    result = true;
+                    break;
+                }
             }
+            setIsCoursePurchased(result)
+            // console.log(result);
         }
-        setIsCoursePurchased(result)
-        // console.log(result);
     }
     const checkIsCourseOfCart = () => {
-        let result = false;
-        for (let index = 0; index < carts.length; index++) {
-            const e = carts[index];
-            if (e._id === course._id) {
-                result = true;
-                break;
+        if (Object.keys(userInfo).length !== 0) {
+            let result = false;
+            for (let index = 0; index < carts.length; index++) {
+                const e = carts[index];
+                if (e._id === course._id) {
+                    result = true;
+                    break;
+                }
             }
+            setIsCourseOfCart(result)
+            // console.log(result);
         }
-        setIsCourseOfCart(result)
-        // console.log(result);
     }
 
     const getWishList = async () => {
-        try {
-            const result = await axios.get(`${Url}/user/getWishList`);
-            if (result.data) {
-                setWishLists(result.data)
-                // console.log(result.data);
+        if (Object.keys(userInfo).length !== 0) {
+            try {
+                const result = await axios.get(`${Url}/user/getWishList`);
+                if (result.data) {
+                    setWishLists(result.data)
+                    // console.log(result.data);
+                }
             }
-        }
-        catch (err) {
-            console.log(err);
+            catch (err) {
+                console.log(err);
+            }
         }
     }
 
     const getCart = async () => {
-        try {
-            const result = await axios.get(`${Url}/user/getCart`);
-            if (result.data) {
-                setCarts(result.data)
-                // console.log(result.data);
+        if (Object.keys(userInfo).length !== 0) {
+            try {
+                const result = await axios.get(`${Url}/user/getCart`);
+                if (result.data) {
+                    setCarts(result.data)
+                    // console.log(result.data);
+                }
             }
-        }
-        catch (err) {
-            console.log(err);
+            catch (err) {
+                console.log(err);
+            }
         }
     }
 
     const getCoursePurchased = async () => {
-        try {
-            const result = await axios.get(`${Url}/user/getCoursePurchased`);
-            if (result.data) {
-                setCoursePurchaseds(result.data)
+        if (Object.keys(userInfo).length !== 0) {
+            try {
+                const result = await axios.get(`${Url}/user/getCoursePurchased`);
+                if (result.data) {
+                    setCoursePurchaseds(result.data)
+                }
             }
-        }
-        catch (err) {
-            console.log(err);
+            catch (err) {
+                console.log(err);
+            }
         }
     }
 
     const checkIsInWishList = () => {
-        let result = false;
-        for (let index = 0; index < wishlists.length; index++) {
-            const e = wishlists[index];
-            if (e._id === course._id) {
-                result = true;
-                break;
+        if (Object.keys(userInfo).length !== 0) {
+            let result = false;
+            for (let index = 0; index < wishlists.length; index++) {
+                const e = wishlists[index];
+                if (e._id === course._id) {
+                    result = true;
+                    break;
+                }
             }
+            setIsInWishList(result);
+            // console.log(result);
         }
-        setIsInWishList(result);
-        // console.log(result);
     }
 
     const handleAddWishList = async () => {
-        if (!isInWishList) {
-            try {
-                const res = await axios.put(`${Url}/user/addWishList/` + course._id);
-                // console.log(res.data.ListVideo);
-                if (res.data) {
-                    const result = await axios.get(`${Url}/user/getWishList`);
-                    if (result.data) {
-                        setWishLists(result.data)
-                    }
-                    Toast.show('Thành công',
-                        {
-                            backgroundColor: '#3B404F',
-                            textColor: '#ffffff',
-                            opacity: 1,
-                            duration: Toast.durations.SHORT,
-                            position: Toast.positions.CENTER,
-                            animation: true,
-                        })
-                }
-                // console.log(res.data);
-            } catch (err) {
-                console.log(err);
-                Toast.show('Thất bại',
-                    {
-                        backgroundColor: '#3B404F',
-                        textColor: '#ffffff',
-                        opacity: 1,
-                        duration: Toast.durations.SHORT,
-                        position: Toast.positions.CENTER,
-                        animation: true,
-                    })
-            }
-        }
-        else {
-            try {
-                const res = await axios.put(`${Url}/user/deleteWishList/` + course._id);
-                // console.log(res.data.ListVideo);
-                if (res.data) {
-                    const result = await axios.get(`${Url}/user/getWishList`);
-                    if (result.data) {
-                        setWishLists(result.data)
-                    }
-                    Toast.show('Thành công',
-                        {
-                            backgroundColor: '#3B404F',
-                            textColor: '#ffffff',
-                            opacity: 1,
-                            duration: Toast.durations.SHORT,
-                            position: Toast.positions.CENTER,
-                            animation: true,
-                        })
-                }
-                // console.log(res.data);
-            } catch (err) {
-                console.log(err);
-                Toast.show('Thất bại',
-                    {
-                        backgroundColor: '#3B404F',
-                        textColor: '#ffffff',
-                        opacity: 1,
-                        duration: Toast.durations.SHORT,
-                        position: Toast.positions.CENTER,
-                        animation: true,
-                    })
-            }
-        }
-    }
-
-    const handleAddCart = async () => {
-        if (!isCourseOfCart) {
-            try {
-                const res = await axios.put(`${Url}/user/addCart/` + course._id);
-                // console.log(res.data.ListVideo);
-                if (res.data) {
-                    const result = await axios.get(`${Url}/user/getCart`);
-                    if (result.data) {
-                        setCarts(result.data)
-                    }
-                    Toast.show('Thành công',
-                        {
-                            backgroundColor: '#3B404F',
-                            textColor: '#ffffff',
-                            opacity: 1,
-                            duration: Toast.durations.SHORT,
-                            position: Toast.positions.CENTER,
-                            animation: true,
-                        })
-                }
-                // console.log(res.data);
-            } catch (err) {
-                console.log(err);
-                Toast.show('Thất bại',
-                    {
-                        backgroundColor: '#3B404F',
-                        textColor: '#ffffff',
-                        opacity: 1,
-                        duration: Toast.durations.SHORT,
-                        position: Toast.positions.CENTER,
-                        animation: true,
-                    })
-            }
-        }
-        else {
-            Toast.show('Khóa học đã nằm trong giỏ hàng',
+        if (Object.keys(userInfo).length === 0)
+            Toast.show('Vui lòng đăng nhập',
                 {
                     backgroundColor: '#3B404F',
                     textColor: '#ffffff',
@@ -269,6 +179,132 @@ export default function CoursesDetail({ route }) {
                     position: Toast.positions.CENTER,
                     animation: true,
                 })
+        else {
+            if (!isInWishList) {
+                try {
+                    const res = await axios.put(`${Url}/user/addWishList/` + course._id);
+                    // console.log(res.data.ListVideo);
+                    if (res.data) {
+                        const result = await axios.get(`${Url}/user/getWishList`);
+                        if (result.data) {
+                            setWishLists(result.data)
+                        }
+                        Toast.show('Thành công',
+                            {
+                                backgroundColor: '#3B404F',
+                                textColor: '#ffffff',
+                                opacity: 1,
+                                duration: Toast.durations.SHORT,
+                                position: Toast.positions.CENTER,
+                                animation: true,
+                            })
+                    }
+                    // console.log(res.data);
+                } catch (err) {
+                    console.log(err);
+                    Toast.show('Thất bại',
+                        {
+                            backgroundColor: '#3B404F',
+                            textColor: '#ffffff',
+                            opacity: 1,
+                            duration: Toast.durations.SHORT,
+                            position: Toast.positions.CENTER,
+                            animation: true,
+                        })
+                }
+            }
+            else {
+                try {
+                    const res = await axios.put(`${Url}/user/deleteWishList/` + course._id);
+                    // console.log(res.data.ListVideo);
+                    if (res.data) {
+                        const result = await axios.get(`${Url}/user/getWishList`);
+                        if (result.data) {
+                            setWishLists(result.data)
+                        }
+                        Toast.show('Thành công',
+                            {
+                                backgroundColor: '#3B404F',
+                                textColor: '#ffffff',
+                                opacity: 1,
+                                duration: Toast.durations.SHORT,
+                                position: Toast.positions.CENTER,
+                                animation: true,
+                            })
+                    }
+                    // console.log(res.data);
+                } catch (err) {
+                    console.log(err);
+                    Toast.show('Thất bại',
+                        {
+                            backgroundColor: '#3B404F',
+                            textColor: '#ffffff',
+                            opacity: 1,
+                            duration: Toast.durations.SHORT,
+                            position: Toast.positions.CENTER,
+                            animation: true,
+                        })
+                }
+            }
+        }
+    }
+
+    const handleAddCart = async () => {
+        if (Object.keys(userInfo).length === 0)
+            Toast.show('Vui lòng đăng nhập',
+                {
+                    backgroundColor: '#3B404F',
+                    textColor: '#ffffff',
+                    opacity: 1,
+                    duration: Toast.durations.SHORT,
+                    position: Toast.positions.CENTER,
+                    animation: true,
+                })
+        else {
+            if (!isCourseOfCart) {
+                try {
+                    const res = await axios.put(`${Url}/user/addCart/` + course._id);
+                    // console.log(res.data.ListVideo);
+                    if (res.data) {
+                        const result = await axios.get(`${Url}/user/getCart`);
+                        if (result.data) {
+                            setCarts(result.data)
+                        }
+                        Toast.show('Thành công',
+                            {
+                                backgroundColor: '#3B404F',
+                                textColor: '#ffffff',
+                                opacity: 1,
+                                duration: Toast.durations.SHORT,
+                                position: Toast.positions.CENTER,
+                                animation: true,
+                            })
+                    }
+                    // console.log(res.data);
+                } catch (err) {
+                    console.log(err);
+                    Toast.show('Thất bại',
+                        {
+                            backgroundColor: '#3B404F',
+                            textColor: '#ffffff',
+                            opacity: 1,
+                            duration: Toast.durations.SHORT,
+                            position: Toast.positions.CENTER,
+                            animation: true,
+                        })
+                }
+            }
+            else {
+                Toast.show('Khóa học đã nằm trong giỏ hàng',
+                    {
+                        backgroundColor: '#3B404F',
+                        textColor: '#ffffff',
+                        opacity: 1,
+                        duration: Toast.durations.SHORT,
+                        position: Toast.positions.CENTER,
+                        animation: true,
+                    })
+            }
         }
     }
 
@@ -315,9 +351,21 @@ export default function CoursesDetail({ route }) {
     }
 
     const handleOrder = () => {
-        const coursePayments = [];
-        coursePayments.push(course);
-        nav.navigate("PaymentScreen", { payments: coursePayments, total: course.Price })
+        if (Object.keys(userInfo).length === 0)
+            Toast.show('Vui lòng đăng nhập',
+                {
+                    backgroundColor: '#3B404F',
+                    textColor: '#ffffff',
+                    opacity: 1,
+                    duration: Toast.durations.SHORT,
+                    position: Toast.positions.CENTER,
+                    animation: true,
+                })
+        else {
+            const coursePayments = [];
+            coursePayments.push(course);
+            nav.navigate("PaymentScreen", { payments: coursePayments, total: course.Price })
+        }
     }
 
     useEffect(() => {

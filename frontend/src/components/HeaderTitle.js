@@ -12,35 +12,36 @@ export default function HeaderTitle({ name, title, isBack }) {
     const nav = useNavigation();
     const [numCart, setnumCart] = useState(0);
     const [mode, setMode] = useState();
-    const { textSearch, setTextSearch,carts, setCarts } = useContext(AuthContext);
+    const { textSearch, setTextSearch, carts, setCarts, userInfo } = useContext(AuthContext);
 
     const getMode = async () => {
         const mode = await AsyncStorage.getItem('mode');
         setMode(mode)
     }
-    useEffect(()=>{
+    useEffect(() => {
         if (carts.length == 0) getCart();
         setnumCart(carts.length)
         getMode()
-    },[])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         setnumCart(carts.length)
-    },[carts])
+    }, [carts])
 
 
-  const getCart = async () => {
-    try {
-      const result = await axios.get(`${Url}/user/getCart`);
-      if (result.data) {
-        setCarts(result.data)
-        // console.log(result.data);
-      }
+    const getCart = async () => {
+        if (Object.keys(userInfo).length!==0)
+            try {
+                const result = await axios.get(`${Url}/user/getCart`);
+                if (result.data) {
+                    setCarts(result.data)
+                    // console.log(result.data);
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
     }
-    catch (err) {
-      console.log(err);
-    }
-  }
 
     return (
         <View className="flex-row items-center justify-center w-screen h-14 px-5">
@@ -50,11 +51,11 @@ export default function HeaderTitle({ name, title, isBack }) {
                         <View className="w-1/12">
                             <Ionicons name="search" size={24} color="white" />
                         </View>
-                        <TextInput 
-                            className=" w-11/12 text-base px-2 text-white" 
+                        <TextInput
+                            className=" w-11/12 text-base px-2 text-white"
                             placeholder='Tìm kiếm'
                             value={textSearch}
-                            onChangeText={(e)=>setTextSearch(e)}>
+                            onChangeText={(e) => setTextSearch(e)}>
                         </TextInput>
                     </View> : <></>}
                 {isBack ?
@@ -68,7 +69,7 @@ export default function HeaderTitle({ name, title, isBack }) {
                 {title.length != 0 ?
                     <Text className="text-lg text-white font-bold ">{title}</Text> : <></>}
             </View>
-            {mode !== "Teacher" ?
+            {mode !== "Teacher" && Object.keys(userInfo).length!==0 ?
                 <TouchableOpacity className="w-2/12 items-center flex-row"
                     onPress={() =>
                         nav.navigate("CardScreen")

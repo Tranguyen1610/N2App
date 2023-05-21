@@ -12,11 +12,11 @@ const {
 
 const router = express.Router();
 
-router.route("/:courseId").get(protect, getAllComments);
+router.route("/:courseId").get(getAllComments);
 router.route("/").post(protect, createComment);
 router.route("/:commentId/delete").delete(protect, deleteComment);
 router.route("/:id/star").get(protect, getStartOfCourse);
 router.route("/reply").post(protect,replyComment);
-router.route("/:replyId/getreply").get(protect,getReplyofComment);
+router.route("/:replyId/getreply").get(getReplyofComment);
 
 module.exports = router;

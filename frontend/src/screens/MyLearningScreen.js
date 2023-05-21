@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ActivityIndicator, StatusBar, RefreshControl } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, StatusBar, RefreshControl, TouchableOpacity } from 'react-native'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import HeaderTitle from '../components/HeaderTitle'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,21 +6,24 @@ import CourseLearning from '../components/CourseLearning'
 import { AuthContext } from '../contexts/AuthContext'
 import axios from 'axios';
 import { Url } from '../contexts/constants'
+import { useNavigation } from '@react-navigation/native'
 
 export default function MyLearningScreen({ navigation }) {
-  const { userInfo, coursePurchaseds, setCoursePurchaseds } = useContext(AuthContext);
+  const { userInfo, coursePurchaseds, setCoursePurchaseds, setUseHide } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
+  const nav = useNavigation();
 
   const getCoursePurchased = async () => {
-    try {
-      const result = await axios.get(`${Url}/user/getCoursePurchased`);
-      if (result.data) {
-        setCoursePurchaseds(result.data)
+    if (Object.keys(userInfo).length !== 0)
+      try {
+        const result = await axios.get(`${Url}/user/getCoursePurchased`);
+        if (result.data) {
+          setCoursePurchaseds(result.data)
+        }
       }
-    }
-    catch (err) {
-      console.log(err);
-    }
+      catch (err) {
+        console.log(err);
+      }
   }
 
   useEffect(() => {
@@ -36,6 +39,18 @@ export default function MyLearningScreen({ navigation }) {
       setRefreshing(false);
     }, 1000);
   }, []);
+
+  if(Object.keys(userInfo).length===0)
+    return(
+      <View className="bg-[#0A0909] flex-1 justify-center items-center">
+        <Text className='text-white text-lg'> Bạn cần đăng nhập để sử dụng tính năng này</Text>
+        <TouchableOpacity className="mt-5"
+          onPress={()=>setUseHide(false)}>
+          <Text className='bg-[#1273FE] text-white p-3 text-base font-medium rounded-md'> Đăng nhập</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  else
 
   return (
     <SafeAreaView className="bg-[#0A0909] flex-1">

@@ -5,7 +5,6 @@ import { AuthContext } from '../contexts/AuthContext'
 import CoursesPropose from '../components/CoursesPropose'
 import Type from '../components/Type'
 import HeaderTitle from '../components/HeaderTitle'
-import { Courses, dataType } from '../contexts/Data'
 import axios from 'axios';
 import { Url } from '../contexts/constants'
 import FavoriteType from '../components/FavoriteType'
@@ -15,6 +14,7 @@ export default function FeaturedScreen({ navigation }) {
   const { userInfo, listType, setListType, courses, setCourses, listFavoriteType, setListFavoriteType } = useContext(AuthContext);
   const [topFiveCourse, setTopFiveCourse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [numColumns, setNumColumns] = useState(0);
 
   const getType = async () => {
     let list = [];
@@ -22,6 +22,7 @@ export default function FeaturedScreen({ navigation }) {
       const res = await axios.get(`${Url}/type`);
       // console.log(res.data);
       setListType(res.data)
+      setNumColumns(Math.ceil(res.data.length / 2))
     } catch (err) {
       console.log(err);
     }
@@ -42,6 +43,7 @@ export default function FeaturedScreen({ navigation }) {
     setTopFiveCourse(list.slice(0, 5))
   }
   const getFavoriteType = async () => {
+    if(Object.keys(userInfo).length!==0)
     try {
       const res = await axios.get(`${Url}/user/getFavoriteType`);
       // console.log(res.data);
@@ -78,10 +80,10 @@ export default function FeaturedScreen({ navigation }) {
       </SafeAreaView>
     )
   return (
-    <SafeAreaView className="bg-[#0A0909] flex-1 p-5">
+    <SafeAreaView className="bg-[#0A0909] flex-1">
       <StatusBar backgroundColor={"#0A0909"} />
       <HeaderTitle name='FeaturedScreen' title='' isBack={false} />
-      <ScrollView className=""
+      <ScrollView className="p-5"
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -123,8 +125,9 @@ export default function FeaturedScreen({ navigation }) {
         </View>
         <ScrollView horizontal={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} className="mt-3" >
           <FlatList
+            key={numColumns}
             data={listType}
-            numColumns={Math.ceil(dataType.length / 2)}
+            numColumns={numColumns}
             scrollEnabled={false}
             renderItem={({ item }) =>
               <Type
