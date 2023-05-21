@@ -17,6 +17,8 @@ export const ModalNotification =({
             "title": "N2App",
             "body": notification
         })
+        alert("gửi thành công")
+        form.resetFields(["notification"])
     }
     return(
         <Modal
@@ -37,13 +39,13 @@ export const ModalNotification =({
             margin:10,
             marginTop:20,
             justifyContent:"center"
-        }}  form={form}>
+        }}  form={form} onFinish={handlesPushNotification}>
         <Typography.Title style={{textAlign:"center"}}>Tạo thông báo</Typography.Title>
         <Form.Item name={"notification"}>
           <Input placeholder="Enter notification" />
         </Form.Item>
         <div style={{textAlign:"right",justifyContent:"center"}}>
-        <Button onClick={handlesPushNotification} style={{width:"30%"}} type="primary" htmlType="submit">Gửi thông báo</Button>
+        <Button style={{width:"30%"}} type="primary" htmlType="submit">Gửi thông báo</Button>
         </div>
       </Form>
         

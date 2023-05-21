@@ -74,9 +74,8 @@ function CourseScreen() {
     }
   };
   return (
-    <div>
-      <Typography.Title level={4}>Khóa học</Typography.Title>
-      <Space>
+    <div style={{}}>
+      <Space style={{marginBottom:10}}>
         <div style={{ display: "flex" }}>
           <Button
             onClick={() => {
@@ -98,7 +97,7 @@ function CourseScreen() {
         </div>
       </Space>
       <Spin spinning={loading}>
-        <Table dataSource={dataSource} loading={loading}>
+        <Table dataSource={dataSource} loading={loading} pagination={{pageSize:6}}>
           <Column
             title="Tên Khóa học"
             dataIndex="Name"
@@ -110,13 +109,13 @@ function CourseScreen() {
             dataIndex=""
             render={(text, record) => <span>{record.Type?.Name}</span>}
           ></Column>
-          <Column
+          {/* <Column
             title="Đánh giá"
             dataIndex=""
             render={(text, record) => {
               //  getStartOfCourse(record._id)
             }}
-          ></Column>
+          ></Column> */}
           {/* <Column
           title="Nổi bật"
           dataIndex="isHighlight"

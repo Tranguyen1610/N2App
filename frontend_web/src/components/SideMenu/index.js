@@ -8,6 +8,7 @@ function SideMenu() {
   return (
     <div className='SideMenu'>
       <Menu
+      className='Menu'
       onClick={(item)=>{
         //item,key
         navigate(item.key)
