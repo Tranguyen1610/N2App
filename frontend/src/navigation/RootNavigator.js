@@ -40,6 +40,7 @@ const RootNavigator = () => {
     >
       <Stack.Screen name="SwitchNavigator" component={SwitchNavigator} />
       <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
+      <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
       <Stack.Screen name="TeacherNavigator" component={TeacherNavigator} />
       <Stack.Screen name="SwitchStudent" component={SwitchStudent} />
       <Stack.Screen name="SwitchTeacher" component={SwitchTeacher} />

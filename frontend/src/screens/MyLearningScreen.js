@@ -68,7 +68,7 @@ export default function MyLearningScreen({ navigation }) {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            className="mt-5"
+            className="mt-5 mb-10"
             showsHorizontalScrollIndicator={false}
             data={coursePurchaseds}
             renderItem={({ item }) =>
