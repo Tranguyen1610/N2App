@@ -1,7 +1,8 @@
-import { View, Text, TextInput, ActivityIndicator, TouchableOpacity, Keyboard, StatusBar } from 'react-native'
+import { View, Text, TextInput, ActivityIndicator, TouchableOpacity, Keyboard, StatusBar, Modal } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system'
 import axios from 'axios';
 import { Url } from '../contexts/constants';
 import Toast from 'react-native-root-toast';
@@ -19,6 +20,7 @@ export default function AddVideoScreen({ route }) {
   const [alertValue, setAlertValue] = useState("");
   const [key, setKey] = useState(Date.now());
   const [numVideo, setNumVideo] = useState(0);
+  const [modalVisible,setModalVisible] = useState(false);
   const showVideoPicker = async () => {
     // Ask the user for the permission to access the media library 
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -49,7 +51,13 @@ export default function AddVideoScreen({ route }) {
     // Explore the result 
     if (!result.cancelled) {
       // console.log(result);
-      handleUploadVideo(result)
+      const { size } = await FileSystem.getInfoAsync(result.uri);
+      const fileSizeInMB = size / (1024 * 1024)
+      if(fileSizeInMB >100){
+        setModalVisible(true);
+      }
+      else
+        handleUploadVideo(result);
     }
   }
 
@@ -235,6 +243,40 @@ export default function AddVideoScreen({ route }) {
             </TouchableOpacity>
           </View>
         </View> : <></>}
+        <Modal
+            visible={modalVisible}
+            transparent={true}
+            onRequestClose={() => setModalVisible(false)}
+            animationType='fade'
+            hardwareAccelerated>
+            <View className="flex-1 justify-center items-center bg-[#00000099]" >
+              <View className="bg-[#1B212D] w-[90%] rounded-lg">
+                <Text className=" p-3 text-lg font-bold text-white">Thông báo</Text>
+                  <View>
+                    <View className="mt-2 ml-5 items-center">
+                      <Text className="text-base text-white">Kích thước file vượt mức cho phép</Text>
+                      <Text className="text-gray-500 mt-3">(Kích thước file phải nhỏ hơn 100 MB)</Text>
+                    </View>
+                    <View className="flex-row p-5 justify-end">
+                      <TouchableOpacity
+                        onPress={() => setModalVisible(false)}>
+                        <Text
+                          className="text-base text-white"
+                        >OK</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setModalVisible(false);
+                          showVideoPicker();
+                        }}>
+                        <Text className="text-base text-[#1273FE] ml-5"
+                        >Chọn lại</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+              </View>
+            </View>
+          </Modal>
     </View>
   )
 }

@@ -3,6 +3,8 @@ const Order = require("../models/orderModel");
 const User = require("../models/userModel");
 const OrderDetail = require("../models/orderDetailModel");
 const { count } = require("../models/orderModel");
+const Course = require("../models/courseModel");
+const Setting = require("../models/settingModel");
 
 const createOrder = asyncHandler(async (req, res) => {
   try {
@@ -67,10 +69,18 @@ const paymentSuccessOrder = asyncHandler(async (req, res) => {
           },
           { new: true }
         );
+        
+        await Course.findByIdAndUpdate(
+          o,
+          { $inc: { NumSale: 1 } },
+          { new: true }
+        );
+
       });
       for (const d of order.Detail) {
         const user = await User.findById(d.Teacher);
-        const amount = d.Price - (d.Price * 10) / 100;
+        const settingFee = await Setting.findOne({Name:"Fee"});
+        const amount = d.Price - (d.Price * settingFee.Fee) / 100;
         const afterBalance = Number(user.Balance) + Number(amount);
         await User.findByIdAndUpdate(d.Teacher, {
           $set: { Balance: afterBalance },

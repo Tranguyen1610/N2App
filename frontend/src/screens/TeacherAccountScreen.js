@@ -127,6 +127,17 @@ export default function TeacherAccountScreen({ navigation }) {
             color="white" />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
+          onPress={() =>
+            nav.navigate('StatisticalScreen')
+          }>
+          <Ionicons name="bar-chart" size={24} color="#C51BF7" />
+          <Text className="ml-2.5 mr-auto text-base text-white">Thống kê</Text>
+          <Ionicons
+            name='chevron-forward'
+            size={25}
+            color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity className="flex-row justify-between items-center py-4 border-b border-gray-600"
           onPress={() => {
             setModalLogoutVisible(true)
           }}>

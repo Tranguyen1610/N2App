@@ -12,7 +12,7 @@ const paymentMethodRoutes = require("./routes/paymentMethodRoutes");
 const otpRoutes = require("./routes/otpRoutes");
 const contentRoutes = require("./routes/contentRoutes");
 const requestRoutes = require("./routes/requestRoutes");
-
+const settingRouters = require("./routes/settingRouters");
 
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/middleware");
@@ -36,6 +36,7 @@ app.use("/api/paymentMedthod", paymentMethodRoutes);
 app.use("/api/otp", otpRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/request", requestRoutes);
+app.use("/api/setting", settingRouters);
 
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);

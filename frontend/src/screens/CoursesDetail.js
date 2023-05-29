@@ -440,7 +440,10 @@ export default function CoursesDetail({ route }) {
                                 startingValue={numStarAVG}
                             />
                         </View>
-                        <Text className="text-gray-400 text-sm">({numCmt} xếp hạng) </Text>
+                        <View className="flex-row">
+                            <Text className="text-gray-400 text-sm">{course.NumSale} đã bán </Text>
+                            <Text className="text-gray-400 text-sm">({numCmt} xếp hạng) </Text>
+                        </View>
                         <View className="flex-row mt-2">
                             <Text className="text-gray-400 text-base"> Tác giả</Text>
                             <Text className="text-[#1273FE] text-base ml-3">{course.Teacher.Name}</Text>
@@ -491,7 +494,7 @@ export default function CoursesDetail({ route }) {
                         ))}
 
                     </ScrollView>
-                    {!isCoursePurchased ?
+                    {!isCoursePurchased && course.Teacher._id !== userInfo._id?
                         <View className="absolute bottom-0 flex-row w-screen h-14 ">
                             <TouchableOpacity className="bg-[#242F41] items-center justify-center w-3/12 flex-row border-r-2 border-gray-800"
                                 onPress={() => handleAddWishList()}>

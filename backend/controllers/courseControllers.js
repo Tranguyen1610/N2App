@@ -244,6 +244,20 @@ const CheckCourse = asyncHandler(async(req,res)=>{
       });
     }
 })
+
+const getCourseofTeacherSort = asyncHandler(async(req,res)=>{
+  await Course.find({ Teacher: req.userId,ListVideo: { $ne: [], $exists: true },OnSale:true })
+  .populate("Teacher")
+  .populate("Type")
+  .sort({ NumSale: 'desc' })
+  .then((data) => {
+    var result = data;
+    res.json(result);
+  })
+  .catch((error) => {
+    res.status(400).send(error.message || error);
+  });
+})
 module.exports = {
   createCourse,
   addVideotoCourse,
@@ -261,4 +275,5 @@ module.exports = {
   getCourseofTeacherNotSale,
   CheckCourse,
   allCoursesOnSale,
+  getCourseofTeacherSort
 };

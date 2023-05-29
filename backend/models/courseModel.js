@@ -22,6 +22,7 @@ const courseSchema = mongoose.Schema(
       }
     ],
     OnSale:{type:Boolean,default:false},
+    NumSale:{ type: Number, trim: true, default:0 },
   },
   {
     timestamp: true,

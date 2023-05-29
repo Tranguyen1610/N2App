@@ -27,6 +27,7 @@ import RequestDetailScreen from '../screens/RequestDetailScreen';
 import TransactionHistoryScreen from '../screens/TransactionHistoryScreen';
 import TeacherNavigator from './TeacherNavigator';
 import AuthNavigator from './AuthNavigator';
+import StatisticalScreen from '../screens/StatisticalScreen';
 
 const Stack = createNativeStackNavigator();
 const RootNavigator = () => {
@@ -237,6 +238,16 @@ const RootNavigator = () => {
           headerStyle: { backgroundColor: '#0A0909' },
           headerTintColor: '#ffffff',
           title: 'Lịch sử giao dịch'
+        }} />
+      <Stack.Screen
+        name="StatisticalScreen"
+        component={StatisticalScreen}
+        options={{
+          animation: 'slide_from_right',
+          headerShown: true,
+          headerStyle: { backgroundColor: '#0A0909' },
+          headerTintColor: '#ffffff',
+          title: 'Thống kê'
         }} />
 
     </Stack.Navigator>

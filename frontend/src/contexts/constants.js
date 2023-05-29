@@ -1,2 +1,2 @@
-export const apiUrl = 'https://n2app.onrender.com/api/user'
-export const Url = 'https://n2app.onrender.com/api'
+export const apiUrl = 'http://192.168.31.220:5000/api/user'
+export const Url = 'http://192.168.31.220:5000/api'

@@ -1,6 +1,7 @@
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput, StatusBar } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Image, Alert, Linking, TextInput, StatusBar, Modal } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system'
 import { Video } from 'expo-av'
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -14,7 +15,8 @@ export default function AddCourseStep2Screen({ route }) {
     const [linkVideo, setLinkVideo] = useState("");
     const [linkImage, setLinkImage] = useState("");
     const [isLoadingVideo, setIsLoadingVideo] = useState(false);
-    const [alertValue, setAlertValue] = useState("")
+    const [alertValue, setAlertValue] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
     const videoRef = useRef();
     const nav = useNavigation();
 
@@ -83,7 +85,13 @@ export default function AddCourseStep2Screen({ route }) {
         // Explore the result 
         if (!result.cancelled) {
             // console.log(result);
-            handleUploadVideo(result)
+            const { size } = await FileSystem.getInfoAsync(result.uri);
+            const fileSizeInMB = size / (1024 * 1024)
+            if (fileSizeInMB > 100) {
+                setModalVisible(true);
+            }
+            else
+                handleUploadVideo(result);
         }
     }
 
@@ -223,6 +231,40 @@ export default function AddCourseStep2Screen({ route }) {
                     <Text className="text-white bg-[#1273FE] font-semibold text-base p-3  rounded-xl">Hoàn thành</Text>
                 </TouchableOpacity>
             </View>
+            <Modal
+            visible={modalVisible}
+            transparent={true}
+            onRequestClose={() => setModalVisible(false)}
+            animationType='fade'
+            hardwareAccelerated>
+            <View className="flex-1 justify-center items-center bg-[#00000099]" >
+              <View className="bg-[#1B212D] w-[90%] rounded-lg">
+                <Text className=" p-3 text-lg font-bold text-white">Thông báo</Text>
+                  <View>
+                    <View className="mt-2 ml-5 items-center">
+                      <Text className="text-base text-white">Kích thước file vượt mức cho phép</Text>
+                      <Text className="text-gray-500 mt-3">(Kích thước file phải nhỏ hơn 100 MB)</Text>
+                    </View>
+                    <View className="flex-row p-5 justify-end">
+                      <TouchableOpacity
+                        onPress={() => setModalVisible(false)}>
+                        <Text
+                          className="text-base text-white"
+                        >OK</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setModalVisible(false);
+                          showVideoPicker();
+                        }}>
+                        <Text className="text-base text-[#1273FE] ml-5"
+                        >Chọn lại</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+              </View>
+            </View>
+          </Modal>
         </View>
     )
 }
