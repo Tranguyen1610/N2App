@@ -13,7 +13,7 @@ import axios from 'axios';
 import Toast from 'react-native-root-toast'
 
 export default function AccountSceeen({ navigation }) {
-  const { userInfo, setUserInfo, logout, types, setTypes, listFavoriteType, setListFavoriteType, changePassword,setUseHide } = useContext(AuthContext)
+  const { userInfo, setUserInfo, logout, types, setTypes, listFavoriteType, setListFavoriteType, changePassword,setUseHide,setIsLogin } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false);
   const [modalFavoriteType, setModalFavoriteType] = useState(false);
   const [modalLogoutVisible, setModalLogoutVisible] = useState(false);
@@ -170,7 +170,10 @@ export default function AccountSceeen({ navigation }) {
       <View className="bg-[#0A0909] flex-1 justify-center items-center">
         <Text className='text-white text-lg'> Bạn cần đăng nhập để sử dụng tính năng này</Text>
         <TouchableOpacity className="mt-5"
-          onPress={() => setUseHide(false)}>
+          onPress={() => {
+            setIsLogin(true);
+            setUseHide(false);
+            }}>
           <Text className='bg-[#1273FE] text-white p-3 text-base font-medium rounded-md'> Đăng nhập</Text>
         </TouchableOpacity>
       </View>

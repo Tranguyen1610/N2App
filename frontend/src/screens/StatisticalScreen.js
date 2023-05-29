@@ -9,46 +9,54 @@ const { width, height } = Dimensions.get('screen');
 
 export default function StatisticalScreen() {
     const [topFiveCourse, setTopFiveCourse] = useState([]);
-    let data = {
-        labels: ['Top 1', 'Top 2', 'Top 3', 'Top 4', 'Top 5'],
-            datasets: [
-                {
-                    data: [5, 4, 3, 2, 1],
-                },
-            ],
-    };
+    const [data, setData] = useState({
+        labels: [],
+        datasets: [
+            {
+                data: [],
+            },
+        ],
+    });
     const getTopFileCourse = async () => {
         let list = [];
         try {
-          const res = await axios.get(`${Url}/course/getCourseofTeacherSort`);
-          // console.log(res.data);
-          const listcourse = res.data;
-          for (let index = 0; index < listcourse.length; index++) {
-            list.push(listcourse[index])
-          }
+            const res = await axios.get(`${Url}/course/getCourseofTeacherSort`);
+            // console.log(res.data);
+            const listcourse = res.data;
+            for (let index = 0; index < listcourse.length; index++) {
+                list.push(listcourse[index])
+            }
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
+
+        let dataa =
+        {
+            labels: [],
+            datasets: [
+                {
+                    data: [],
+                },
+            ],
+        };
         setTopFiveCourse(list.slice(0, 5));
+        let top5 = list.slice(0, 5);
+        top5.forEach((c,i)=>{
+            dataa.labels.push("Top "+ Number(i+1))
+            dataa.datasets[0].data.push(c.NumSale);
+        })
+        setData(dataa);
     }
-    const getData = () =>{
-        data.datasets[0].data.push(5);
-        data.datasets[0].data.push(4);
-        data.datasets[0].data.push(3);
-        data.datasets[0].data.push(2);
-        data.datasets[0].data.push(1);
-        console.log(data.datasets);
-    }
-    useEffect(()=>{
-        //getTopFileCourse();
-        getData();
-    },[])
+    useEffect(() => {
+        getTopFileCourse();
+    }, [])
     return (
-        <SafeAreaView className="bg-[#0A0909] flex-1 items-center ">
+        <SafeAreaView className="bg-[#0A0909] flex-1 p-5">
             <StatusBar backgroundColor={"#0A0909"} />
+            <Text className="text-[#1273FE] text-lg text-center mb-3">Top 5 khóa học bán chạy</Text>
             <BarChart
                 data={data}
-                width={width*0.95}
+                width={width * 0.95}
                 height={200}
                 chartConfig={{
                     backgroundColor: "#004FE2",
@@ -59,16 +67,25 @@ export default function StatisticalScreen() {
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     style: {
                         borderRadius: 16,
-                        
+
                     },
-                    
+
                 }}
                 showValuesOnTopOfBars={true}
                 style={{
                     marginVertical: 8,
                     borderRadius: 16,
+                    alignItems:'center',
+                    marginBottom:20
                 }}
             />
+            {topFiveCourse.map((c,i)=>(
+                <View className="items-start flex-row mt-5" key={i}>
+                    <Text className="text-white text-base w-1/6">Top {i+1}:</Text>
+                    <Text className="text-white text-base w-4/6">{c.Name}</Text>
+                    <Text className="text-white text-base w-1/6 text-center">{c.NumSale}</Text>
+                </View>
+            ))}
         </SafeAreaView>
     )
 }

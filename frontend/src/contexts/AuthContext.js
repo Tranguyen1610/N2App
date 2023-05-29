@@ -10,6 +10,7 @@ export const AuthContextProvider = ({ children }) => {
 
 	const [userToken, setUserToken] = useState(null);
 	const [userHide, setUseHide] = useState(false);
+	const [isLogin, setIsLogin] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
 	const [types, setTypes] = useState([]);
 	const [listType, setListType] = useState([]);
@@ -181,7 +182,8 @@ export const AuthContextProvider = ({ children }) => {
 			setListFavoriteType, coursesTC, setCoursesTC, coursesTCUF, setCoursesTCUF,
 			coursesTCNS, setCoursesTCNS, setUserInfo, changePassword,loginGoogle,
 			contents, setContents, listRequestCancel, setListRequestCancel,listRequestNoAccept, 
-			setListRequestNoAccept,listRequestAccept, setListRequestAccept,userHide, setUseHide
+			setListRequestNoAccept,listRequestAccept, setListRequestAccept,userHide, setUseHide,
+			isLogin, setIsLogin
 		}}>
 			{children}
 		</AuthContext.Provider>

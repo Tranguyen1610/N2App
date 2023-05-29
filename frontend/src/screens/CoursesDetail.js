@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Dimensions, Image, Modal, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import HeaderTitle from '../components/HeaderTitle';
@@ -15,7 +15,7 @@ import Toast from 'react-native-root-toast';
 
 export default function CoursesDetail({ route }) {
     const course = route.params.course;
-    const { userInfo, wishlists, setWishLists, carts, setCarts, coursePurchaseds, setCoursePurchaseds } = useContext(AuthContext);
+    const { userInfo, wishlists, setWishLists, carts, setCarts, coursePurchaseds, setCoursePurchaseds, setUseHide, setIsLogin } = useContext(AuthContext);
     const [comments, setComments] = useState([])
     const [videos, setVideos] = useState([])
     const [numStarAVG, setNumStarAVG] = useState(0);
@@ -27,6 +27,7 @@ export default function CoursesDetail({ route }) {
     const [isCourseOfCart, setIsCourseOfCart] = useState(false);
     const [rating, setRating] = useState(0);
     const [content, setContent] = useState("");
+    const [modalVisible, setModalVisible] = useState(false);
 
     const nav = useNavigation();
     const formatNumStart = (num) => {
@@ -170,15 +171,7 @@ export default function CoursesDetail({ route }) {
 
     const handleAddWishList = async () => {
         if (Object.keys(userInfo).length === 0)
-            Toast.show('Vui lòng đăng nhập',
-                {
-                    backgroundColor: '#3B404F',
-                    textColor: '#ffffff',
-                    opacity: 1,
-                    duration: Toast.durations.SHORT,
-                    position: Toast.positions.CENTER,
-                    animation: true,
-                })
+            setModalVisible(true);
         else {
             if (!isInWishList) {
                 try {
@@ -251,15 +244,7 @@ export default function CoursesDetail({ route }) {
 
     const handleAddCart = async () => {
         if (Object.keys(userInfo).length === 0)
-            Toast.show('Vui lòng đăng nhập',
-                {
-                    backgroundColor: '#3B404F',
-                    textColor: '#ffffff',
-                    opacity: 1,
-                    duration: Toast.durations.SHORT,
-                    position: Toast.positions.CENTER,
-                    animation: true,
-                })
+            setModalVisible(true);
         else {
             if (!isCourseOfCart) {
                 try {
@@ -352,15 +337,7 @@ export default function CoursesDetail({ route }) {
 
     const handleOrder = () => {
         if (Object.keys(userInfo).length === 0)
-            Toast.show('Vui lòng đăng nhập',
-                {
-                    backgroundColor: '#3B404F',
-                    textColor: '#ffffff',
-                    opacity: 1,
-                    duration: Toast.durations.SHORT,
-                    position: Toast.positions.CENTER,
-                    animation: true,
-                })
+            setModalVisible(true);
         else {
             const coursePayments = [];
             coursePayments.push(course);
@@ -494,7 +471,7 @@ export default function CoursesDetail({ route }) {
                         ))}
 
                     </ScrollView>
-                    {!isCoursePurchased && course.Teacher._id !== userInfo._id?
+                    {!isCoursePurchased && course.Teacher._id !== userInfo._id ?
                         <View className="absolute bottom-0 flex-row w-screen h-14 ">
                             <TouchableOpacity className="bg-[#242F41] items-center justify-center w-3/12 flex-row border-r-2 border-gray-800"
                                 onPress={() => handleAddWishList()}>
@@ -511,6 +488,40 @@ export default function CoursesDetail({ route }) {
                         </View>
                         : <></>}
                 </View>}
+            <Modal
+                visible={modalVisible}
+                transparent={true}
+                onRequestClose={() => setModalVisible(false)}
+                animationType='fade'
+                hardwareAccelerated>
+                <View className="flex-1 justify-center items-center bg-[#00000099]" >
+                    <View className="bg-[#1B212D] w-[90%] rounded-lg">
+                        <Text className=" p-3 text-lg font-bold text-white">Thông báo</Text>
+                        <View>
+                            <View className="mt-2 ml-5 items-center">
+                                <Text className="text-base text-white">Bạn phải đăng nhập để dùng tính năng này</Text>
+                            </View>
+                            <View className="flex-row p-5 justify-end">
+                                <TouchableOpacity
+                                    onPress={() => setModalVisible(false)}>
+                                    <Text
+                                        className="text-base text-white"
+                                    >Hủy</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setModalVisible(false);
+                                        setIsLogin(true);
+                                        setUseHide(false);
+                                    }}>
+                                    <Text className="text-base text-[#1273FE] ml-5"
+                                    >Đăng nhập</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     )
 }

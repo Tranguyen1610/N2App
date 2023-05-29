@@ -18,6 +18,7 @@ const {
   CheckCourse,
   allCoursesOnSale,
   getCourseofTeacherSort,
+  deleteCourseAdmin,
 } = require("../controllers/courseControllers");
 const router = express.Router();
 
@@ -39,4 +40,5 @@ router.route("/getCourseUnFinishOfTeacher").get(protect,getCourseUnFinishOfTeach
 router.route("/getCourseofTeacherNotSale").get(protect,getCourseofTeacherNotSale);
 router.route("/checkCourse/:id").put(protect,CheckCourse);
 router.route("/getCourseofTeacherSort").get(protect,getCourseofTeacherSort);
+router.route("/delete/:id").put(protect, deleteCourseAdmin);
 module.exports = router;

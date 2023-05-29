@@ -9,19 +9,19 @@ import axios from 'axios';
 import { Url } from '../contexts/constants'
 
 export default function WishlistScreen() {
-  const { userInfo, wishlists, setWishLists,setUseHide } = useContext(AuthContext);
+  const { userInfo, wishlists, setWishLists, setUseHide,setIsLogin } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
   const getWishList = async () => {
     if (Object.keys(userInfo).length !== 0)
-    try {
-      const result = await axios.get(`${Url}/user/getWishList`);
-      if (result.data) {
-        setWishLists(result.data)
+      try {
+        const result = await axios.get(`${Url}/user/getWishList`);
+        if (result.data) {
+          setWishLists(result.data)
+        }
       }
-    }
-    catch (err) {
-      console.log(err);
-    }
+      catch (err) {
+        console.log(err);
+      }
   }
 
   useEffect(() => {
@@ -43,7 +43,10 @@ export default function WishlistScreen() {
       <View className="bg-[#0A0909] flex-1 justify-center items-center">
         <Text className='text-white text-lg'> Bạn cần đăng nhập để sử dụng tính năng này</Text>
         <TouchableOpacity className="mt-5"
-          onPress={() => setUseHide(false)}>
+          onPress={() => {
+            setIsLogin(true);
+            setUseHide(false);
+          }}>
           <Text className='bg-[#1273FE] text-white p-3 text-base font-medium rounded-md'> Đăng nhập</Text>
         </TouchableOpacity>
       </View>
