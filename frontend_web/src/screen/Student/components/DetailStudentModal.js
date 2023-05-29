@@ -14,6 +14,7 @@ import Link from "antd/es/typography/Link";
 import { DetailCourseModal } from "../../Course/components/DetailCourseModal";
 import axios from "axios";
 import { Url } from "../../../contexts/constants";
+import { formatMoney } from "../../../utils/format";
 
 const { Column } = Table;
 
@@ -116,7 +117,13 @@ export const DetailStudentModal = ({
                 );
               }}
             ></Column>
-            <Column title="Giá" dataIndex="Price"></Column>
+            <Column
+              title="Giá"
+              dataIndex="Price"
+              render={(text, record) => {
+                return <Typography>{formatMoney(text)}</Typography>;
+              }}
+            ></Column>
             <Column title="Mô tả" dataIndex="Description"></Column>
           </Table>
         </Spin>
@@ -155,7 +162,13 @@ export const DetailStudentModal = ({
                   );
                 }}
               ></Column>
-              <Column title="Giá" dataIndex="Price"></Column>
+              <Column
+                title="Giá"
+                dataIndex="Price"
+                render={(text, record) => {
+                  return <Typography>{formatMoney(text)}</Typography>;
+                }}
+              ></Column>
               <Column title="Mô tả" dataIndex="Description"></Column>
             </Table>
           </Spin>
@@ -194,7 +207,13 @@ export const DetailStudentModal = ({
                   );
                 }}
               ></Column>
-              <Column title="Giá" dataIndex="Price"></Column>
+              <Column
+                title="Giá"
+                dataIndex="Price"
+                render={(text, record) => {
+                  return <Typography>{formatMoney(text)}</Typography>;
+                }}
+              ></Column>
               <Column title="Mô tả" dataIndex="Description"></Column>
             </Table>
           </Spin>

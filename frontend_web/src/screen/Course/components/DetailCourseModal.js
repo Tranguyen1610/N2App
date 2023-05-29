@@ -13,6 +13,7 @@ import { VideoModal } from "./VideoModal";
 import Link from "antd/es/typography/Link";
 import axios from "axios";
 import { Url } from "../../../contexts/constants";
+import { formatMoney } from "../../../utils/format";
 
 const { Column } = Table;
 
@@ -89,6 +90,9 @@ export const DetailCourseModal = ({
               </Descriptions.Item>
               <Descriptions.Item label="Email">
                 <span>{selectedOrder?.Teacher?.Email}</span>
+              </Descriptions.Item>
+              <Descriptions.Item label="Giá bán">
+                <span>{formatMoney(selectedOrder?.Price)}</span>
               </Descriptions.Item>
             </Descriptions>
           </Col>
