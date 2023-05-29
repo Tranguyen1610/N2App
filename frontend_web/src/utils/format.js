@@ -1,6 +1,5 @@
 export function formatMoney(number) {
   const isValidNumber = typeof number == "number" && !isNaN(number);
-  console.log("isValidNumber", isValidNumber);
   if (!isValidNumber) {
     return "Invalid number";
   }

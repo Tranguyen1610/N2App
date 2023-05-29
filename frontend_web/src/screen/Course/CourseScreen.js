@@ -18,6 +18,8 @@ function CourseScreen() {
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [textSearch, setTextSearch] = useState("");
   const [EnableDelete, setEnableDelete] = useState(false);
+  const [initialDataSource, setInitialDataSource] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     getCourse();
@@ -33,28 +35,23 @@ function CourseScreen() {
       // console.log(res.data);
       // setListCourse(res.data);
       setDateSource(res.data);
+      setInitialDataSource(res.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
-  const handleSearch = async (text) => {
-    let list = [];
-    // if (text) {
-
-    // }
-    // else getCourse()
+  const handleSearch = (text) => {
     try {
       if (text) {
-        dataSource.forEach((u) => {
-          if (convert(u?.Name).includes(text.toLocaleLowerCase())) {
-            // if
-            list.push(u);
-          }
-        });
-        console.log("list", list);
+        console.log("initDataSource", initialDataSource);
+        const list = initialDataSource.filter((u) =>
+          convert(u?.Name).includes(textSearch.toLocaleLowerCase())
+        );
+        console.log("list search", list);
         setDateSource(list);
       } else {
+        // setDateSource(initialDataSource);
         getCourse();
         console.log("abc");
       }
@@ -62,6 +59,7 @@ function CourseScreen() {
       console.log(err);
     }
   };
+
   const handleGetNumberStar = () => {
     console.log("dataStar", dataSource);
   };

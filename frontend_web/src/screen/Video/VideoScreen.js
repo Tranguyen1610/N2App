@@ -14,7 +14,7 @@ const VideoScreen = () => {
   const [selectedCourse, setSelectedCourse] = useState();
   const [visible, setVisible] = useState(false);
   const [textSearch, setTextSearch] = useState("");
-
+  const [initialDataSource, setInitialDataSource] = useState([]);
   const convert = (string) => {
     if (string != null) return string.toString().toLowerCase();
     else return "";
@@ -23,33 +23,32 @@ const VideoScreen = () => {
     setLoading(true);
     getAllVideo();
   }, []);
+  // useEffect(() => {
+  //   setInitialDataSource(dataSource);
+  // }, [dataSource]);
   const getAllVideo = async () => {
     try {
       const res = await axios.get(`${Url}/api/video/`);
       console.log("video data", res.data);
       // setListCourse(res.data);
       setDateSource(res.data);
+      setInitialDataSource(res.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
-  const handleSearch = async (text) => {
-    let list = [];
-    // if (text) {
-
-    // }
-    // else getCourse()
+  const handleSearch = (text) => {
     try {
       if (text) {
-        dataSource.forEach((u) => {
-          if (convert(u?.Name).includes(textSearch.toLocaleLowerCase())) {
-            // if
-            list.push(u);
-          }
-        });
+        console.log("initDataSource", initialDataSource);
+        const list = initialDataSource.filter((u) =>
+          convert(u?.Name).includes(textSearch.toLocaleLowerCase())
+        );
+        console.log("list search", list);
         setDateSource(list);
       } else {
+        // setDateSource(initialDataSource);
         getAllVideo();
         console.log("abc");
       }
@@ -91,8 +90,8 @@ const VideoScreen = () => {
         <div style={{ display: "flex" }}>
           <Button
             onClick={() => {
-              handleSearch(textSearch);
               console.log("12456", textSearch);
+              handleSearch(textSearch);
             }}
             type="primary"
             icon={<SearchOutlined />}
