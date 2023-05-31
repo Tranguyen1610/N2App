@@ -7,6 +7,7 @@ import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { CourseModal } from "./components/CourseModal";
 import { DetailCourseModal } from "./components/DetailCourseModal";
 import { VideoModal } from "./components/VideoModal";
+import { formatMoney } from "../../utils/format";
 const { Column } = Table;
 function CourseScreen() {
   const [dataSource, setDateSource] = useState([]);
@@ -16,6 +17,9 @@ function CourseScreen() {
   const [visible, setVisible] = useState(false);
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [textSearch, setTextSearch] = useState("");
+  const [EnableDelete, setEnableDelete] = useState(false);
+  const [initialDataSource, setInitialDataSource] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     getCourse();
@@ -31,28 +35,23 @@ function CourseScreen() {
       // console.log(res.data);
       // setListCourse(res.data);
       setDateSource(res.data);
+      setInitialDataSource(res.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
-  const handleSearch = async (text) => {
-     let list = []
-    // if (text) {
-     
-    // }
-    // else getCourse()
+  const handleSearch = (text) => {
     try {
       if (text) {
-        dataSource.forEach((u) => {
-          if (convert(u?.Name).includes(text.toLocaleLowerCase())) {
-            // if
-            list.push(u)
-          }
-        });
-        console.log("list",list);
-        setDateSource(list)
+        console.log("initDataSource", initialDataSource);
+        const list = initialDataSource.filter((u) =>
+          convert(u?.Name).includes(textSearch.toLocaleLowerCase())
+        );
+        console.log("list search", list);
+        setDateSource(list);
       } else {
+        // setDateSource(initialDataSource);
         getCourse();
         console.log("abc");
       }
@@ -60,6 +59,7 @@ function CourseScreen() {
       console.log(err);
     }
   };
+
   const handleGetNumberStar = () => {
     console.log("dataStar", dataSource);
   };
@@ -73,14 +73,32 @@ function CourseScreen() {
       console.log(err);
     }
   };
+  const DeleteCourse = async (id) => {
+    const res = await axios.put(`${Url}/api/course/delete/${id}`);
+    console.log("delete", res.data);
+  };
+  const handleDelete = (id) => {
+    // Kiểm tra xác nhận xóa
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa?");
+
+    // Nếu người dùng chọn OK, thực hiện xóa
+    if (confirmDelete) {
+      // Gọi hàm xử lý xóa tại đây
+      DeleteCourse(id);
+      alert("Xóa thành công");
+      setEnableDelete(true);
+
+      // ...
+    }
+  };
   return (
     <div style={{}}>
-      <Space style={{marginBottom:10}}>
+      <Space style={{ marginBottom: 10 }}>
         <div style={{ display: "flex" }}>
           <Button
             onClick={() => {
               handleSearch(textSearch);
-              console.log("12456",textSearch);
+              console.log("12456", textSearch);
             }}
             type="primary"
             icon={<SearchOutlined />}
@@ -88,22 +106,33 @@ function CourseScreen() {
             Tìm kiếm
           </Button>
           <Input
-            style={{marginLeft:5}}
+            style={{ marginLeft: 5 }}
             placeholder="Nhập tên khóa học"
             name="searchCourse"
-            onChange={e => {setTextSearch(e.target.value);
+            onChange={(e) => {
+              setTextSearch(e.target.value);
             }}
           ></Input>
         </div>
       </Space>
       <Spin spinning={loading}>
-        <Table dataSource={dataSource} loading={loading} pagination={{pageSize:6}}>
+        <Table
+          dataSource={dataSource}
+          loading={loading}
+          pagination={{ pageSize: 6 }}
+        >
           <Column
             title="Tên Khóa học"
             dataIndex="Name"
             key={"course.name"}
           ></Column>
-          <Column title="Giá" dataIndex="Price"></Column>
+          <Column
+            title="Giá"
+            dataIndex="Price"
+            render={(text, record) => {
+              return <Typography>{formatMoney(text)}</Typography>;
+            }}
+          ></Column>
           <Column
             title="Loại"
             dataIndex=""
@@ -125,7 +154,7 @@ function CourseScreen() {
           dataIndex="isActive"
           ></Column> */}
           <Column
-            width={300}
+            width={100}
             align="left"
             key="action"
             render={(text, record) => (
@@ -140,6 +169,34 @@ function CourseScreen() {
                   }}
                 >
                   Chi tiết
+                </Button>
+              </Space>
+            )}
+          />
+          <Column
+            width={100}
+            align="left"
+            key="action"
+            render={(text, record) => (
+              <Space>
+                <Button
+                  disabled={record?.IsDelete ? true : false}
+                  style={{
+                    backgroundColor: record?.IsDelete ? "#c9c9c9a8" : "#ff4d4f",
+                    color: "white",
+                    borderRadius: 4,
+                    paddingBottom: 4,
+                    paddingTop: 4,
+                    paddingLeft: 16,
+                    paddingRight: 16,
+                    borderWidth: 0,
+                    // cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    handleDelete(record._id);
+                  }}
+                >
+                  Xóa
                 </Button>
               </Space>
             )}
