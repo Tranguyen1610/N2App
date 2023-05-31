@@ -17,14 +17,20 @@ function CourseScreen() {
   const [visible, setVisible] = useState(false);
   const [visibleDetail, setVisibleDetail] = useState(false);
   const [textSearch, setTextSearch] = useState("");
-  const [EnableDelete, setEnableDelete] = useState(false);
   const [initialDataSource, setInitialDataSource] = useState([]);
+  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     getCourse();
     handleGetNumberStar();
   }, []);
+  useEffect(() => {
+    if (deleteConfirmed) {
+      getCourse();
+      setDeleteConfirmed(false);
+    }
+  }, [deleteConfirmed]);
   const convert = (string) => {
     if (string != null) return string.toString().toLowerCase();
     else return "";
@@ -77,20 +83,21 @@ function CourseScreen() {
     const res = await axios.put(`${Url}/api/course/delete/${id}`);
     console.log("delete", res.data);
   };
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     // Kiểm tra xác nhận xóa
     const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa?");
 
     // Nếu người dùng chọn OK, thực hiện xóa
     if (confirmDelete) {
       // Gọi hàm xử lý xóa tại đây
-      DeleteCourse(id);
+      await DeleteCourse(id);
       alert("Xóa thành công");
-      setEnableDelete(true);
+      setDeleteConfirmed(true);
 
       // ...
     }
   };
+
   return (
     <div style={{}}>
       <Space style={{ marginBottom: 10 }}>
@@ -120,6 +127,7 @@ function CourseScreen() {
           dataSource={dataSource}
           loading={loading}
           pagination={{ pageSize: 6 }}
+          deleteConfirmed={deleteConfirmed}
         >
           <Column
             title="Tên Khóa học"
